@@ -1,0 +1,73 @@
+<html>
+	<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Photoframed</title>
+		
+		<link rel="stylesheet" href="css/default-250dev.css" type="text/css" />
+		
+		<script type="text/javascript" src="js/jquery-1.4.min-250dev.js"></script>
+		<script type="text/javascript" src="js/PhotoFrame-250dev.js"></script>
+		
+		<script type="text/javascript">
+		$(document).ready(function(){
+			PhotoFrame.init();
+			PhotoFrame.setDisplayInterval  ( 20000 );
+			PhotoFrame.setTrafficMap       ("user/maps/nederland.png");
+			PhotoFrame.setTrafficOverlay   ("http://www.traphic.nl/generated/verkeersinformatie.png");
+			PhotoFrame.setWeatherMap       ("http://www3.buienradar.nl/images.aspx?jaar=-3&soort=sp-loop");
+			PhotoFrame.setWeatherOverlay   ("");
+			PhotoFrame.setEnableBar        ( true );
+			PhotoFrame.setEnableFX         ( true );
+			PhotoFrame.setWebcamsInterval  ( 5000 );
+			PhotoFrame.setConnectionURL    ("http://www.nu.nl/images/logo_nu_nl.gif");
+
+			PhotoFrame.setFileCount(4);			
+			$(document).keypress(function (event) {
+				var letter = String.fromCharCode(event.which);
+				
+				if (letter == "h") {PhotoFrame.toggleHelp();}if (letter == "t") {PhotoFrame.toggleTraffic();}if (letter == "w") {PhotoFrame.toggleWeather();}if (letter == "c") {PhotoFrame.toggleWebcams();}if (letter == "?") {PhotoFrame.toggleAbout();}if (letter == " ") {PhotoFrame.updateDisplay();}
+				event.stopPropagation()
+				return 0;
+			});
+
+			PhotoFrame.addWebcam("webcam-0", "http://www.rtvnoord.nl/webcam/RTVN-GM.jpg", 0);PhotoFrame.addWebcam("webcam-1", "http://www.zedah.org:8888/", 0);
+			PhotoFrame.showAbout();			PhotoFrame.checkConnection();
+			PhotoFrame.start();
+		});
+		</script>
+	</head>
+	
+	<body>
+		<div id="container">
+			<div id="background"></div>
+						<div id="bar" style="top:40px">
+				<div id="clock">
+					<div class="holder" id="hours"></div>
+					<div class="holder" id="minutes"></div>
+											<img id="connectionerror" src="img/transmit_error-250dev.png"/>
+									</div>
+				<div id="quotes"></div>
+			</div>
+						<div id="traffic">
+				<img class="map"     src="user/maps/nederland.png"/><img class="overlay" src="http://www.traphic.nl/generated/verkeersinformatie.png"/>	
+			</div>
+			<div id="weather">
+				<img class="map"     src="http://www3.buienradar.nl/images.aspx?jaar=-3&soort=sp-loop"/>	
+			</div>
+			<div id="about">
+				<a href="http://github.com/janpaul123/photoframed" target="_blank">
+					<img src="img/logo-250dev.png"/>
+					<div class="title">Photoframed</div>
+					<div class="link">github.com/janpaul123/photoframed</div>
+				</a>
+				press <strong>h</strong> for keyboard commands 
+			</div>
+			<div id="help">
+				<table>
+				<tr><td class="key"><strong>h</strong></td><td class="title">Toggle help box<br /></tr><tr><td class="key"><strong>t</strong></td><td class="title">Toggle traffic map<br /></tr><tr><td class="key"><strong>w</strong></td><td class="title">Toggle weather map<br /></tr><tr><td class="key"><strong>c</strong></td><td class="title">Toggle webcams<br /></tr><tr><td class="key"><strong>?</strong></td><td class="title">Toggle about box<br /></tr><tr><td class="key"><strong>space</strong></td><td class="title">Update display<br /></tr>				</table>
+			</div>
+			<div id="webcams">
+				<div class="container" style=""><div class="holder"><div class="border"></div><div id="webcam-0" ><img class="webcam" style="max-width: 280px; max-height: 180px; min-width: 150px; min-height: 100px; "/></div><div class="title">Grote Markt, Groningen</div><div class="shadow" id="shadow-webcam-0"></div><img class="error"  id="error-webcam-0" src="img/webcam_error-__php%20echo%20$version___.png"/></div></div><div class="container" style=""><div class="holder"><div class="border"></div><div id="webcam-1" ><img class="webcam" style="max-width: 280px; max-height: 180px; min-width: 150px; min-height: 100px; max-width: 280px; max-height: 180px; min-width: 150px; min-height: 100px; "/></div><div class="title">Stichting SCN, Hereweg, Groningen</div><div class="shadow" id="shadow-webcam-1"></div><img class="error"  id="error-webcam-1" src="img/webcam_error-__php%20echo%20$version___.png"/></div></div>			</div>
+		</div>
+	</body>
+</html>
