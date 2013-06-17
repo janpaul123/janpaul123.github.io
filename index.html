@@ -1,0 +1,24 @@
+---
+layout: post
+---
+
+{% for post in paginator.posts %}
+  <div class="post" id="post-496">
+  <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+  <div class="date"><small>{{ post.date | date: "%d %B %Y" }}</small></div>
+  <div class="entry">
+    {{ post.content | postmorefilter: post.url, "Read more &raquo;" }}
+  </div>
+{% endfor %}
+
+<div class="navigation">
+  {% if paginator.previous_page == 1 %}
+    <a href="/" class="previous">&laquo; Previous</a>
+  {% else %}
+    <a href="{{ paginator.previous_page_path }}" class="previous">&laquo; Previous</a>
+  {% endif %}
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  {% if paginator.next_page %}
+    <a href="/page{{ paginator.next_page }}" class="next">Next &raquo;</a>
+  {% endif %}
+</div>

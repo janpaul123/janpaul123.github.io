@@ -1,0 +1,52 @@
+---
+layout: post
+title: Bloggin&#8217; awai! (and pangrams)
+---
+<p>Well, there you have it. I started a blog. Now I think only people who actually have something to say should begin blogging. And I&#8217;m not sure if I&#8217;ve got something to say. So the first few posts will be postings of old projects, for my own reference and to get the hang of it. Maybe you&#8217;ll like it too!</p>
+<p>My writing skills are average, as is my knowledge of the English language. So if you have suggestions of any kind, please, don&#8217;t hesitate to leave a comment!</p>
+<p>That being said, let&#8217;s look at a fun little project I worked on about two years ago. I had a bet with <a href="http://vlastuin.net">Marcel Vlastuin</a> that I could produce a self-enumerating <a href="http://en.wikipedia.org/wiki/Pangram">pangram</a>. This is an example of such a pangram:</p>
+<blockquote><p>This sentence contains three a&#8217;s, one b, three c&#8217;s, two d&#8217;s, thirty three e&#8217;s, seven f&#8217;s, one g, six h&#8217;s, ten i&#8217;s, one j, one k, one l, one m, twenty four n&#8217;s, sixteen o&#8217;s, one p, one q, nine r&#8217;s, twenty six s&#8217;s, seventeen t&#8217;s, five u&#8217;s, five v&#8217;s, four w&#8217;s, four x&#8217;s, four y&#8217;s, and one z.</p></blockquote>
+
+<!--more-->
+
+<p>Pangram, the word coming from the greek <em>pan gramma</em>, literally means &#8220;every letter&#8221;. The best known pangram is without any doubt &#8220;The quick brown fox jumps over the lazy dog&#8221;. But I had to make a self-enumerating one, without doing research to it, and with my name in it.</p>
+
+<style type='text/css'>
+#gallery-1 {
+  margin: auto;
+}
+#gallery-1 .gallery-item {
+  float: left;
+  margin-top: 10px;
+  text-align: center;
+  width: 33%;
+}
+#gallery-1 img {
+  border: 2px solid #cfcfcf;
+}
+#gallery-1 .gallery-caption {
+  margin-left: 0;
+}
+</style>
+<!-- see gallery_shortcode() in wp-includes/media.php -->
+<div id='gallery-1' class='gallery galleryid-6 gallery-columns-3 gallery-size-thumbnail'><dl class='gallery-item'>
+  <dt class='gallery-icon'>
+    <a href='wp-content/uploads/2009/09/pangram-hof.JPG' title='The first self-enumerating pangram'><img width="150" height="116" src="wp-content/uploads/2009/09/pangram-hof-150x116.jpg" class="attachment-thumbnail" alt="The first self-enumerating pangram" title="The first self-enumerating pangram" /></a>
+  </dt></dl><dl class='gallery-item'>
+  <dt class='gallery-icon'>
+    <a href='wp-content/uploads/2009/09/pangram_persian.png' title='Persian pangram'><img width="150" height="87" src="wp-content/uploads/2009/09/pangram_persian-150x87.png" class="attachment-thumbnail" alt="Persian pangram" title="Persian pangram" /></a>
+  </dt></dl><dl class='gallery-item'>
+  <dt class='gallery-icon'>
+    <a href='wp-content/uploads/2009/09/pangram-marcel.JPG' title='Marcel&#039;s pangram'><img width="150" height="15" src="wp-content/uploads/2009/09/pangram-marcel-150x15.jpg" class="attachment-thumbnail" alt="Marcel&#039;s pangram" title="Marcel&#039;s pangram" /></a>
+  </dt></dl><br style="clear: both" />
+  <br style='clear: both;' />
+</div>
+
+<p>For this purpose I built a small program that could generate such a pangram. It would take the previous sentence, count the characters and generate a new sentence. When it got the same sentence twice, the job was done. But there was one problem: many times the program would alternate between a small set of sentences, and never get out of this loop. Therefore it was necessary to add a bit of randomness. The original sourcecode was lost when my old laptop crashed, but as I sent Marcel the generated pangrams, they were still in my mailbox! The pangrams are in Dutch.</p>
+<blockquote><p>JP vond deze zin, die vier a&#8217;s, twee b&#8217;s, drie c&#8217;s, acht d&#8217;s, zevenenveertig e&#8217;s, drie f&#8217;s, vier g&#8217;s, drie h&#8217;s, zeventien i&#8217;s, drie j&#8217;s, een k, twee l&#8217;s, een m, twintig n&#8217;s, twee o&#8217;s, twee p&#8217;s, een q, acht r&#8217;s, twintig s&#8217;en, vijftien t&#8217;s, een u, elf v&#8217;s, zeven w&#8217;s, een x, een y en zeven z&#8217;s bevat.</p>
+  <p>Deze voor Marcel gegenereerde zin omvat drie a&#8217;s, een b, twee c&#8217;s, vijf d&#8217;s, eenenvijftig e&#8217;s, zes f&#8217;s, zes g&#8217;s, een h, zeventien i&#8217;s, vier j&#8217;s, een k, vier l&#8217;s, drie m&#8217;s, tweeentwintig n&#8217;s, vier o&#8217;s, een p, een q, tien r&#8217;s, twintig s&#8217;en, elf t&#8217;s, een u, elf v&#8217;s, vijf w&#8217;s, een x, een y en zeven z&#8217;s.</p>
+  <p>Jan Paul Posma is trots op deze zin omdat die acht a&#8217;s, twee b&#8217;s, drie c&#8217;s, zeven d&#8217;s, negenenveertig e&#8217;s, vier f&#8217;s, tien g&#8217;s, drie h&#8217;s, tweeentwintig i&#8217;s, vijf j&#8217;s, een k, twee l&#8217;s, drie m&#8217;s, negenentwintig n&#8217;s, vijf o&#8217;s, vier p&#8217;s, een q, acht r&#8217;s, zesentwintig s&#8217;en, eenentwintig t&#8217;s, twee u&#8217;s, negen v&#8217;s, negen w&#8217;s, een x, een y en vijf z&#8217;s bevat.</p>
+  <p>In deze zin staan tien a&#8217;s, twee b&#8217;s, vier c&#8217;s, zeven d&#8217;s, eenenvijftig e&#8217;s, vier f&#8217;s, zeven g&#8217;s, vier h&#8217;s, drieentwintig i&#8217;s, drie j&#8217;s, een k, vier l&#8217;s, een m, achtentwintig n&#8217;s, vier o&#8217;s, twee p&#8217;s, een q, twaalf r&#8217;s, vierentwintig s&#8217;en, achttien t&#8217;s, twee u&#8217;s, elf v&#8217;s, acht w&#8217;s, een x, een y en zes z&#8217;s, en is bovendien door Jan Paul gegenereerd!</p>
+</blockquote>
+
+<p>Thus winning the bet, a fine dinner. Thanks Marcel! I guess that concludes this <em>F1rSt P0st!!!11oneone42</em>, thank you for reading it. :-)</p>
