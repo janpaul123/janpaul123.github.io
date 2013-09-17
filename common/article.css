@@ -1,0 +1,36 @@
+body {
+  font: 13px/1.8 Helvetica, Arial, sans-serif;
+  color: #eee;
+  background: black;
+}
+
+body.jpp-iframe {
+  background: transparent;
+}
+
+article {
+  margin: 0 auto;
+  width: 710px;
+  padding: 50px 50px 20px;
+  border: 1px solid transparent; /* for block formatting context */
+}
+
+p, li, div, ul {
+  margin-bottom: 1.5em;
+}
+
+b {
+  color: white;
+}
+
+a, a:visited, a:active {
+  color: #F93;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+code {
+  font: 13px Courier, monospace;
+}
