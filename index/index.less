@@ -7,12 +7,20 @@
 
 /////
 
-.transform(@string){
+.transform(@string) {
   -webkit-transform: @string;
   -moz-transform:    @string;
   -ms-transform:     @string;
   -o-transform:      @string;
   transform:         @string;
+}
+
+.transition(@string) {
+  -webkit-transition: @string;
+  -moz-transition:    @string;
+  -ms-transition:     @string;
+  -o-transition:      @string;
+  transition:         @string;
 }
 
 * {
@@ -50,7 +58,7 @@ body {
 }
 
 .background-animating {
-  transition: all @menuMoveTime; // transform
+  .transition(all @menuMoveTime); // transform
 }
 
 // Menu container
@@ -68,7 +76,7 @@ body {
 }
 
 .menu-container-animated {
-  transition: all @menuMoveTime; // transform -- same time as content-container-move-right
+  .transition(all @menuMoveTime); // transform
 }
 
 .menu-container-move-left {
@@ -92,7 +100,7 @@ body {
   text-align: center;
   font-weight: bold;
   padding-top: 20px;
-  transition: all 0.3s;
+  .transition(all 0.3s);
   cursor: pointer;
   .transform(translateZ(1px) scale(1) rotate(0));
 
@@ -155,7 +163,7 @@ body {
   height: 1em;
   margin-top: -0.5em;
 
-  transition: all @itemAnimationTime;
+  .transition(all @itemAnimationTime);
 }
 
 .menu-group:hover .menu-group-header {
@@ -173,7 +181,7 @@ body {
   position: relative;
   height: 36px;
   margin-left: @sideMargin;
-  transition: all @itemAnimationTime;
+  .transition(all @itemAnimationTime);
 
   .transform(rotate(1deg) translateZ(1px));
 
@@ -191,7 +199,7 @@ body {
 
 .menu-item-container-selected {
   height: 65px;
-  transition: all 0.5s;
+  .transition(all 0.5s);
 }
 
 // Item
@@ -211,7 +219,7 @@ body {
   .transform(translateZ(1px));
   outline: 1px solid transparent; // http://stackoverflow.com/questions/9235342/3d-css-transform-jagged-edges-in-firefox
 
-  transition: background-color @itemAnimationTime;
+  .transition(background-color @itemAnimationTime);
 }
 
 .item-back {
@@ -220,7 +228,7 @@ body {
   top: 9px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 1.4s;
+  .transition(opacity 1.4s);
 
   &:hover {
     color: white;
@@ -241,7 +249,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: color @itemAnimationTime;
+  .transition(color @itemAnimationTime);
 }
 
 .item-source {
@@ -261,7 +269,7 @@ body {
   text-overflow: ellipsis;
   font-style: italic;
   opacity: 0;
-  transition: opacity @itemAnimationTime;
+  .transition(opacity @itemAnimationTime);
 }
 
 .item-time {
@@ -270,7 +278,7 @@ body {
   right: 10px;
   font-style: italic;
   opacity: 0;
-  transition: opacity @itemAnimationTime;
+  .transition(opacity @itemAnimationTime);
 }
 
 .item-icon {
@@ -282,7 +290,7 @@ body {
   position: absolute;
   right: 10px;
   top: 6px;
-  transition: color @itemAnimationTime;
+  .transition(color @itemAnimationTime);
 }
 
 .item-type-document .item-icon {
@@ -360,7 +368,7 @@ body {
     position: fixed;
 
     // left, right, top, height, transform
-    transition: all @itemSelectMiddleTime cubic-bezier(0.175, 0.885, 0.320, 1.275) !important; /* easeOutBack */
+    .transition(all @itemSelectMiddleTime cubic-bezier(0.175, 0.885, 0.320, 1.275)) !important; /* easeOutBack */
   }
 }
 
@@ -380,7 +388,7 @@ body {
     .transform(rotate(1deg) translateZ(1px));
 
     // left, right, top, height, transform, background-color
-    transition: all @itemDeselectMiddleTime;
+    .transition(all @itemDeselectMiddleTime);
 
     .item-back {
       opacity: 0;
@@ -409,7 +417,7 @@ body {
 }
 
 .content-container-animated {
-  transition: opacity @contentFadeInTime ease @contentFadeInDelay;
+  .transition(opacity @contentFadeInTime ease @contentFadeInDelay);
 }
 
 .content-container-fixed {
@@ -420,7 +428,7 @@ body {
 }
 
 .content-container-move-right {
-  transition: all @menuMoveTime; // transform
+  .transition(all @menuMoveTime); // transform
   .transform(translate3d(100%, 0, 1px));
 }
 
