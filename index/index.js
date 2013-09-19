@@ -362,42 +362,39 @@
       return _ref3;
     }
 
-    ItemView.prototype.events = {
-      'click': 'onClick',
-      'click .js-back': 'onClickBack'
-    };
-
     ItemView.prototype.initialize = function() {
-      var $newEl;
       this._href = this.$el.attr('href');
       this._height = this.$el.data('height');
       this._id = this.$el.attr('id');
+      this._linkText = this.$('.js-link').html();
       this.$originalContainer = this.$el.parent();
       this.iframeView = contentContainerView.addIframe(this.href(), this._height);
-      $newEl = $("<div>" + this.$el.html() + "</div>");
-      $newEl.addClass(this.$el.attr('class'));
-      this.$el.replaceWith($newEl);
-      return this.$el = $newEl;
+      return this._makeA();
     };
 
     ItemView.prototype.href = function() {
       return this._href;
     };
 
-    ItemView.prototype.onClick = function(e) {
-      e.preventDefault();
-      if (window.selectedItemView === this) {
-        return;
-      }
-      return window.router.navigateToPage(this._id);
+    ItemView.prototype._makeDiv = function() {
+      var $newEl;
+      $newEl = $("<div>" + this.$el.html() + "</div>");
+      $newEl.addClass(this.$el.attr('class'));
+      this.$el.replaceWith($newEl);
+      this.$el = $newEl;
+      this.$('.js-back').html('<a href="#" class="item-back"><span class="icon-hand-left"></span> Back</a>');
+      return this.$('.js-link').html("<a href=\"" + (this.href()) + "\" class=\"item-link\" target=\"_blank\">" + this._linkText + "</a>");
     };
 
-    ItemView.prototype.onClickBack = function(e) {
-      e.stopPropagation();
-      if (window.selectedItemView !== this) {
-        return;
-      }
-      return window.router.navigateToIndex();
+    ItemView.prototype._makeA = function() {
+      var $newEl;
+      this.$('.js-back').html('');
+      this.$('.js-link').html(this._linkText);
+      $newEl = $("<a>" + this.$el.html() + "</a>");
+      $newEl.addClass(this.$el.attr('class'));
+      $newEl.attr('href', '#' + this._id);
+      this.$el.replaceWith($newEl);
+      return this.$el = $newEl;
     };
 
     ItemView.prototype.selectItemStart = function() {
@@ -409,6 +406,7 @@
       }
       window.selectedItemView = this;
       this.lastScrollTop = $(window).scrollTop();
+      this._makeDiv();
       this.reset();
       offset = this.$originalContainer.offset();
       this.$el.css({
@@ -453,6 +451,7 @@
         _ref4.deselectItemEnd();
       }
       window.selectedItemView = this;
+      this._makeDiv();
       this.reset();
       this.$el.css({
         left: '',
@@ -499,6 +498,7 @@
 
     ItemView.prototype.deselectItemEnd = function() {
       log('deselectItemEnd');
+      this._makeA();
       this.reset();
       this.$el.css({
         left: '',

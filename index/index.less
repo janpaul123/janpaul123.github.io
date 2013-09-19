@@ -226,9 +226,11 @@ body {
   position: absolute;
   left: 10px;
   top: 9px;
-  cursor: pointer;
   opacity: 0;
   .transition(opacity 1.4s);
+
+  color: #ddd;
+  text-decoration: none;
 
   &:hover {
     color: white;
@@ -279,6 +281,18 @@ body {
   font-style: italic;
   opacity: 0;
   .transition(opacity @itemAnimationTime);
+}
+
+.item-link-container {
+  text-decoration: underline;
+}
+
+.item-link {
+  color: #ddd;
+
+  &:hover {
+    color: white;
+  }
 }
 
 .item-icon {

@@ -289,40 +289,44 @@ class MenuContainerView extends Backbone.Marionette.ItemView
 
 class ItemView extends Backbone.Marionette.ItemView
 
-  events:
-    'click': 'onClick'
-    'click .js-back': 'onClickBack'
-
   initialize: ->
     @_href = @$el.attr('href')
     @_height = @$el.data('height')
     @_id = @$el.attr('id')
+    @_linkText = @$('.js-link').html()
 
     @$originalContainer = @$el.parent()
     @iframeView = contentContainerView.addIframe @href(), @_height
 
+    @_makeA()
+
+  href: -> @_href
+
+  _makeDiv: ->
     $newEl = $("<div>" + @$el.html() + "</div>")
     $newEl.addClass @$el.attr('class')
     @$el.replaceWith($newEl)
     @$el = $newEl
 
-  href: -> @_href
+    @$('.js-back').html '<a href="#" class="item-back"><span class="icon-hand-left"></span> Back</a>'
+    @$('.js-link').html """<a href="#{@href()}" class="item-link" target="_blank">#{@_linkText}</a>"""
 
-  onClick: (e) ->
-    e.preventDefault()
-    return if window.selectedItemView == this
-    window.router.navigateToPage @_id
+  _makeA: ->
+    @$('.js-back').html ''
+    @$('.js-link').html @_linkText
 
-  onClickBack: (e) ->
-    e.stopPropagation()
-    return unless window.selectedItemView == this
-    window.router.navigateToIndex()
+    $newEl = $("<a>" + @$el.html() + "</a>")
+    $newEl.addClass @$el.attr('class')
+    $newEl.attr 'href', '#' + @_id
+    @$el.replaceWith($newEl)
+    @$el = $newEl
 
   selectItemStart: =>
     log 'selectItemStart'
     window.selectedItemView?.deselectItemEnd()
     window.selectedItemView = this
     @lastScrollTop = $(window).scrollTop()
+    @_makeDiv()
     @reset()
     offset = @$originalContainer.offset()
     @$el.css
@@ -355,6 +359,7 @@ class ItemView extends Backbone.Marionette.ItemView
     log 'selectItemEnd'
     window.selectedItemView?.deselectItemEnd()
     window.selectedItemView = this
+    @_makeDiv()
     @reset()
     @$el.css left: '', top: '', right: ''
     $('.js-selected-item-container').html(@$el)
@@ -390,6 +395,7 @@ class ItemView extends Backbone.Marionette.ItemView
 
   deselectItemEnd: =>
     log 'deselectItemEnd'
+    @_makeA()
     @reset()
     @$el.css left: '', top: '', right: ''
     @$originalContainer.html(@$el)
