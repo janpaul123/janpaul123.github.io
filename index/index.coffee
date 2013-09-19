@@ -387,7 +387,7 @@ class ItemView extends Backbone.Marionette.ItemView
 
     windowWidth = $(window).width()
     @$el.css
-      left: windowWidth/2 - 700/2 + 120
+      left: windowWidth/2 - 700/2 + 150
       right: windowWidth/2 - 700/2
       top: @$originalContainer.offset().top + 7 - $(window).scrollTop()
 

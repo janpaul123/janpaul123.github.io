@@ -489,7 +489,7 @@
       log('restoring scroll position', $(window).scrollTop(), this.lastScrollTop);
       windowWidth = $(window).width();
       this.$el.css({
-        left: windowWidth / 2 - 700 / 2 + 120,
+        left: windowWidth / 2 - 700 / 2 + 150,
         right: windowWidth / 2 - 700 / 2,
         top: this.$originalContainer.offset().top + 7 - $(window).scrollTop()
       });
