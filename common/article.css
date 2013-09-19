@@ -4,7 +4,7 @@ body {
   background: black;
 }
 
-body.jpp-iframe {
+html.jpp-iframe body {
   background: transparent;
 }
 

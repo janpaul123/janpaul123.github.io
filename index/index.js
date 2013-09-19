@@ -634,8 +634,8 @@
       var doc;
       doc = this._iframe()[0].contentDocument;
       if (doc) {
-        $(doc.body).addClass('jpp-iframe');
-        return $(doc.documentElement).find('iframe').addClass('jpp-iframe');
+        $(doc.body.parentNode).addClass('jpp-iframe');
+        return $(doc.documentElement).find('html').addClass('jpp-iframe');
       }
     };
 

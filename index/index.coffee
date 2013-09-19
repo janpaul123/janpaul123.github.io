@@ -492,8 +492,8 @@ class IframeView extends Backbone.Marionette.ItemView
     doc = @_iframe()[0].contentDocument;
 
     if doc
-      $(doc.body).addClass('jpp-iframe')
-      $(doc.documentElement).find('iframe').addClass('jpp-iframe')
+      $(doc.body.parentNode).addClass('jpp-iframe')
+      $(doc.documentElement).find('html').addClass('jpp-iframe')
 
 class Router extends Backbone.Router
   routes:
