@@ -216,7 +216,7 @@ body {
   right: 0;
   top: 0;
   overflow: hidden;
-  .transform(translateZ(1px));
+  .transform(translateZ(3px));
   outline: 1px solid transparent; // http://stackoverflow.com/questions/9235342/3d-css-transform-jagged-edges-in-firefox
 
   .transition(background-color @itemAnimationTime);
@@ -313,8 +313,6 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 40;
-  .transform(translate3d(0,0,2px));
 }
 
 // Item transformations
@@ -348,7 +346,8 @@ body {
 
 .selected-item-container {
   .item {
-    .transform(translateZ(1px));
+    z-index: 40;
+    .transform(translateZ(3px));
     height: 65px;
   }
 
@@ -358,7 +357,7 @@ body {
 
   .item-select-start {
     position: fixed;
-    .transform(rotate(1deg) translateZ(1px));
+    .transform(rotate(1deg) translateZ(3px));
 
     .item-back {
       opacity: 0;
@@ -377,16 +376,20 @@ body {
   position: fixed;
   bottom: 0;
   overflow: hidden;
+  .transform(translateZ(2px));
+  z-index: 40;
 }
 
 .selected-item-container-deselect-middle {//.item {
   position: fixed;
   bottom: 0;
   overflow: hidden;
+  .transform(translateZ(2px));
+  z-index: 40;
 
   .item {
     height: 36px;
-    .transform(rotate(1deg) translateZ(1px));
+    .transform(rotate(1deg) translateZ(3px));
 
     // left, right, top, height, transform, background-color
     .transition(all @itemDeselectMiddleTime);
