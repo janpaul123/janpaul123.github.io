@@ -1,3 +1,5 @@
+@import '../common/mixins.less';
+
 @itemAnimationTime: 0.5s;
 @itemSelectMiddleTime: 0.7s;
 @itemDeselectMiddleTime: 1.0s;
@@ -6,30 +8,6 @@
 @contentFadeInTime: 0.7s;
 
 /////
-
-.transform(@string) {
-  -webkit-transform: @string;
-  -moz-transform:    @string;
-  -ms-transform:     @string;
-  -o-transform:      @string;
-  transform:         @string;
-}
-
-.transition(@string) {
-  -webkit-transition: @string;
-  -moz-transition:    @string;
-  -ms-transition:     @string;
-  -o-transition:      @string;
-  transition:         @string;
-}
-
-.animation(@string) {
-  -webkit-animation: @string;
-  -moz-animation:    @string;
-  -ms-animation:     @string;
-  -o-animation:      @string;
-  animation:         @string;
-}
 
 * {
   box-sizing: border-box;
