@@ -189,12 +189,12 @@ body {
   cursor: pointer;
   border-top: 2px solid black;
 
-  &:first-child {
-    border-top: 4px solid transparent;
+  &:nth-child(2) { // read as: first child, because menu-group-header is actually always first
+    border-top: 3px solid transparent;
   }
 
   &:last-child {
-    border-bottom: 2px solid transparent;
+    border-bottom: 3px solid transparent;
   }
 }
 
