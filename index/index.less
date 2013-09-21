@@ -116,11 +116,17 @@ body {
   text-align: center;
 }
 
-@-webkit-keyframes floating-planet {
+.floating-planet() {
   from {.transform(translate(0, 0px) rotate(20deg));}
   50% { .transform(translate(0, 5px) rotate(20deg));}
   to {  .transform(translate(0, 0px) rotate(20deg));}
 }
+
+@-webkit-keyframes floating-planet { .floating-planet(); }
+@-moz-keyframes floating-planet { .floating-planet(); }
+@-ms-keyframes floating-planet { .floating-planet(); }
+@-o-keyframes floating-planet { .floating-planet(); }
+@keyframes floating-planet { .floating-planet(); }
 
 .menu-planet {
   display: block;
