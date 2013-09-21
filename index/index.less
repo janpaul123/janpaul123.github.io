@@ -23,6 +23,14 @@
   transition:         @string;
 }
 
+.animation(@string) {
+  -webkit-animation: @string;
+  -moz-animation:    @string;
+  -ms-animation:     @string;
+  -o-animation:      @string;
+  animation:         @string;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -131,10 +139,7 @@ body {
 .menu-planet {
   display: block;
   margin: 20px auto 30px;
-  -webkit-animation-name: floating-planet;
-  -webkit-animation-duration: 5s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950); /* easeInOutSine */
+  .animation(floating-planet 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite); /* easeInOutSine */
 }
 
 .menu-list {
