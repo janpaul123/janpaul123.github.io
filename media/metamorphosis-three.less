@@ -1,10 +1,24 @@
+@import '../common/mixins.less';
+
+.metamorphose3() {
+  from {.transform(translate(0px, 0));}
+  to {  .transform(translate(-7973px, 0));}
+}
+
+@-webkit-keyframes metamorphose3 { .metamorphose3(); }
+@-moz-keyframes metamorphose3 { .metamorphose3(); }
+@-ms-keyframes metamorphose3 { .metamorphose3(); }
+@-o-keyframes metamorphose3 { .metamorphose3(); }
+@keyframes metamorphose3 { .metamorphose3(); }
+
 .metamorphosis-image {
   position: absolute;
   top: 90px;
   left: 0;
-  right: 0;
+  width: 2*7973px;
   height: 229px;
   background: url(metamorphose3.jpg) repeat-x;
+  .animation(metamorphose3 90s linear infinite);
 }
 
 .video {
