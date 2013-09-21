@@ -77,7 +77,9 @@
     };
 
     BackgroundView.prototype._scrollTopToY = function() {
-      return Math.max(-this._topOffset, parseFloat((this.$window.scrollTop() / 4).toFixed(2)) + 0.005);
+      var scrollTop;
+      scrollTop = this._movedUp ? 0 : this.$window.scrollTop();
+      return Math.max(-this._topOffset, parseFloat((scrollTop / 4).toFixed(2)) + 0.005);
     };
 
     BackgroundView.prototype.moveBackgroundLeftStart = function() {
@@ -85,6 +87,7 @@
       this.$el.off(transitionEnd);
       this._stopUpdating = false;
       this._movedLeft = true;
+      this._movedUp = true;
       this._updateScroll();
       this.$el.addClass('background-animating');
       return this.$el.on(transitionEnd, this.moveBackgroundLeftEnd);
@@ -95,6 +98,7 @@
       this.$el.off(transitionEnd);
       this._stopUpdating = false;
       this._movedLeft = true;
+      this._movedUp = false;
       this.$el.removeClass('background-animating');
       return this._updateScroll();
     };
@@ -104,7 +108,8 @@
       this.$el.off(transitionEnd);
       this.$el.addClass('background-animating');
       this._stopUpdating = true;
-      return this._movedLeft = false;
+      this._movedLeft = false;
+      return this._movedUp = false;
     };
 
     BackgroundView.prototype.moveBackgroundRightMiddle = function() {
@@ -112,6 +117,7 @@
       this.$el.off(transitionEnd);
       this._stopUpdating = false;
       this._movedLeft = false;
+      this._movedUp = false;
       this._updateScroll();
       return this.$el.on(transitionEnd, this.moveBackgroundRightEnd);
     };
@@ -122,6 +128,7 @@
       this.$el.removeClass('background-animating');
       this._stopUpdating = false;
       this._movedLeft = false;
+      this._movedUp = false;
       return this._updateScroll();
     };
 
@@ -197,7 +204,8 @@
       for (iframeUrl in _ref2) {
         iframeView = _ref2[iframeUrl];
         iframeView.abortLoading();
-        _results.push(iframeView.hide());
+        iframeView.hide();
+        _results.push(iframeView.deactivate());
       }
       return _results;
     };
@@ -249,7 +257,8 @@
         if (iframeUrl === url) {
           _results.push(iframeView.show());
         } else {
-          _results.push(iframeView.hide());
+          iframeView.hide();
+          _results.push(iframeView.deactivate());
         }
       }
       return _results;
@@ -566,6 +575,11 @@
 
     IframeView.prototype.hide = function() {
       return this.$el.addClass('content-iframe-hidden');
+    };
+
+    IframeView.prototype.deactivate = function() {
+      var _ref5, _ref6;
+      return (_ref5 = this._iframe()[0]) != null ? (_ref6 = _ref5.contentWindow) != null ? typeof _ref6.jppDeactivate === "function" ? _ref6.jppDeactivate() : void 0 : void 0 : void 0;
     };
 
     IframeView.prototype.startLoading = function() {
