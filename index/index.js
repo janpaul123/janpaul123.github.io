@@ -422,7 +422,7 @@
       offset = this.$originalContainer.offset();
       this.$el.css({
         left: offset.left + 1,
-        top: offset.top + 7 - $(window).scrollTop(),
+        top: offset.top + 8 - $(window).scrollTop(),
         right: $(window).width() - offset.left - this.$el.outerWidth()
       });
       this.$el.addClass('item-select-start');
@@ -504,7 +504,7 @@
       this.$el.css({
         left: windowWidth / 2 - 700 / 2 + 150,
         right: windowWidth / 2 - 700 / 2,
-        top: this.$originalContainer.offset().top + 7 - $(window).scrollTop()
+        top: this.$originalContainer.offset().top + 8 - $(window).scrollTop()
       });
       return _.delay(menuContainerView.moveMenuContainerRightMiddle, 300);
     };
