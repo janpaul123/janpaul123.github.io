@@ -391,6 +391,10 @@ class ItemView extends Backbone.Marionette.ItemView
     $('.js-selected-item-container').addClass 'selected-item-container-deselect-middle'
     # Stuff above explicitly before scroll top, as that rerenders in FF
 
+    # This seems to fix a bug in Chrome where the scroll position stays 0, even when trying to
+    # explicitly set the scrollTop to the correct value below
+    $(window).scrollTop 1
+
     newScrollTop = @_restoreScrollTop @lastScrollTop
     $(window).scrollTop newScrollTop
     log 'restoring scroll position', $(window).scrollTop(), newScrollTop, @lastScrollTop
