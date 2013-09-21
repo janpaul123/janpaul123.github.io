@@ -113,7 +113,8 @@ class BackgroundView extends Backbone.Marionette.ItemView
       @$el.height @_height
 
   _scrollTopToY: ->
-    Math.max(-@_topOffset, parseFloat((@$window.scrollTop() / 4).toFixed(2)) + 0.005)
+    scrollTop = if @_movedUp then 0 else @$window.scrollTop()
+    Math.max(-@_topOffset, parseFloat((scrollTop / 4).toFixed(2)) + 0.005)
 
   moveBackgroundLeftStart: =>
     log 'moveBackgroundLeftStart'
@@ -121,6 +122,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
 
     @_stopUpdating = false
     @_movedLeft = true
+    @_movedUp = true
     @_updateScroll()
     @$el.addClass 'background-animating'
     @$el.on transitionEnd, @moveBackgroundLeftEnd
@@ -130,6 +132,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @$el.off transitionEnd
     @_stopUpdating = false
     @_movedLeft = true
+    @_movedUp = false
     @$el.removeClass 'background-animating'
     @_updateScroll()
 
@@ -140,6 +143,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @$el.addClass 'background-animating'
     @_stopUpdating = true
     @_movedLeft = false
+    @_movedUp = false
 
   moveBackgroundRightMiddle: =>
     log 'moveBackgroundRightMiddle'
@@ -147,6 +151,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
 
     @_stopUpdating = false
     @_movedLeft = false
+    @_movedUp = false
     @_updateScroll()
     @$el.on transitionEnd, @moveBackgroundRightEnd
 
@@ -156,6 +161,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @$el.removeClass 'background-animating'
     @_stopUpdating = false
     @_movedLeft = false
+    @_movedUp = false
     @_updateScroll()
 
 
