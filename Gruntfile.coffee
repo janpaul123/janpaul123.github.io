@@ -8,6 +8,7 @@ module.exports = (grunt) ->
           yuicompress: true
         files:
           'index/index.css': 'index/index.less'
+          'media/metamorphosis-three.css': 'media/metamorphosis-three.less'
 
     coffee:
       all:
