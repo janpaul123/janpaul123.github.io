@@ -391,8 +391,9 @@ class ItemView extends Backbone.Marionette.ItemView
     $('.js-selected-item-container').addClass 'selected-item-container-deselect-middle'
     # Stuff above explicitly before scroll top, as that rerenders in FF
 
-    @_restoreScrollTop @lastScrollTop
-    log 'restoring scroll position', $(window).scrollTop(), @lastScrollTop
+    newScrollTop = @_restoreScrollTop @lastScrollTop
+    $(window).scrollTop newScrollTop
+    log 'restoring scroll position', $(window).scrollTop(), newScrollTop, @lastScrollTop
 
     windowWidth = $(window).width()
     @$el.css
@@ -427,7 +428,7 @@ class ItemView extends Backbone.Marionette.ItemView
     if scrollTop >= pageHeight - windowHeight
       scrollTop = pageHeight - windowHeight
 
-    $(window).scrollTop Math.floor(scrollTop)
+    Math.floor(scrollTop)
 
 
 class IframeView extends Backbone.Marionette.ItemView
