@@ -372,7 +372,8 @@
     }
 
     ItemView.prototype.initialize = function() {
-      this._href = this.$el.attr('href');
+      this._href = this.$el.data('href') || this.$el.attr('href');
+      this._link = this.$el.attr('href');
       this._height = this.$el.data('height');
       this._id = this.$el.attr('id');
       this._linkText = this.$('.js-link').html();
@@ -392,7 +393,7 @@
       this.$el.replaceWith($newEl);
       this.$el = $newEl;
       this.$('.js-back').html('<a href="#" class="item-back"><span class="icon-hand-left"></span> Back</a>');
-      return this.$('.js-link').html("<a href=\"" + (this.href()) + "\" class=\"item-link\" target=\"_blank\">" + this._linkText + "</a>");
+      return this.$('.js-link').html("<a href=\"" + this._link + "\" class=\"item-link\" target=\"_blank\">" + this._linkText + "</a>");
     };
 
     ItemView.prototype._makeA = function() {

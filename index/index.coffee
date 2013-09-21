@@ -298,7 +298,8 @@ class MenuContainerView extends Backbone.Marionette.ItemView
 class ItemView extends Backbone.Marionette.ItemView
 
   initialize: ->
-    @_href = @$el.attr('href')
+    @_href = @$el.data('href') || @$el.attr('href')
+    @_link = @$el.attr('href')
     @_height = @$el.data('height')
     @_id = @$el.attr('id')
     @_linkText = @$('.js-link').html()
@@ -317,7 +318,7 @@ class ItemView extends Backbone.Marionette.ItemView
     @$el = $newEl
 
     @$('.js-back').html '<a href="#" class="item-back"><span class="icon-hand-left"></span> Back</a>'
-    @$('.js-link').html """<a href="#{@href()}" class="item-link" target="_blank">#{@_linkText}</a>"""
+    @$('.js-link').html """<a href="#{@_link}" class="item-link" target="_blank">#{@_linkText}</a>"""
 
   _makeA: ->
     @$('.js-back').html ''
