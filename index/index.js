@@ -106,7 +106,7 @@
     BackgroundView.prototype.moveBackgroundRightStart = function() {
       log('moveBackgroundRightStart');
       this.$el.off(transitionEnd);
-      this.$el.addClass('background-animating');
+      this._updateScroll();
       this._stopUpdating = true;
       this._movedLeft = false;
       return this._movedUp = false;
@@ -115,6 +115,7 @@
     BackgroundView.prototype.moveBackgroundRightMiddle = function() {
       log('moveBackgroundRightMiddle');
       this.$el.off(transitionEnd);
+      this.$el.addClass('background-animating');
       this._stopUpdating = false;
       this._movedLeft = false;
       this._movedUp = false;
@@ -491,12 +492,14 @@
     };
 
     ItemView.prototype.deselectItemMiddle = function() {
-      var windowWidth;
+      var newScrollTop, windowWidth;
       log('deselectItemMiddle');
       this.reset();
       $('.js-selected-item-container').addClass('selected-item-container-deselect-middle');
-      this._restoreScrollTop(this.lastScrollTop);
-      log('restoring scroll position', $(window).scrollTop(), this.lastScrollTop);
+      $(window).scrollTop(1);
+      newScrollTop = this._restoreScrollTop(this.lastScrollTop);
+      $(window).scrollTop(newScrollTop);
+      log('restoring scroll position', $(window).scrollTop(), newScrollTop, this.lastScrollTop);
       windowWidth = $(window).width();
       this.$el.css({
         left: windowWidth / 2 - 700 / 2 + 150,
@@ -537,7 +540,7 @@
       if (scrollTop >= pageHeight - windowHeight) {
         scrollTop = pageHeight - windowHeight;
       }
-      return $(window).scrollTop(Math.floor(scrollTop));
+      return Math.floor(scrollTop);
     };
 
     return ItemView;

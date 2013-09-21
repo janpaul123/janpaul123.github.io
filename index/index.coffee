@@ -140,7 +140,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     log 'moveBackgroundRightStart'
     @$el.off transitionEnd
 
-    @$el.addClass 'background-animating'
+    @_updateScroll()
     @_stopUpdating = true
     @_movedLeft = false
     @_movedUp = false
@@ -149,6 +149,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     log 'moveBackgroundRightMiddle'
     @$el.off transitionEnd
 
+    @$el.addClass 'background-animating'
     @_stopUpdating = false
     @_movedLeft = false
     @_movedUp = false
