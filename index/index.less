@@ -157,6 +157,7 @@ body {
 
 .menu-group {
   position: relative;
+  visibility: hidden; // Fixes a bug in Firefox where the menu-group would incorrectly be hoverable
 }
 
 @menuGroupHeaderFontSize: 1.5em;
@@ -172,6 +173,7 @@ body {
   width: @sideMargin;
   height: 1em;
   line-height: 1;
+  visibility: visible;
   font-size: @menuGroupHeaderFontSize;
   .transform(@menuGroupHeaderTransform);
 
@@ -193,6 +195,7 @@ body {
   position: relative;
   height: 36px;
   margin-left: @sideMargin;
+  visibility: visible;
   .transition(all @itemAnimationTime);
 
   .transform(rotate(1deg) translateZ(1px));
