@@ -154,14 +154,15 @@ body {
   font-family: "Londrina Solid", sans-serif;
   text-align: center;
   position: absolute;
-  width: @sideMargin;
   left: 0px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  width: @sideMargin;
+  height: 1em;
   line-height: 1;
   font-size: @menuGroupHeaderFontSize;
   .transform(@menuGroupHeaderTransform);
-
-  height: 1em;
-  margin-top: -0.5em;
 
   .transition(all @itemAnimationTime);
 }
