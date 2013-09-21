@@ -204,6 +204,7 @@ class ContentContainerView extends Backbone.Marionette.ItemView
     for iframeUrl, iframeView of @iframeViews
       iframeView.abortLoading()
       iframeView.hide()
+      iframeView.deactivate()
     # @startLoadingNextIframe()
 
   _reset: ->
@@ -230,6 +231,7 @@ class ContentContainerView extends Backbone.Marionette.ItemView
         iframeView.show()
       else
         iframeView.hide()
+        iframeView.deactivate()
 
   startLoadingNextIframe: ->
     for iframeUrl, iframeView of @iframeViews
@@ -439,6 +441,8 @@ class IframeView extends Backbone.Marionette.ItemView
 
   hide: ->
     @$el.addClass 'content-iframe-hidden'
+
+  deactivate: -> @_iframe()[0]?.contentWindow?.jppDeactivate?()
 
   startLoading: ->
     return unless @needsLoading()
