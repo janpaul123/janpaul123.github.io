@@ -479,7 +479,36 @@ body {
 }
 
 
+/// Social icons
 
+.menu-social-container {
+  position: relative;
+  margin: 60px 0;
+}
+
+.menu-social {
+  font-size: 24px;
+  line-height: 24px;
+  text-align: right;
+  .transform(rotate(1deg) translateZ(1px));
+
+  a {
+    color: #ccc;
+    background: #333;
+    padding: 5px 5px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    width: 35px;
+
+    .transition(all @itemAnimationTime); // color, background
+
+    &:hover {
+      color: white;
+      background: #555;
+    }
+  }
+}
 
 
 
