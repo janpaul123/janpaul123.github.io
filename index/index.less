@@ -510,7 +510,74 @@ body {
   }
 }
 
+.floating-satellite() {
+  from {.transform(translate(0, 0px));}
+  50% { .transform(translate(0, 5px));}
+  to {  .transform(translate(0, 0px));}
+}
 
+@-webkit-keyframes floating-satellite { .floating-satellite(); }
+@-moz-keyframes floating-satellite { .floating-satellite(); }
+@-ms-keyframes floating-satellite { .floating-satellite(); }
+@-o-keyframes floating-satellite { .floating-satellite(); }
+@keyframes floating-satellite { .floating-satellite(); }
+
+.menu-social-satellite-container {
+  position: absolute;
+  left: 250px;
+  top: -35px;
+  width: 136px;
+  height: 136px;
+
+  .animation(floating-satellite 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite); /* easeInOutSine */
+}
+
+.rotating-satellite() {
+  from {.transform(rotate(-20deg));}
+  50% { .transform(rotate(10deg));}
+  to {  .transform(rotate(-20deg));}
+}
+
+@-webkit-keyframes rotating-satellite { .rotating-satellite(); }
+@-moz-keyframes rotating-satellite { .rotating-satellite(); }
+@-ms-keyframes rotating-satellite { .rotating-satellite(); }
+@-o-keyframes rotating-satellite { .rotating-satellite(); }
+@keyframes rotating-satellite { .rotating-satellite(); }
+
+.menu-social-satellite {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 136px;
+  height: 136px;
+  background: url(satellite.png);
+
+  .animation(rotating-satellite 60s ease infinite);
+}
+
+.rotating-satellite-dish() {
+  from {.transform(rotate(50deg));}
+  50% { .transform(rotate(15deg));}
+  to {  .transform(rotate(50deg));}
+}
+
+@-webkit-keyframes rotating-satellite-dish { .rotating-satellite-dish(); }
+@-moz-keyframes rotating-satellite-dish { .rotating-satellite-dish(); }
+@-ms-keyframes rotating-satellite-dish { .rotating-satellite-dish(); }
+@-o-keyframes rotating-satellite-dish { .rotating-satellite-dish(); }
+@keyframes rotating-satellite-dish { .rotating-satellite-dish(); }
+
+
+.menu-social-satellite-dish {
+  position: absolute;
+  left: 68px;
+  top: 55px;
+  width: 60px;
+  height: 60px;
+  background: url(dish.png);
+
+  .animation(rotating-satellite-dish 20s linear infinite);
+}
 
 
 
