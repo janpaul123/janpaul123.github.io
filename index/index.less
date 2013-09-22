@@ -483,16 +483,17 @@ body {
 
 .menu-social-container {
   position: relative;
-  margin: 60px 0;
+  margin: 80px 0 40px;
 }
 
 .menu-social {
-  font-size: 24px;
+  position: relative;
   line-height: 24px;
   text-align: right;
   .transform(rotate(1deg) translateZ(1px));
 
   a {
+    font-size: 24px;
     color: #ccc;
     background: #333;
     padding: 5px 5px;
@@ -507,6 +508,14 @@ body {
       color: white;
       background: #555;
     }
+  }
+
+  .menu-social-header {
+    position: absolute;
+    right: 60px;
+    top: -30px;
+    font-size: @menuGroupHeaderFontSize;
+    font-family: "Londrina Solid", sans-serif;
   }
 }
 
@@ -525,7 +534,7 @@ body {
 .menu-social-satellite-container {
   position: absolute;
   left: 250px;
-  top: -35px;
+  top: -60px;
   width: 136px;
   height: 136px;
 
