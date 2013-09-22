@@ -749,7 +749,7 @@
   })(Backbone.Router);
 
   $(function() {
-    var el, _i, _len, _ref6;
+    var el, email, _i, _len, _ref6;
     window.backgroundView = new BackgroundView({
       el: $('.js-background')
     }).render();
@@ -768,7 +768,10 @@
       });
     }
     window.router = new Router;
-    return Backbone.history.start();
+    Backbone.history.start();
+    email = 'mailto:j' + '@' + 'npaulpos';
+    email += '.ma';
+    return $('#email').attr('href', email);
   });
 
 }).call(this);

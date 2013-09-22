@@ -583,3 +583,7 @@ $ ->
 
   window.router = new Router
   Backbone.history.start()
+
+  email = 'mailto:j' + '@' + 'npaulpos'
+  email += '.ma'
+  $('#email').attr 'href', email
