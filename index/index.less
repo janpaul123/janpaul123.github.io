@@ -484,13 +484,15 @@ body {
 .menu-social-container {
   position: relative;
   margin: 80px 0 40px;
+  text-align: right;
 }
 
 .menu-social {
   position: relative;
+  display: inline-block;
   line-height: 24px;
-  text-align: right;
   .transform(rotate(1deg) translateZ(1px));
+  visibility: hidden;
 
   a {
     font-size: 24px;
@@ -501,6 +503,7 @@ body {
     display: inline-block;
     text-align: center;
     width: 35px;
+    visibility: visible;
 
     .transition(all @itemAnimationTime); // color, background
 
@@ -509,14 +512,30 @@ body {
       background: #555;
     }
   }
+}
 
-  .menu-social-header {
-    position: absolute;
-    right: 60px;
-    top: -30px;
-    font-size: @menuGroupHeaderFontSize;
-    font-family: "Londrina Solid", sans-serif;
-  }
+.menu-social-header {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: -35px;
+  text-align: center;
+  font-family: "Londrina Solid", sans-serif;
+  visibility: visible;
+
+  font-size: @menuGroupHeaderFontSize;
+  .transform(rotate(0deg));
+  .transition(all @itemAnimationTime);
+}
+
+.menu-social:hover .menu-social-header {
+  .transform(rotate(-1deg));
+  font-size: 2em;
+}
+
+.menu-social:hover .menu-social-header:hover {
+  .transform(rotate(0deg));
+  font-size: @menuGroupHeaderFontSize;
 }
 
 .floating-satellite() {
