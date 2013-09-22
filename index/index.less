@@ -529,17 +529,17 @@ body {
   visibility: visible;
 
   font-size: @menuGroupHeaderFontSize;
-  .transform(rotate(0deg));
+  .transform(rotate(0deg) translateZ(1px));
   .transition(all @itemAnimationTime);
 }
 
 .menu-social:hover .menu-social-header {
-  .transform(rotate(-1deg));
+  .transform(rotate(-1deg translateZ(1px)));
   font-size: 2em;
 }
 
 .menu-social:hover .menu-social-header:hover {
-  .transform(rotate(0deg));
+  .transform(rotate(0deg) translateZ(1px));
   font-size: @menuGroupHeaderFontSize;
 }
 
