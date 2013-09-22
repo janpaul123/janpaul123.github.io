@@ -341,7 +341,7 @@ class ItemView extends Backbone.Marionette.ItemView
     offset = @$originalContainer.offset()
     @$el.css
       left: offset.left + 1
-      top: offset.top + 8 - $(window).scrollTop()
+      top: offset.top + 7 - $(window).scrollTop()
       right: $(window).width() - offset.left - @$el.outerWidth()
     @$el.addClass 'item-select-start'
     $('.js-selected-item-container').html(@$el)
@@ -404,7 +404,7 @@ class ItemView extends Backbone.Marionette.ItemView
     @$el.css
       left: windowWidth/2 - 700/2 + 150
       right: windowWidth/2 - 700/2
-      top: @$originalContainer.offset().top + 8 - $(window).scrollTop()
+      top: @$originalContainer.offset().top + 7 - $(window).scrollTop()
 
     _.delay menuContainerView.moveMenuContainerRightMiddle, 300
 
