@@ -550,9 +550,9 @@ body {
 }
 
 .floating-satellite() {
-  from {.transform(translateZ(0, 0px, 1px));}
-  50% { .transform(translateZ(0, 5px, 1px));}
-  to {  .transform(translateZ(0, 0px, 1px));}
+  from {.transform(translate3d(0, 0px, 1px));}
+  50% { .transform(translate3d(0, 5px, 1px));}
+  to {  .transform(translate3d(0, 0px, 1px));}
 }
 
 @-webkit-keyframes floating-satellite { .floating-satellite(); }
