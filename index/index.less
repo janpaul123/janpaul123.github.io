@@ -493,17 +493,23 @@ body {
   line-height: 24px;
   .transform(rotate(1deg) translateZ(1px));
   visibility: hidden;
+}
+
+.menu-social-item {
+  display: inline-block;
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+  visibility: visible;
 
   a {
     font-size: 24px;
+    padding: 5px;
     color: #ccc;
     background: #333;
-    padding: 5px;
     text-decoration: none;
     display: inline-block;
     text-align: center;
     width: 35px;
-    visibility: visible;
     outline: 1px solid transparent; // http://stackoverflow.com/questions/9235342/3d-css-transform-jagged-edges-in-firefox
 
     .transition(all @itemAnimationTime); // color, background
