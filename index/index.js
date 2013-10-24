@@ -152,15 +152,19 @@
     }
 
     ContentContainerView.prototype.template = function() {
-      return "<div class=\"content js-content-region\"></div>";
+      return "<div class=\"content js-content-region js-iframe-region\"></div>";
     };
 
     ContentContainerView.prototype.ui = {
       contentRegion: '.js-content-region'
     };
 
+    ContentContainerView.prototype.regions = {
+      iframeRegion: '.js-iframe-region'
+    };
+
     ContentContainerView.prototype.initialize = function() {
-      return this.iframeViews = {};
+      return this.iframeHeights = {};
     };
 
     ContentContainerView.prototype.showContentStart = function(url) {
@@ -197,18 +201,9 @@
     };
 
     ContentContainerView.prototype.moveContentRightEnd = function() {
-      var iframeUrl, iframeView, _ref2, _results;
       log('moveContentRightEnd');
       this._reset();
-      _ref2 = this.iframeViews;
-      _results = [];
-      for (iframeUrl in _ref2) {
-        iframeView = _ref2[iframeUrl];
-        iframeView.abortLoading();
-        iframeView.hide();
-        _results.push(iframeView.deactivate());
-      }
-      return _results;
+      return this.iframeRegion.close();
     };
 
     ContentContainerView.prototype._reset = function() {
@@ -218,75 +213,19 @@
     };
 
     ContentContainerView.prototype.addIframe = function(url, height) {
-      var iframeView;
-      iframeView = new IframeView({
-        url: url,
-        height: height
-      });
-      iframeView.render();
-      this.ui.contentRegion.append(iframeView.el);
-      return this.iframeViews[url] = iframeView;
-    };
-
-    ContentContainerView.prototype.abortLoadingIframesExcept = function(url) {
-      var iframeUrl, iframeView, _ref2, _results;
-      _ref2 = this.iframeViews;
-      _results = [];
-      for (iframeUrl in _ref2) {
-        iframeView = _ref2[iframeUrl];
-        if (iframeUrl !== url) {
-          _results.push(iframeView.abortLoading());
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
+      return this.iframeHeights[url] = height;
     };
 
     ContentContainerView.prototype.showIframe = function(url) {
-      var iframeUrl, iframeView, _ref2, _results;
-      _ref2 = this.iframeViews;
-      _results = [];
-      for (iframeUrl in _ref2) {
-        iframeView = _ref2[iframeUrl];
-        if (iframeUrl !== url) {
-          iframeView.abortLoading();
-        }
-        if (iframeUrl === url) {
-          iframeView.startLoading();
-        }
-        if (iframeUrl === url) {
-          _results.push(iframeView.show());
-        } else {
-          iframeView.hide();
-          _results.push(iframeView.deactivate());
-        }
-      }
-      return _results;
-    };
-
-    ContentContainerView.prototype.startLoadingNextIframe = function() {
-      var iframeUrl, iframeView, _ref2, _ref3;
-      _ref2 = this.iframeViews;
-      for (iframeUrl in _ref2) {
-        iframeView = _ref2[iframeUrl];
-        if (iframeView.isLoading()) {
-          return;
-        }
-      }
-      _ref3 = this.iframeViews;
-      for (iframeUrl in _ref3) {
-        iframeView = _ref3[iframeUrl];
-        if (iframeView.needsLoading()) {
-          iframeView.startLoading();
-          return;
-        }
-      }
+      return this.iframeRegion.show(new IframeView({
+        url: url,
+        height: this.iframeHeights[url]
+      }));
     };
 
     return ContentContainerView;
 
-  })(Backbone.Marionette.ItemView);
+  })(Backbone.Marionette.Layout);
 
   MenuContainerView = (function(_super) {
     __extends(MenuContainerView, _super);
@@ -432,10 +371,9 @@
       menuContainerView.moveMenuContainerLeftStart();
       backgroundView.moveBackgroundLeftStart();
       _.delay(this.selectItemMiddle, 150);
-      _.delay((function() {
+      return _.delay((function() {
         return contentContainerView.showContentStart(_this.href());
       }), 500);
-      return contentContainerView.abortLoadingIframesExcept(this.href());
     };
 
     ItemView.prototype.selectItemMiddle = function() {
@@ -561,38 +499,9 @@
       return '';
     };
 
-    IframeView.prototype.needsLoading = function() {
-      return !this.loading && !this.loaded;
-    };
-
-    IframeView.prototype.isLoading = function() {
-      return this.loading;
-    };
-
     IframeView.prototype.onRender = function() {
-      return this.hide();
-    };
-
-    IframeView.prototype.show = function() {
-      return this.$el.removeClass('content-iframe-hidden');
-    };
-
-    IframeView.prototype.hide = function() {
-      return this.$el.addClass('content-iframe-hidden');
-    };
-
-    IframeView.prototype.deactivate = function() {
-      var _ref5, _ref6;
-      return (_ref5 = this._iframe()[0]) != null ? (_ref6 = _ref5.contentWindow) != null ? typeof _ref6.jppDeactivate === "function" ? _ref6.jppDeactivate() : void 0 : void 0 : void 0;
-    };
-
-    IframeView.prototype.startLoading = function() {
       var _this = this;
-      if (!this.needsLoading()) {
-        return;
-      }
       log('startLoading', this.options.url);
-      this.loading = true;
       this.$el.html("<iframe scrolling='no' frameborder='0' src='" + this.options.url + "'></iframe>");
       this._updateHeight();
       return this._iframe().on('load', function() {
@@ -600,19 +509,8 @@
       });
     };
 
-    IframeView.prototype.abortLoading = function() {
-      if (this.loaded) {
-        return;
-      }
-      log('abortLoading', this.options.url);
-      this.loading = false;
-      return this.$el.html('');
-    };
-
     IframeView.prototype.onLoad = function() {
       log('onLoad', this.options.url);
-      this.loaded = true;
-      this.loading = false;
       this._setClass();
       return this._updateHeight();
     };

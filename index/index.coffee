@@ -166,16 +166,19 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @_updateScroll()
 
 
-class ContentContainerView extends Backbone.Marionette.ItemView
+class ContentContainerView extends Backbone.Marionette.Layout
   template: => """
-    <div class="content js-content-region"></div>
+    <div class="content js-content-region js-iframe-region"></div>
   """
 
   ui:
     contentRegion: '.js-content-region'
 
+  regions:
+    iframeRegion: '.js-iframe-region'
+
   initialize: ->
-    @iframeViews = {}
+    @iframeHeights = {}
 
   showContentStart: (url) =>
     log 'showContentStart'
@@ -208,10 +211,7 @@ class ContentContainerView extends Backbone.Marionette.ItemView
   moveContentRightEnd: =>
     log 'moveContentRightEnd'
     @_reset()
-    for iframeUrl, iframeView of @iframeViews
-      iframeView.abortLoading()
-      iframeView.hide()
-      iframeView.deactivate()
+    @iframeRegion.close()
 
   _reset: ->
     @$el.off transitionEnd
@@ -219,24 +219,10 @@ class ContentContainerView extends Backbone.Marionette.ItemView
     @ui.contentRegion.css 'top', 0
 
   addIframe: (url, height) ->
-    iframeView = new IframeView {url, height}
-    iframeView.render()
-    @ui.contentRegion.append iframeView.el
-    @iframeViews[url] = iframeView
-
-  abortLoadingIframesExcept: (url) ->
-    for iframeUrl, iframeView of @iframeViews
-      iframeView.abortLoading() unless iframeUrl == url
+    @iframeHeights[url] = height
 
   showIframe: (url) ->
-    for iframeUrl, iframeView of @iframeViews
-      iframeView.abortLoading() unless iframeUrl == url
-      iframeView.startLoading() if iframeUrl == url
-      if iframeUrl == url
-        iframeView.show()
-      else
-        iframeView.hide()
-        iframeView.deactivate()
+    @iframeRegion.show new IframeView url: url, height: @iframeHeights[url]
 
 
 class MenuContainerView extends Backbone.Marionette.ItemView
@@ -341,7 +327,6 @@ class ItemView extends Backbone.Marionette.ItemView
     backgroundView.moveBackgroundLeftStart()
     _.delay @selectItemMiddle, 150
     _.delay (=> contentContainerView.showContentStart @href()), 500
-    contentContainerView.abortLoadingIframesExcept @href()
 
   selectItemMiddle: =>
     log 'selectItemMiddle'
@@ -431,41 +416,14 @@ class IframeView extends Backbone.Marionette.ItemView
 
   template: -> ''
 
-  needsLoading: -> !@loading && !@loaded
-
-  isLoading: -> @loading
-
   onRender: ->
-    @hide()
-
-  show: ->
-    @$el.removeClass 'content-iframe-hidden'
-
-  hide: ->
-    @$el.addClass 'content-iframe-hidden'
-
-  deactivate: -> @_iframe()[0]?.contentWindow?.jppDeactivate?()
-
-  startLoading: ->
-    return unless @needsLoading()
-
     log 'startLoading', @options.url
-    @loading = true
     @$el.html "<iframe scrolling='no' frameborder='0' src='#{@options.url}'></iframe>"
     @_updateHeight()
     @_iframe().on 'load', => @onLoad()
 
-  abortLoading: ->
-    return if @loaded
-
-    log 'abortLoading', @options.url
-    @loading = false
-    @$el.html ''
-
   onLoad: ->
     log 'onLoad', @options.url
-    @loaded = true
-    @loading = false
     @_setClass()
     @_updateHeight()
 
