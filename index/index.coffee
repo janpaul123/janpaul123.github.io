@@ -212,7 +212,6 @@ class ContentContainerView extends Backbone.Marionette.ItemView
       iframeView.abortLoading()
       iframeView.hide()
       iframeView.deactivate()
-    # @startLoadingNextIframe()
 
   _reset: ->
     @$el.off transitionEnd
@@ -224,7 +223,6 @@ class ContentContainerView extends Backbone.Marionette.ItemView
     iframeView.render()
     @ui.contentRegion.append iframeView.el
     @iframeViews[url] = iframeView
-    # @startLoadingNextIframe()
 
   abortLoadingIframesExcept: (url) ->
     for iframeUrl, iframeView of @iframeViews
@@ -239,15 +237,6 @@ class ContentContainerView extends Backbone.Marionette.ItemView
       else
         iframeView.hide()
         iframeView.deactivate()
-
-  startLoadingNextIframe: ->
-    for iframeUrl, iframeView of @iframeViews
-      return if iframeView.isLoading()
-
-    for iframeUrl, iframeView of @iframeViews
-      if iframeView.needsLoading()
-        iframeView.startLoading()
-        return
 
 
 class MenuContainerView extends Backbone.Marionette.ItemView
@@ -479,7 +468,6 @@ class IframeView extends Backbone.Marionette.ItemView
     @loading = false
     @_setClass()
     @_updateHeight()
-    # contentContainerView.startLoadingNextIframe()
 
   _iframe: ->
     @$('iframe')
