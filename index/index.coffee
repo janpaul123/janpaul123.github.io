@@ -2,7 +2,6 @@
 # - Make responsive
 # - Cross-browser testing
 # - Better performance
-# - Only activate group headers when moving over items
 # - Planet should say stuff
 # - Planet should fall down when clicked
 # - Spaceship when clicking title
