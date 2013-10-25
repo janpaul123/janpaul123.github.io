@@ -412,13 +412,11 @@ class ItemView extends Backbone.Marionette.ItemView
 
 class IframeView extends Backbone.Marionette.ItemView
 
-  className: 'content-iframe'
-
   template: -> ''
 
   onRender: ->
     log 'startLoading', @options.url
-    @$el.html "<iframe scrolling='no' frameborder='0' src='#{@options.url}'></iframe>"
+    @$el.html "<iframe class='content-iframe' scrolling='no' frameborder='0' src='#{@options.url}'></iframe>"
     @_updateHeight()
     @_iframe().on 'load', => @onLoad()
 

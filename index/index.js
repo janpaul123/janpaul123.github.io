@@ -493,8 +493,6 @@
       return _ref4;
     }
 
-    IframeView.prototype.className = 'content-iframe';
-
     IframeView.prototype.template = function() {
       return '';
     };
@@ -502,7 +500,7 @@
     IframeView.prototype.onRender = function() {
       var _this = this;
       log('startLoading', this.options.url);
-      this.$el.html("<iframe scrolling='no' frameborder='0' src='" + this.options.url + "'></iframe>");
+      this.$el.html("<iframe class='content-iframe' scrolling='no' frameborder='0' src='" + this.options.url + "'></iframe>");
       this._updateHeight();
       return this._iframe().on('load', function() {
         return _this.onLoad();
