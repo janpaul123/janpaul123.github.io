@@ -499,7 +499,7 @@
 
     IframeView.prototype.onRender = function() {
       var _this = this;
-      log('startLoading', this.options.url);
+      log('iframe onRender', this.options.url);
       this.$el.html("<iframe class='content-iframe' scrolling='no' frameborder='0' src='" + this.options.url + "'></iframe>");
       this._updateHeight();
       return this._iframe().on('load', function() {
@@ -508,7 +508,7 @@
     };
 
     IframeView.prototype.onLoad = function() {
-      log('onLoad', this.options.url);
+      log('iframe onLoad', this.options.url);
       this._setClass();
       return this._updateHeight();
     };
