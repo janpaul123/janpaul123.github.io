@@ -84,7 +84,7 @@ log = ->
 
 transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd'
 
-window.selectedItemView = null #####
+window.selectedItemView = null
 
 class BackgroundView extends Backbone.Marionette.ItemView
   _topOffset: 100
