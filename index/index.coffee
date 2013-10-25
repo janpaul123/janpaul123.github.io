@@ -168,11 +168,11 @@ class BackgroundView extends Backbone.Marionette.ItemView
 
 class ContentContainerView extends Backbone.Marionette.Layout
   template: => """
-    <div class="content js-content-region js-iframe-region"></div>
+    <div class="iframe js-iframe-region"></div>
   """
 
   ui:
-    contentRegion: '.js-content-region'
+    iframeRegion: '.js-iframe-region'
 
   regions:
     iframeRegion: '.js-iframe-region'
@@ -197,10 +197,10 @@ class ContentContainerView extends Backbone.Marionette.Layout
 
   moveContentRightStart: =>
     log 'moveContentRightStart'
-    top = @ui.contentRegion.offset().top - $(window).scrollTop()
+    top = @ui.iframeRegion.offset().top - $(window).scrollTop()
     @_reset()
     @$el.addClass 'content-container-visible content-container-fixed'
-    @ui.contentRegion.css 'top', top
+    @ui.iframeRegion.css 'top', top
     $(window).scrollTop 0
 
   moveContentRightMiddle: =>
@@ -216,7 +216,7 @@ class ContentContainerView extends Backbone.Marionette.Layout
   _reset: ->
     @$el.off transitionEnd
     @$el.removeClass 'content-container-visible content-container-animated content-container-fixed content-container-move-right'
-    @ui.contentRegion.css 'top', 0
+    @ui.iframeRegion.css 'top', 0
 
   addIframe: (url, height) ->
     @iframeHeights[url] = height

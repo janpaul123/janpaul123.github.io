@@ -152,11 +152,11 @@
     }
 
     ContentContainerView.prototype.template = function() {
-      return "<div class=\"content js-content-region js-iframe-region\"></div>";
+      return "<div class=\"iframe js-iframe-region\"></div>";
     };
 
     ContentContainerView.prototype.ui = {
-      contentRegion: '.js-content-region'
+      iframeRegion: '.js-iframe-region'
     };
 
     ContentContainerView.prototype.regions = {
@@ -187,10 +187,10 @@
     ContentContainerView.prototype.moveContentRightStart = function() {
       var top;
       log('moveContentRightStart');
-      top = this.ui.contentRegion.offset().top - $(window).scrollTop();
+      top = this.ui.iframeRegion.offset().top - $(window).scrollTop();
       this._reset();
       this.$el.addClass('content-container-visible content-container-fixed');
-      this.ui.contentRegion.css('top', top);
+      this.ui.iframeRegion.css('top', top);
       return $(window).scrollTop(0);
     };
 
@@ -209,7 +209,7 @@
     ContentContainerView.prototype._reset = function() {
       this.$el.off(transitionEnd);
       this.$el.removeClass('content-container-visible content-container-animated content-container-fixed content-container-move-right');
-      return this.ui.contentRegion.css('top', 0);
+      return this.ui.iframeRegion.css('top', 0);
     };
 
     ContentContainerView.prototype.addIframe = function(url, height) {

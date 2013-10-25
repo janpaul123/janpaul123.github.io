@@ -428,10 +428,6 @@ body {
   .transform(translate3d(0, 0, 1px));
 }
 
-.content {
-  position: relative;
-}
-
 .content-container-visible {
   opacity: 1;
 }
@@ -450,6 +446,10 @@ body {
 .content-container-move-right {
   .transition(all @menuMoveTime); // transform
   .transform(translate3d(100%, 0, 1px));
+}
+
+.iframe {
+  position: relative;
 }
 
 iframe.content-iframe {
