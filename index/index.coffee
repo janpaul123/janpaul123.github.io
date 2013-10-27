@@ -167,17 +167,11 @@ class BackgroundView extends Backbone.Marionette.ItemView
 
 class ContentContainerView extends Backbone.Marionette.Layout
   template: => """
-    <div class="iframe js-iframe-region"></div>
+    <div class="js-iframe-region"></div>
   """
-
-  ui:
-    iframeRegion: '.js-iframe-region'
 
   regions:
     iframeRegion: '.js-iframe-region'
-
-  initialize: ->
-    @iframeHeights = {}
 
   showContentStart: (url) =>
     log 'showContentStart'
@@ -196,10 +190,8 @@ class ContentContainerView extends Backbone.Marionette.Layout
 
   moveContentRightStart: =>
     log 'moveContentRightStart'
-    top = @ui.iframeRegion.offset().top - $(window).scrollTop()
     @_reset()
     @$el.addClass 'content-container-visible content-container-fixed'
-    @ui.iframeRegion.css 'top', top
     $(window).scrollTop 0
 
   moveContentRightMiddle: =>
@@ -215,13 +207,9 @@ class ContentContainerView extends Backbone.Marionette.Layout
   _reset: ->
     @$el.off transitionEnd
     @$el.removeClass 'content-container-visible content-container-animated content-container-fixed content-container-move-right'
-    @ui.iframeRegion.css 'top', 0
-
-  addIframe: (url, height) ->
-    @iframeHeights[url] = height
 
   showIframe: (url) ->
-    @iframeRegion.show new IframeView url: url, height: @iframeHeights[url]
+    @iframeRegion.show new IframeView url: url
 
 
 class MenuContainerView extends Backbone.Marionette.ItemView
@@ -275,12 +263,10 @@ class ItemView extends Backbone.Marionette.ItemView
   initialize: ->
     @_href = @$el.data('href') || @$el.attr('href')
     @_link = @$el.attr('href')
-    @_height = @$el.data('height')
     @_id = @$el.attr('id')
     @_linkText = @$('.js-link').html()
 
     @$originalContainer = @$el.parent()
-    @iframeView = contentContainerView.addIframe @href(), @_height
 
     @_makeA()
 
@@ -415,38 +401,15 @@ class IframeView extends Backbone.Marionette.ItemView
 
   onRender: ->
     log 'iframe onRender', @options.url
-    @$el.html "<iframe class='content-iframe' scrolling='no' frameborder='0' src='#{@options.url}'></iframe>"
-    @_updateHeight()
+    @$el.html "<iframe class='content-iframe' scrolling='yes' frameborder='0' src='#{@options.url}'></iframe>"
     @_iframe().on 'load', => @onLoad()
 
   onLoad: ->
     log 'iframe onLoad', @options.url
     @_setClass()
-    @_updateHeight()
 
   _iframe: ->
     @$('iframe')
-
-  _updateHeight: ->
-    if @options.height?
-      @_iframe().height @options.height
-      return
-
-    iframe = @_iframe()[0]
-    try
-      doc = iframe.contentDocument ? iframe.contentWindow.document
-    catch e
-      console.error e
-
-    # based on Bret Victor's height calculation
-    height = 0
-    if doc
-      db = doc.body
-      dde = doc.documentElement
-      height = Math.max height, db.scrollHeight, db.offsetHeight, db.clientHeight if db?
-      height = Math.max height, dde.scrollHeight, dde.offsetHeight, dde.clientHeight if dde?
-
-    @_iframe().height height
 
   _setClass: ->
     doc = @_iframe()[0].contentDocument;

@@ -152,19 +152,11 @@
     }
 
     ContentContainerView.prototype.template = function() {
-      return "<div class=\"iframe js-iframe-region\"></div>";
-    };
-
-    ContentContainerView.prototype.ui = {
-      iframeRegion: '.js-iframe-region'
+      return "<div class=\"js-iframe-region\"></div>";
     };
 
     ContentContainerView.prototype.regions = {
       iframeRegion: '.js-iframe-region'
-    };
-
-    ContentContainerView.prototype.initialize = function() {
-      return this.iframeHeights = {};
     };
 
     ContentContainerView.prototype.showContentStart = function(url) {
@@ -185,12 +177,9 @@
     };
 
     ContentContainerView.prototype.moveContentRightStart = function() {
-      var top;
       log('moveContentRightStart');
-      top = this.ui.iframeRegion.offset().top - $(window).scrollTop();
       this._reset();
       this.$el.addClass('content-container-visible content-container-fixed');
-      this.ui.iframeRegion.css('top', top);
       return $(window).scrollTop(0);
     };
 
@@ -208,18 +197,12 @@
 
     ContentContainerView.prototype._reset = function() {
       this.$el.off(transitionEnd);
-      this.$el.removeClass('content-container-visible content-container-animated content-container-fixed content-container-move-right');
-      return this.ui.iframeRegion.css('top', 0);
-    };
-
-    ContentContainerView.prototype.addIframe = function(url, height) {
-      return this.iframeHeights[url] = height;
+      return this.$el.removeClass('content-container-visible content-container-animated content-container-fixed content-container-move-right');
     };
 
     ContentContainerView.prototype.showIframe = function(url) {
       return this.iframeRegion.show(new IframeView({
-        url: url,
-        height: this.iframeHeights[url]
+        url: url
       }));
     };
 
@@ -314,11 +297,9 @@
     ItemView.prototype.initialize = function() {
       this._href = this.$el.data('href') || this.$el.attr('href');
       this._link = this.$el.attr('href');
-      this._height = this.$el.data('height');
       this._id = this.$el.attr('id');
       this._linkText = this.$('.js-link').html();
       this.$originalContainer = this.$el.parent();
-      this.iframeView = contentContainerView.addIframe(this.href(), this._height);
       return this._makeA();
     };
 
@@ -500,8 +481,7 @@
     IframeView.prototype.onRender = function() {
       var _this = this;
       log('iframe onRender', this.options.url);
-      this.$el.html("<iframe class='content-iframe' scrolling='no' frameborder='0' src='" + this.options.url + "'></iframe>");
-      this._updateHeight();
+      this.$el.html("<iframe class='content-iframe' scrolling='yes' frameborder='0' src='" + this.options.url + "'></iframe>");
       return this._iframe().on('load', function() {
         return _this.onLoad();
       });
@@ -509,39 +489,11 @@
 
     IframeView.prototype.onLoad = function() {
       log('iframe onLoad', this.options.url);
-      this._setClass();
-      return this._updateHeight();
+      return this._setClass();
     };
 
     IframeView.prototype._iframe = function() {
       return this.$('iframe');
-    };
-
-    IframeView.prototype._updateHeight = function() {
-      var db, dde, doc, e, height, iframe, _ref5;
-      if (this.options.height != null) {
-        this._iframe().height(this.options.height);
-        return;
-      }
-      iframe = this._iframe()[0];
-      try {
-        doc = (_ref5 = iframe.contentDocument) != null ? _ref5 : iframe.contentWindow.document;
-      } catch (_error) {
-        e = _error;
-        console.error(e);
-      }
-      height = 0;
-      if (doc) {
-        db = doc.body;
-        dde = doc.documentElement;
-        if (db != null) {
-          height = Math.max(height, db.scrollHeight, db.offsetHeight, db.clientHeight);
-        }
-        if (dde != null) {
-          height = Math.max(height, dde.scrollHeight, dde.offsetHeight, dde.clientHeight);
-        }
-      }
-      return this._iframe().height(height);
     };
 
     IframeView.prototype._setClass = function() {

@@ -423,13 +423,10 @@ body {
   left: 0;
   right: 0;
   top: 65px;
-  opacity: 0;
+  bottom: 0;
   z-index: 30;
   .transform(translate3d(0, 0, 1px));
-}
-
-.content-container-visible {
-  opacity: 1;
+  visibility: hidden;
 }
 
 .content-container-animated {
@@ -438,9 +435,6 @@ body {
 
 .content-container-fixed {
   position: fixed;
-  overflow: hidden;
-  top: 0;
-  bottom: 0;
 }
 
 .content-container-move-right {
@@ -448,15 +442,18 @@ body {
   .transform(translate3d(100%, 0, 1px));
 }
 
-.iframe {
-  position: relative;
-}
-
 iframe.content-iframe {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
+  height: 100%;
+  visibility: visible;
+  opacity: 0;
+}
+
+.content-container-visible iframe.content-iframe {
+  opacity: 1;
 }
 
 // Body loading
