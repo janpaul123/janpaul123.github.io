@@ -26,12 +26,12 @@
 # - moveMenuContainerRightMiddle: remove menu-container .menu-container-move-left
 # - moveMenuContainerRightEnd: -
 
-# - showContentStart: attach content to content-container, fade in / slide in (?)
+# - showContentStart: open iframe, fade in
 # - showContentEnd: -
 
-# - moveContentRightStart: gives content fixed position based on current scroll position, trims height
+# - moveContentRightStart: gives content fixed position, deactivate scrolling of iframe
 # - moveContentRightMiddle: give content-container .content-container-move-right
-# - moveContentRightEnd: hide content completely, remove .content-container-move-right, restores height
+# - moveContentRightEnd: hide content completely, remove .content-container-move-right, close iframe
 
 # - moveBackgroundLeftStart: gives background .background-animating, and translation
 # - moveBackgroundLeftEnd: removes .background-animating
