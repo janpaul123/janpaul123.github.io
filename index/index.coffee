@@ -112,8 +112,11 @@ class BackgroundView extends Backbone.Marionette.ItemView
       @$el.height @_height
 
   _scrollTopToY: ->
-    scrollTop = if @_movedUp then 0 else @$window.scrollTop()
+    scrollTop = if @_movedUp then 0 else @_scrollTop()
     Math.max(-@_topOffset, parseFloat((scrollTop / 4).toFixed(2)) + 0.005)
+
+  _scrollTop: ->
+    window.contentContainerView?.scrollTop() ? @$window.scrollTop()
 
   moveBackgroundLeftStart: =>
     log 'moveBackgroundLeftStart'
@@ -193,6 +196,7 @@ class ContentContainerView extends Backbone.Marionette.Layout
     @_reset()
     @$el.addClass 'content-container-visible content-container-fixed'
     $(window).scrollTop 0
+    @iframeRegion.currentView?.deactivate()
 
   moveContentRightMiddle: =>
     log 'moveContentRightMiddle'
@@ -210,6 +214,9 @@ class ContentContainerView extends Backbone.Marionette.Layout
 
   showIframe: (url) ->
     @iframeRegion.show new IframeView url: url
+
+  scrollTop: ->
+    @iframeRegion.currentView?.scrollTop()
 
 
 class MenuContainerView extends Backbone.Marionette.ItemView
@@ -406,17 +413,40 @@ class IframeView extends Backbone.Marionette.ItemView
 
   onLoad: ->
     log 'iframe onLoad', @options.url
+    @_active = true
     @_setClass()
+    @_bindScroll()
 
   _iframe: ->
     @$('iframe')
 
   _setClass: ->
-    doc = @_iframe()[0].contentDocument;
+    doc = @_document()
 
     if doc
       $(doc.body.parentNode).addClass('jpp-iframe')
       $(doc.documentElement).find('html').addClass('jpp-iframe')
+
+  _bindScroll: ->
+    return unless @_document()?
+
+    iframeWindow = @_iframe()[0].contentWindow
+    $window = $(window)
+    $(iframeWindow).on 'scroll', (-> $window.trigger('scroll')) if iframeWindow
+
+  scrollTop: ->
+    return null unless @_active
+
+    @_document()?.body.scrollTop
+
+  _document: ->
+    try
+      return @_iframe()[0].contentDocument ? @_iframe()[0].contentWindow.document
+    catch e
+      console.error e
+      return null
+
+  deactivate: -> @_active = false
 
 class Router extends Backbone.Router
   routes:

@@ -78,8 +78,13 @@
 
     BackgroundView.prototype._scrollTopToY = function() {
       var scrollTop;
-      scrollTop = this._movedUp ? 0 : this.$window.scrollTop();
+      scrollTop = this._movedUp ? 0 : this._scrollTop();
       return Math.max(-this._topOffset, parseFloat((scrollTop / 4).toFixed(2)) + 0.005);
+    };
+
+    BackgroundView.prototype._scrollTop = function() {
+      var _ref1, _ref2;
+      return (_ref1 = (_ref2 = window.contentContainerView) != null ? _ref2.scrollTop() : void 0) != null ? _ref1 : this.$window.scrollTop();
     };
 
     BackgroundView.prototype.moveBackgroundLeftStart = function() {
@@ -177,10 +182,12 @@
     };
 
     ContentContainerView.prototype.moveContentRightStart = function() {
+      var _ref2;
       log('moveContentRightStart');
       this._reset();
       this.$el.addClass('content-container-visible content-container-fixed');
-      return $(window).scrollTop(0);
+      $(window).scrollTop(0);
+      return (_ref2 = this.iframeRegion.currentView) != null ? _ref2.deactivate() : void 0;
     };
 
     ContentContainerView.prototype.moveContentRightMiddle = function() {
@@ -204,6 +211,11 @@
       return this.iframeRegion.show(new IframeView({
         url: url
       }));
+    };
+
+    ContentContainerView.prototype.scrollTop = function() {
+      var _ref2;
+      return (_ref2 = this.iframeRegion.currentView) != null ? _ref2.scrollTop() : void 0;
     };
 
     return ContentContainerView;
@@ -489,7 +501,9 @@
 
     IframeView.prototype.onLoad = function() {
       log('iframe onLoad', this.options.url);
-      return this._setClass();
+      this._active = true;
+      this._setClass();
+      return this._bindScroll();
     };
 
     IframeView.prototype._iframe = function() {
@@ -498,11 +512,48 @@
 
     IframeView.prototype._setClass = function() {
       var doc;
-      doc = this._iframe()[0].contentDocument;
+      doc = this._document();
       if (doc) {
         $(doc.body.parentNode).addClass('jpp-iframe');
         return $(doc.documentElement).find('html').addClass('jpp-iframe');
       }
+    };
+
+    IframeView.prototype._bindScroll = function() {
+      var $window, iframeWindow;
+      if (this._document() == null) {
+        return;
+      }
+      iframeWindow = this._iframe()[0].contentWindow;
+      $window = $(window);
+      if (iframeWindow) {
+        return $(iframeWindow).on('scroll', (function() {
+          return $window.trigger('scroll');
+        }));
+      }
+    };
+
+    IframeView.prototype.scrollTop = function() {
+      var _ref5;
+      if (!this._active) {
+        return null;
+      }
+      return (_ref5 = this._document()) != null ? _ref5.body.scrollTop : void 0;
+    };
+
+    IframeView.prototype._document = function() {
+      var e, _ref5;
+      try {
+        return (_ref5 = this._iframe()[0].contentDocument) != null ? _ref5 : this._iframe()[0].contentWindow.document;
+      } catch (_error) {
+        e = _error;
+        console.error(e);
+        return null;
+      }
+    };
+
+    IframeView.prototype.deactivate = function() {
+      return this._active = false;
     };
 
     return IframeView;
