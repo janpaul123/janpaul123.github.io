@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+
+  <style>
+    body {
+      font: 16px/1.5 Helvetica, Arial, sans-serif;
+      text-align: justify;
+    }
+
+    blockquote, h1 {
+      font-weight: bold;
+      margin: 20px;
+      color: #ff7;
+      line-height: 2.5;
+      text-shadow: 0 0 25px #ff0;
+    }
+
+    img {
+      width: 100%;
+    }
+  </style>
+
+  <title>Self-enumerating pangrams</title>
+
+  <article>
+    <p>In 2007 I worked at a fun little project. I had a bet with <a href="http://vlastuin.net">Marcel Vlastuin</a> that I could produce a self-enumerating <a href="http://en.wikipedia.org/wiki/Pangram">pangram</a>. This is an example of such a pangram:</p>
+
+    <blockquote><p>This sentence contains three a&rsquo;s, one b, three c&rsquo;s, two d&rsquo;s, thirty three e&rsquo;s, seven f&rsquo;s, one g, six h&rsquo;s, ten i&rsquo;s, one j, one k, one l, one m, twenty four n&rsquo;s, sixteen o&rsquo;s, one p, one q, nine r&rsquo;s, twenty six s&rsquo;s, seventeen t&rsquo;s, five u&rsquo;s, five v&rsquo;s, four w&rsquo;s, four x&rsquo;s, four y&rsquo;s, and one z.</p></blockquote>
+
+    <p>Pangram, the word coming from the greek <em>pan gramma</em>, literally means &ldquo;every letter&rdquo;. The best known pangram is without any doubt &ldquo;The quick brown fox jumps over the lazy dog&rdquo;. But I had to make a self-enumerating one, which counts all the letters in the sentence itself &mdash; and with my name in it!</p>
+
+    <p>For this purpose I built a small program that could generate such a pangram. It would take the previous sentence, count the characters, and generate a new sentence. When it got the same sentence twice, the job was done. But there was one problem: many times the program would alternate between a small set of sentences, and never get out of this loop. Therefore it was necessary to add a bit of randomness. The original sourcecode was lost when my old laptop crashed, but as I had sent Marcel the generated pangrams, they were still in my mailbox! The pangrams are in Dutch.</p>
+
+    <blockquote><p>JP vond deze zin, die vier a&rsquo;s, twee b&rsquo;s, drie c&rsquo;s, acht d&rsquo;s, zevenenveertig e&rsquo;s, drie f&rsquo;s, vier g&rsquo;s, drie h&rsquo;s, zeventien i&rsquo;s, drie j&rsquo;s, een k, twee l&rsquo;s, een m, twintig n&rsquo;s, twee o&rsquo;s, twee p&rsquo;s, een q, acht r&rsquo;s, twintig s&rsquo;en, vijftien t&rsquo;s, een u, elf v&rsquo;s, zeven w&rsquo;s, een x, een y en zeven z&rsquo;s bevat.</p>
+      <p>Deze voor Marcel gegenereerde zin omvat drie a&rsquo;s, een b, twee c&rsquo;s, vijf d&rsquo;s, eenenvijftig e&rsquo;s, zes f&rsquo;s, zes g&rsquo;s, een h, zeventien i&rsquo;s, vier j&rsquo;s, een k, vier l&rsquo;s, drie m&rsquo;s, tweeentwintig n&rsquo;s, vier o&rsquo;s, een p, een q, tien r&rsquo;s, twintig s&rsquo;en, elf t&rsquo;s, een u, elf v&rsquo;s, vijf w&rsquo;s, een x, een y en zeven z&rsquo;s.</p>
+      <p>Jan Paul Posma is trots op deze zin omdat die acht a&rsquo;s, twee b&rsquo;s, drie c&rsquo;s, zeven d&rsquo;s, negenenveertig e&rsquo;s, vier f&rsquo;s, tien g&rsquo;s, drie h&rsquo;s, tweeentwintig i&rsquo;s, vijf j&rsquo;s, een k, twee l&rsquo;s, drie m&rsquo;s, negenentwintig n&rsquo;s, vijf o&rsquo;s, vier p&rsquo;s, een q, acht r&rsquo;s, zesentwintig s&rsquo;en, eenentwintig t&rsquo;s, twee u&rsquo;s, negen v&rsquo;s, negen w&rsquo;s, een x, een y en vijf z&rsquo;s bevat.</p>
+      <p>In deze zin staan tien a&rsquo;s, twee b&rsquo;s, vier c&rsquo;s, zeven d&rsquo;s, eenenvijftig e&rsquo;s, vier f&rsquo;s, zeven g&rsquo;s, vier h&rsquo;s, drieentwintig i&rsquo;s, drie j&rsquo;s, een k, vier l&rsquo;s, een m, achtentwintig n&rsquo;s, vier o&rsquo;s, twee p&rsquo;s, een q, twaalf r&rsquo;s, vierentwintig s&rsquo;en, achttien t&rsquo;s, twee u&rsquo;s, elf v&rsquo;s, acht w&rsquo;s, een x, een y en zes z&rsquo;s, en is bovendien door Jan Paul gegenereerd!</p>
+    </blockquote>
+
+    <p>Thus winning the bet, a fine dinner. Of course, I&rsquo;m not the first one to create such a pangram. Below are some earlier examples. A comprehensive history has been <a href="http://www.fatrazie.com/EWpangram.html">published</a> by Eric Wassenaar.</p>
+
+    <blockquote><p>Only the fool would take trouble to verify that his sentence was composed of ten a's, three b's, four c's, four d's, forty-six e's, sixteen f's, four g's, thirteen h's, fifteen i's, two k's, nine l's, four m's, twenty-five n's, twenty-four o's, five p's, sixteen r's, forty-one s's, thirty-seven t's, ten u's, eight v's, eight w's, four x's, eleven y's, twenty-seven commas, twenty-three apostrophes, seven hyphens and, last but not least, a single !</p></blockquote>
+
+    <p><img src="../wp-content/uploads/2009/09/pangram_persian.png"></p>
+    <p><img src="../wp-content/uploads/2009/09/pangram-hof.JPG"></p>
+
+  </article>
+
+  <script type="text/javascript" src="https://static.factlink.com/lib/dist/factlink_loader_publishers.min.js"></script>
+</html>
