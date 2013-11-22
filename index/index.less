@@ -4,7 +4,6 @@
 @itemSelectMiddleTime: 0.7s;
 @itemDeselectMiddleTime: 1.0s;
 @menuMoveTime: 1.0s;
-@contentFadeInDelay: 0.8s;
 @contentFadeInTime: 0.7s;
 
 /////
@@ -429,10 +428,6 @@ body {
   visibility: hidden;
 }
 
-.content-container-animated {
-  .transition(opacity @contentFadeInTime ease @contentFadeInDelay);
-}
-
 .content-container-fixed {
   position: fixed;
 }
@@ -454,6 +449,10 @@ iframe.content-iframe {
 
 .content-container-visible iframe.content-iframe {
   opacity: 1;
+}
+
+.content-container-animated iframe.content-iframe {
+  .transition(opacity @contentFadeInTime ease);
 }
 
 // Body loading

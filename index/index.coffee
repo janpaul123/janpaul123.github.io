@@ -179,10 +179,10 @@ class ContentContainerView extends Backbone.Marionette.Layout
   showContentStart: (url) =>
     log 'showContentStart'
     @_reset()
-    @showIframe url
-    @$el.on transitionEnd, @showContentEnd
-    @$el.addClass 'content-container-visible content-container-animated'
     $(window).scrollTop 0
+    @showIframe url, =>
+      @$el.on transitionEnd, @showContentEnd
+      @$el.addClass 'content-container-visible content-container-animated'
 
   showContentEnd: =>
     log 'showContentEnd'
@@ -212,8 +212,10 @@ class ContentContainerView extends Backbone.Marionette.Layout
     @$el.off transitionEnd
     @$el.removeClass 'content-container-visible content-container-animated content-container-fixed content-container-move-right'
 
-  showIframe: (url) ->
-    @iframeRegion.show new IframeView url: url
+  showIframe: (url, onLoad) ->
+    iframeView = new IframeView url: url
+    @listenTo iframeView, 'onLoad', onLoad
+    @iframeRegion.show iframeView
 
   scrollTop: ->
     @iframeRegion.currentView?.scrollTop()
@@ -416,6 +418,7 @@ class IframeView extends Backbone.Marionette.ItemView
     @_active = true
     @_setClass()
     @_bindScroll()
+    @trigger 'onLoad'
 
   _iframe: ->
     @$('iframe')

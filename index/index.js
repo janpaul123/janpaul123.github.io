@@ -165,12 +165,14 @@
     };
 
     ContentContainerView.prototype.showContentStart = function(url) {
+      var _this = this;
       log('showContentStart');
       this._reset();
-      this.showIframe(url);
-      this.$el.on(transitionEnd, this.showContentEnd);
-      this.$el.addClass('content-container-visible content-container-animated');
-      return $(window).scrollTop(0);
+      $(window).scrollTop(0);
+      return this.showIframe(url, function() {
+        _this.$el.on(transitionEnd, _this.showContentEnd);
+        return _this.$el.addClass('content-container-visible content-container-animated');
+      });
     };
 
     ContentContainerView.prototype.showContentEnd = function() {
@@ -207,10 +209,13 @@
       return this.$el.removeClass('content-container-visible content-container-animated content-container-fixed content-container-move-right');
     };
 
-    ContentContainerView.prototype.showIframe = function(url) {
-      return this.iframeRegion.show(new IframeView({
+    ContentContainerView.prototype.showIframe = function(url, onLoad) {
+      var iframeView;
+      iframeView = new IframeView({
         url: url
-      }));
+      });
+      this.listenTo(iframeView, 'onLoad', onLoad);
+      return this.iframeRegion.show(iframeView);
     };
 
     ContentContainerView.prototype.scrollTop = function() {
@@ -503,7 +508,8 @@
       log('iframe onLoad', this.options.url);
       this._active = true;
       this._setClass();
-      return this._bindScroll();
+      this._bindScroll();
+      return this.trigger('onLoad');
     };
 
     IframeView.prototype._iframe = function() {
