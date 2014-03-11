@@ -1,0 +1,143 @@
+<b>Building jsdares, an interactive programming course</b>
+
+<p>Welcome!</p>
+
+<p>Let me first introduce myself. My name is Jan Paul Posma, I'm from the Netherlands, so you can find me online here {JanPaulPosma.nl}. All my work can be found on this site, including, I hope, this presentation. To contact me, you can use this email address {j@npaulpos.ma}.</p>
+
+<p>I was invited to talk here about my work. I do quite a few different things, but I'm going to talk about jsdares, which is an online programming course. The JS part stands for Javascript, as that's the language I teach, and "dares" is for "I dare you". The course consists of several short "dares", or exercises. You can find the course online by going to jsdares.com.</p>
+
+<p>Currently I don't actively work on jsdares, as I work for two other companies, Factlink and Versal. I don't think we have time to discuss those, but I'm open to any questions and discussions.</p>
+
+<p>I've never done such an hour-long seminar before, so I have no idea what will happen. I've prepared some stuff to talk about here, but I could also just email it to you. The benefit of me and you both being here is that we can have some more interaction, so feel free to interrupt me at any time. I rather have us exploring an interesting tangent, than me rambling about boring things. And active participation is a very effective way of learning, as we will discuss in a minute.</p>
+
+<p>***</p>
+
+<p>My story starts in late 2011. I was studying Computer Science at the University of Oxford, and I was looking for a final project. At the time, I was reading about the history of computing. One article struck me in particular, the classic "As we may think" from Vannevar Bush, in 1945. He foresaw that we would have the complete knowledge of the world to our disposal, easily accessible to everyone through technology. Basically by what is now known as the internet. He imagined how, after amplifying the hand with hammers, and the eye with microscopes, we would now amplify our mind with computers.</p>
+
+<p>And in many respects we have, many fields have taken enormous leaps because of computers. But one field, I'm afraid, has not: education. Many still learn using physical textbooks, not using this promise of computing at all. And if we do, we hardly "amplify our minds". We read on Wikipedia, which is basically just a big textbook. But we've had books for thousands of years! Or we sign up for a MOOC, a Massively Open Online Course, where we watch videos of professors. But we've had moving pictures for over a century! Sure, we now have online forums for education, but that's more of a replacement of transportation -- we don't have to all sit in a classroom together any more -- than an "amplification of the mind".</p>
+
+<p>A computer is not a broadcast medium. A computer is a tool to make us *think* better!</p>
+
+<p>This gives you some background, this is where I'm coming from. In fact, this ideal motivates what I've been doing for the last couple of years.</p>
+
+<p>***</p>
+
+<p>For my dissertation in Computer Science, I wanted to make something that teaches some subject, levering as much power from the computer as possible. My advisor told me, "you're studying Computer Science, so teach programming!" So my goal became to create an engaging programming course for children, a truly amazing interactive experience.</p>
+
+<p>I interviewed various teachers of programming at my old university in the Netherlands, and at a youth centre where I used to volunteer. I wanted to build on their teaching experiences, because I didn't have that many. They told me to use a simple, imperative language in which the children can create something interesting and meaningful, such as a game or a website. For this Javascript is perfect, as it is ubiquitous in online games and websites, hence the "js" in jsdares.</p>
+
+<p>They also told me that trial and error is a vital part of learning, and that an interactive console is a great way to try out commands. If you happen to play an instrument, you must recognise this. You can immediately hear what it is you're playing, and what you're doing wrong. Still, a word of caution: hitting the right notes by trial and error doesn't make you learn music theory.</p>
+
+<p>Also, I felt that an interactive console is not enough. You can try out commands in it, but there is still no direct feedback when writing the actual program. You still have to hit "compile, run, compile, run." Would you like to play an instrument in silence, and only hear the result after you're finished?</p>
+
+<p>Therefore I made a zero-response-time compiler, which compiles and runs the program immediately when editing it. In the first prototype I also added a step button, to go through the program just like the computer does. I hoped that this might teach how exactly the computer executes a program.</p>
+
+<p>A step-through debugger is pretty common when programming nowadays, but this one is a bit more advanced. It also shows intermediate steps in expressions, such as the particular comparisons in a for-loop, or the different steps in a calculation. It shows all the atomic operations a computer performs, and part of learning programming is learning how a computer works.</p>
+
+<p>I also added helpful error messages. The compiler doesn't just tell you it encountered invalid syntax, at line 3. Instead it gives hints inside the editor, such as "Did you forget a semicolon", with the error message positioned exactly where it would have expected the semicolon.</p>
+
+<p>Actually, the language used is not really Javascript, but a subset. This is also known as the sub-language approach. I have called my language js--. This way I could implement editor features such as the error messages and the stepping more quickly: the tools-first approach to language design.</p>
+
+<p>I can also show you how the stepping works exactly. After parsing, the language is compiled from js-- to Javascript, but to quite different Javascript. A lot of extra statements are inserted that give me full control over the execution. This way I can log various steps in the execution trace, which are then visualised when stepping through the program. It also allows me to further restrict the language to prevent mistakes at runtime, such as subtracting strings instead of integers. And it allows me to fully sandbox the execution, so nothing bad can happen. For example, long-running programs are terminated to ensure the interface remains responsive.</p>
+
+<p>***</p>
+
+<p>While I made this first prototype, a guy named Bret Victor gave a presentation called "Inventing on Principle". You might have seen it, and if not, I can highly recommend it. In fact, you should check out all of his work, as it's highly relevant to the work you're doing every day.</p>
+
+<p>In his presentation, Bret proposes a principle that a creator should always have an immediate connection with her creation. A musician should immediately hear his music, a painter should immediately see what happens on his canvas, and a programmer should immediately see the behaviour of his program. In his presentation, he shows some examples for different fields. For the next prototype, I've implemented some of his examples for programming.</p>
+
+<p>***</p>
+
+<p>First, I implemented a button that highlights output and code simultaneously. The reasoning is that by making the connection between output and code visually explicit, this helps understanding of what does what exactly. Unfortunately, I have rarely seen anyone actually using this button.</p>
+
+<p>Secondly, I implemented a button that lets you explore different values by dragging numbers. The reasoning is that when playing with values so easily, you get a *feeling* for how a piece of program behaves. Unfortunately, I have rarely seen anyone actually using this button.</p>
+
+<p>Lets look at the step button again. It was a great reasoning that in order to understand how the computer works, you need to see program execution step by step. In this prototype I have even added step back and reload buttons. I have rarely seen anyone actually using them.</p>
+
+<p>These buttons didn't work, but that doesn't mean the reasoning behind why they should work, is false. People just don't click them. In the next version, I have made all these features implicit, by always highlighting code and output together, always allowing to drag numbers, and always being able to quickly trace the steps through a program. And although I don't have hard data, I still think it might help. But it doesn't help enough to justify the explicit click on a button.</p>
+
+<p>***</p>
+
+<p>Now I'm going to skip over a few prototypes, and show you the current version. There are some prototypes in between, but they are a bit too buggy since I haven't maintained them.</p>
+
+<p>Before, all you could do was write some text to the console. But that's not very interesting to many people. I used to volunteer at a youth centre, where I taught programming and electronics and so on. Often kids would ask me if I could teach them how to make a video game. To them that's very exciting.</p>
+
+<p>So I added a canvas to draw on. I used the standard HTML5 canvas, so that the games that were created in my environment would also work stand-alone on the web. I think it's very important to be able to make "real" things like this, as it's motivating to know that you're learning real skills. It's exciting to know that this is how games are *actually* made.</p>
+
+<p>The only difficulty that I got myself into was that I wanted the highlighting of the output, which I made before, to also work with the canvas. In this version I have removed the explicit buttons, so highlighting and manipulating numbers just works. I have seen students use these features more often now, although with the highlighting it is hard to see whether they use it consciously. But even when they don't use it consciously, I hope that it might help.</p>
+
+<p>For the highlighting to work, I had to save the mapping between statements and shapes on the canvas. For the direction "statement to shape" I saved all arguments of a method call that draws the shape, and also the entire state of the canvas.</p>
+
+<p>The other direction, from shapes to statements, is a bit more tricky. The HTML5 canvas doesn't store shapes, such as with SVG. It only stores pixels. So I had to track shapes myself. To do this, I maintain a "mirror canvas", on which I draw the exact same shapes as on the normal canvas. Only on this mirror canvas I use a different colour for each shape, as an identifier. I also maintain a mapping between these colours and the statements. When the user moves the mouse over the real canvas, I look up the same pixel, only on the mirror canvas.</p>
+
+<p>[The only tricky part is that the canvas does colour blending (anti-aliasing) at the edges of shapes, thus generating colours that could represent shapes that have nothing to do with the two shapes that touch each other. We would rather have that nothing happened when hovering over such a pixel, than that the incorrect shape and statement are highlighted. Therefore I made it to cycle through quite different colours, so that chances of hitting an existing colour through interpolation are tiny.]</p>
+
+<p>***</p>
+
+<p>With such a canvas you can make simple games. But that didn't seem too suitable for learning the very basics of programming. My supervisor suggested moving a robot through a maze. This is similar to the approach of Seymour Papert, who taught mathematical thinking by having children program physical robots.</p>
+
+<p>Papert outlined a lot of great ideas about education and technology in his book "Mindstorms". He is a big proponent of self-directed learning, which is very much in line with my approach of trial-and-error. In the same way that you can go to France to immerse yourself in the French language, and thus learning it, he envisions making a "Mathland" on the computer, in which you immerse yourself to learn math. Self-directed learning works particularly well for math, as there are universal truths just waiting to be discovered, as we have discovered many of them in the last couple of millennia.</p>
+
+<p>To demonstrate, lets see how you can learn math by driving around a robot. First we look at moving around without any walls, so without a maze. Then the robot can drive around freely. Lets drive the robot for a bit, and then turn the it around for 30 degrees, have it drive a little more, turn again, and so on. We could state perhaps the following problem: how much do we have to turn it to drive it back to the original position in 2 turns, or in 3, or in 4, and so on. We find quite easily that for two turns, we have to turn it 180 degrees, and for three it is 120 degrees, then 90, 72, and so on.</p>
+
+<p>Even though most people won't immediately recognise that all the turns add up to 360 degrees, it does give you some kind of intuitive feeling for geometry. And giving specific problems to solve, such as writing down what all the turns add up to, really does help gaining a deep understanding, even though it might go pretty slowly.</p>
+
+<p>***</p>
+
+<p>If we place a wall in the robot environment, we restrict the robot's movements to right angles. This was easier to implement, but also easy to understand. This way we can create mazes, which are puzzles everyone understands.</p>
+
+<p>I wanted to make some kind of programming puzzle that doesn't require a teacher to understand. I think teachers can help a lot when learning, especially when student's don't particularly want to learn the subject, but also because they can spot the particular problems they're struggling with. However, creating a course that doesn't require a teacher is actually quite difficult. It sets a great baseline. If it works well without a teacher, it surely works great with a teacher.</p>
+
+<p>Making puzzles with the robot in a maze turned out to work pretty well for teaching without a teacher. Most people enjoy puzzles, especially when they are so very visual like with the robot driving around. And also when they are of just the right difficulty. Not too hard, which would be off-putting, but also not too easy.</p>
+
+<p>I'll go through a couple of "dares", or puzzles, to show you how I did this.</p>
+
+<p>We start out with learning the vocabulary. Learning programming isn't just learning math in Mathland, it's also learning Javascript in Javascript-land. In the first dare you have to navigate the robot around the wall to the green square, but some commands are given already. This gives a hint as to what to do next. When you start to type "robot." an auto-complete menu appears, giving further hints as to what to do. Many students would just copy and paste one of the given commands, which is also just fine.</p>
+
+<p>[In the next puzzle, or dare, I introduce a preview of the scene, so that you can see what the path should look like. I also introduce the idea of error messages, as I found with user testing that sometimes students would miss the error icon.]</p>
+
+<p>Then, in the next dare, I introduce something interesting. You have to do the dare in as few lines as possible. This sets the stage for introducing different programming concepts later on, as abstraction and loops and so on essentially reduce the amount of code you have to write.</p>
+
+<p>We continue on this theme in the next dare, which is quite simple, but where the preview is misleading, and shows a pretty bad program. I encourage students to find a better solutions, noting that that's what programmers do, and giving extra points if they succeed. Finding a better program than the teacher is pretty cool, and I believe small victories like these are important when learning, as they build excitement and self-confidence.</p>
+
+<p>[The following dare builds, again, upon that theme. Students don't have to visit all goals, but they get extra points. And also extra points for fewer lines.]</p>
+
+<p>Then we start with functions. I provide a function, and some calls to it. I also encourage students to use the step bar below to step through the program, although I'm not sure if they actually do this... (The step bar is still great for demonstrating in front of the class, though!) They then have to use the provided function repeatedly to complete the program. If they try to write out all the statements without using functions, as they did before, it won't actually work. The number of lines is restricted so that they can't use that naive approach, yet flexible enough so that they can make a couple of mistakes.</p>
+
+<p>In the dare after that, they have to start from a blank slate, and implement their function all by themselves. It's very important that they start from a blank slate, as this requires them to really think about what they did before. They can even go back, check out the syntax used before, and really learn to use it. When they accomplish that, they have really learned to do something on their own, which inspires more self-confidence.</p>
+
+<p>I believe this self-confidence is very important, as we punish children enough by telling them that their answers are *wrong*, that they score low on tests, and that "really, they are smart enough", feeling even more miserable when they then fail. These problems can really be solved by everyone. Some will solve them quickly, others will struggle with them a long time, or require some pointers by a teacher. But eventually practically everyone will be able to do them, which feels really great.</p>
+
+<p>This makes it all the more important to start from a blank slate, as then you really feel like you did it all by yourself. Since this is the first dare in which a difficult concept has to be applied from scratch, I've made the repetition in the maze very obvious. This is also something I found with user testing. Before I had a maze in which there was some repetition, but you had to look for it. Figuring out the maze is not the goal of this dare. The goal is to apply a difficult concept in real-life, and feeling good about it.</p>
+
+<p>In the next two dares I introduce function arguments. After that I switch to image dares, where students have to copy an image, and again have to use a function to draw the same picture multiple times.</p>
+
+<p>I could have added more dares to practice using functions, but I wanted to experiment with teaching about variables and loops and such. For this I use the console, as you can easily view variables in there. But I'm still looking for a more engaging way to play with variables. Perhaps we can visualise variables in some way, and then combine it with the robot maze or canvas.</p>
+
+<p>***</p>
+
+<p>For the student, the carrot with which we lure them, the eventual goal, is to make games. Somehow the curriculum should work toward that, but I didn't have time to fill the gap between the basics, and making interactive games. But the game part I've worked on extensively, especially with some great editor features.</p>
+
+<p>On the top of the jsdares homepage, I've added an example game. Of course, you can change some values on the fly and see how the game responds. One thing that's tricky here, is that we don't want to restart the game from the beginning each time we change a value. Yet this is exactly what would happen if we only used the procedure: "when code changes, rerun program". Therefore I detect whether the piece that has been changed is part of an event handler, in which case I just update the event handlers.</p>
+
+<p>What should then happen if you change something outside of an event handler, such as in initialization code? We don't want to abruptly restart the program in such cases either. But it should be restarted to reflect the change. In that case I gently flash the restart button, to indicate that the program needs to be restarted.</p>
+
+<p>***</p>
+
+<p>To have a truly direct connection with what you're making, as Bret Victor suggests in his presentation, you should be able to see what the program does at different points in time. To do that, I can click on the blue "pause" button. Then I get a slider with which I can rewind time. At each point in time the editor shows the kind of event that has been fired, and the function that is executed. And at each point in time, you can go through the full execution trace using the step bar.</p>
+
+<p>As you can see, this all works pretty fast. I've implemented this by not storing everything, but only the events, and every once in a while a snapshot of the system. Based on the snapshots and events I can reconstruct everything in between, given that the program executes in exactly the same way every time, so deterministically. Javascript is typically not deterministic, but in this case I control the full environment. Still, I've added non-deterministic methods, such as a pseudo-random generator, but those can be made deterministic by adding their state to the snapshot.</p>
+
+<p>Another thing I've stolen from Bret Victor, is abstracting over time. In his presentation, he has a game character that is drawn in multiple locations at the same time, for each point in time. When changing the program, you see immediately how the behaviour changes over time. Bret Victor has implemented this only for a pre-programmed game character, but I wanted to do this for any arbitrary program. I found that a function is a good level at which to do this, so you can abstract a function over time by clicking on a blue bar next to a function.</p>
+
+<p>Note, by the way, the use of colour, everything that has to do with individual statements or pieces of code is highlighted green, and everything interactive or time-related uses blue.</p>
+
+<p>***</p>
+
+<p>That's pretty much it! I've tested jsdares quite a few times in classrooms, and it seems to work pretty well. Especially the learning of basic programming concepts works like a charm, and others who've used it have told me so as well. I haven't filled the gap between basic programming and making games yet, but I've included a "dares editor", and everything is open source, so I'm still hoping that someone can come up with something good.</p>
+
+<p>With the advanced editor features such as abstracting over time I wanted to show that they can be implemented efficiently in a real-world IDE. But I'm not yet convinced about their educational value. They may help, but come at a cost of extra complexity, both for the editor developer and for the student. There are dozens of visualisations and teaching aids possible, and we have to pick them carefully.</p>
+
+<p>I think, and I've seen research pointing in this direction, that motivation, active involvement by exploring and tinkering, and some good exercises for self-directed learning, are most important.</p>
+
+<p>Thank you.</p>
