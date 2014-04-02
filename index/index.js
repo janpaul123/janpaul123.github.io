@@ -263,18 +263,24 @@
       log('moveMenuContainerRightStart');
       this.$el.off(transitionEnd);
       this.$el.show();
-      this.$el.addClass('menu-container-move-left');
-      return this.$el.removeClass('menu-container-animated');
+      this.$el.css('visibility', 'hidden');
+      return this.$el.removeClass('menu-container-move-left menu-container-animated');
     };
 
     MenuContainerView.prototype.moveMenuContainerRightMiddle = function() {
+      var _this = this;
       log('moveMenuContainerRightMiddle');
       this.$el.off(transitionEnd);
-      this.$el.addClass('menu-container-animated');
-      this.$el.removeClass('menu-container-move-left');
-      this.$el.on(transitionEnd, this.moveMenuContainerRightEnd);
-      contentContainerView.moveContentRightMiddle();
-      return backgroundView.moveBackgroundRightMiddle();
+      this.$el.addClass('menu-container-move-left');
+      this.$el.removeClass('menu-container-animated');
+      this.$el.css('visibility', 'visible');
+      return _.defer(function() {
+        _this.$el.addClass('menu-container-animated');
+        _this.$el.removeClass('menu-container-move-left');
+        _this.$el.on(transitionEnd, _this.moveMenuContainerRightEnd);
+        contentContainerView.moveContentRightMiddle();
+        return backgroundView.moveBackgroundRightMiddle();
+      });
     };
 
     MenuContainerView.prototype.moveMenuContainerRightEnd = function(e) {
@@ -312,37 +318,20 @@
     }
 
     ItemView.prototype.initialize = function() {
-      this._href = this.$el.data('href') || this.$el.attr('href');
-      this._link = this.$el.attr('href');
-      this._id = this.$el.attr('id');
-      this._linkText = this.$('.js-link').html();
-      this.$originalContainer = this.$el.parent();
-      return this._makeA();
+      var innerLink, innerTime, linkHref;
+      this._viewHref = this.$el.data('href') || this.$el.attr('href');
+      linkHref = this.$el.attr('href');
+      this.$el.attr('href', '#' + this.$el.attr('id'));
+      innerLink = "<a href='" + linkHref + "' target='_blank'>" + (this.$el.data('host')) + "</a>";
+      innerTime = _.compact([innerLink, this.$el.data('with'), this.$el.data('time')]).join(', ');
+      this.$animatedEl = $("<div><a href='#' class='item-animated-back'><span class='icon-hand-left'></span> Back</a><div class='item-animated-inner'><div class='item-animated-inner-title'>" + (this.$el.html()) + "</div><div class='item-animated-inner-description'><div class='item-animated-inner-time'>" + innerTime + "</div>" + (this.$el.data('description')) + "</div></div></div>");
+      this.$animatedEl.addClass(this.$el.attr('class'));
+      this.$animatedEl.addClass('item-animated');
+      return $('.js-item-animated-container').append(this.$animatedEl);
     };
 
     ItemView.prototype.href = function() {
-      return this._href;
-    };
-
-    ItemView.prototype._makeDiv = function() {
-      var $newEl;
-      $newEl = $("<div>" + this.$el.html() + "</div>");
-      $newEl.addClass(this.$el.attr('class'));
-      this.$el.replaceWith($newEl);
-      this.$el = $newEl;
-      this.$('.js-back').html('<a href="#" class="item-back"><span class="icon-hand-left"></span> Back</a>');
-      return this.$('.js-link').html("<a href=\"" + this._link + "\" class=\"item-link\" target=\"_blank\">" + this._linkText + "</a>");
-    };
-
-    ItemView.prototype._makeA = function() {
-      var $newEl;
-      this.$('.js-back').html('');
-      this.$('.js-link').html(this._linkText);
-      $newEl = $("<a>" + this.$el.html() + "</a>");
-      $newEl.addClass(this.$el.attr('class'));
-      $newEl.attr('href', '#' + this._id);
-      this.$el.replaceWith($newEl);
-      return this.$el = $newEl;
+      return this._viewHref;
     };
 
     ItemView.prototype.selectItemStart = function() {
@@ -354,18 +343,15 @@
       }
       window.selectedItemView = this;
       this.lastScrollTop = $(window).scrollTop();
-      this._makeDiv();
       this.reset();
-      offset = this.$originalContainer.offset();
-      this.$el.css({
-        left: offset.left + 1,
-        top: offset.top + 7 - $(window).scrollTop(),
+      offset = this.$el.offset();
+      this.$animatedEl.css({
+        left: offset.left,
+        top: offset.top - $(window).scrollTop(),
         right: $(window).width() - offset.left - this.$el.outerWidth()
       });
-      this.$el.addClass('item-select-start');
-      $('.js-selected-item-container').html(this.$el);
-      $('.js-selected-item-container').addClass('selected-item-container-active');
-      this.$originalContainer.addClass('menu-item-container-selected');
+      this.$animatedEl.addClass('item-animated-select-start item-animated-active');
+      this.$el.addClass('item-hidden');
       menuContainerView.moveMenuContainerLeftStart();
       backgroundView.moveBackgroundLeftStart();
       _.delay(this.selectItemMiddle, 150);
@@ -377,20 +363,14 @@
     ItemView.prototype.selectItemMiddle = function() {
       log('selectItemMiddle');
       this.reset();
-      this.$el.css({
-        left: '',
-        top: '',
-        right: ''
-      });
-      this.$el.addClass('item-select-middle');
-      $('.js-selected-item-container').addClass('selected-item-container-active');
-      this.$originalContainer.addClass('menu-item-container-selected');
-      return this.$el.on(transitionEnd, this.selectItemEnd);
+      this.$animatedEl.addClass('item-animated-select-middle item-animated-active');
+      this.$el.addClass('item-hidden');
+      return this.$animatedEl.on(transitionEnd, this.selectItemEnd);
     };
 
     ItemView.prototype.selectItemEnd = function(e) {
       var _ref4;
-      if (!((e == null) || e.target === this.$el[0])) {
+      if (!((e == null) || e.target === this.$animatedEl[0])) {
         return;
       }
       log('selectItemEnd');
@@ -398,27 +378,17 @@
         _ref4.deselectItemEnd();
       }
       window.selectedItemView = this;
-      this._makeDiv();
       this.reset();
-      this.$el.css({
-        left: '',
-        top: '',
-        right: ''
-      });
-      $('.js-selected-item-container').html(this.$el);
-      return $('.js-selected-item-container').addClass('selected-item-container-active');
+      this.$animatedEl.addClass('item-animated-select-end item-animated-active');
+      return this.$el.addClass('item-hidden');
     };
 
     ItemView.prototype.deselectItemStart = function() {
       log('deselectItemStart');
       this.reset();
-      this.$el.css({
-        left: '',
-        top: '',
-        right: ''
-      });
-      $('.js-selected-item-container').addClass('selected-item-container-active selected-item-container-deselect-start');
-      this.$el.css({
+      this.$el.addClass('item-hidden');
+      this.$animatedEl.addClass('item-animated-deselect-start item-animated-active');
+      this.$animatedEl.css({
         top: -Math.min(65, $(window).scrollTop())
       });
       backgroundView.moveBackgroundRightStart();
@@ -428,50 +398,50 @@
     };
 
     ItemView.prototype.deselectItemMiddle = function() {
-      var newScrollTop, windowWidth;
+      var newScrollTop, offset;
       log('deselectItemMiddle');
       this.reset();
-      $('.js-selected-item-container').addClass('selected-item-container-deselect-middle');
+      this.$el.addClass('item-hidden');
+      this.$animatedEl.addClass('item-animated-deselect-middle');
       $(window).scrollTop(1);
       newScrollTop = this._restoreScrollTop(this.lastScrollTop);
       $(window).scrollTop(newScrollTop);
       log('restoring scroll position', $(window).scrollTop(), newScrollTop, this.lastScrollTop);
-      windowWidth = $(window).width();
-      this.$el.css({
-        left: windowWidth / 2 - 700 / 2 + 150,
-        right: windowWidth / 2 - 700 / 2,
-        top: this.$originalContainer.offset().top + 7 - $(window).scrollTop()
+      offset = this.$el.offset();
+      this.$animatedEl.css({
+        left: offset.left,
+        top: offset.top - $(window).scrollTop(),
+        right: $(window).width() - offset.left - this.$el.outerWidth()
       });
       return _.delay(menuContainerView.moveMenuContainerRightMiddle, 300);
     };
 
     ItemView.prototype.deselectItemEnd = function() {
       log('deselectItemEnd');
-      this._makeA();
       this.reset();
-      this.$el.css({
-        left: '',
-        top: '',
-        right: ''
-      });
-      this.$originalContainer.html(this.$el);
       return window.selectedItemView = null;
     };
 
     ItemView.prototype.reset = function() {
-      this.$el.removeClass('item-select-start item-select-middle');
-      this.$el.off(transitionEnd);
-      this.$originalContainer.removeClass('menu-item-container-selected');
-      return $('.js-selected-item-container').removeClass('selected-item-container-active selected-item-container-deselect-start selected-item-container-deselect-middle');
+      this.$el.removeClass('item-hidden');
+      this.$animatedEl.css({
+        left: '',
+        top: '',
+        right: ''
+      });
+      this.$animatedEl.removeClass('item-animated-select-start item-animated-select-middle item-animated-select-end');
+      this.$animatedEl.removeClass('item-animated-deselect-start item-animated-deselect-middle');
+      this.$animatedEl.removeClass('item-animated-active');
+      return this.$animatedEl.off(transitionEnd);
     };
 
     ItemView.prototype._restoreScrollTop = function(scrollTop) {
-      var containerOffset, pageHeight, windowHeight, _ref4;
+      var offset, pageHeight, windowHeight, _ref4;
       windowHeight = $(window).height();
       pageHeight = menuContainerView.height();
-      containerOffset = this.$originalContainer.offset();
-      if (!((scrollTop != null) && (scrollTop + 100 < (_ref4 = containerOffset.top) && _ref4 < scrollTop + windowHeight - 100))) {
-        scrollTop = containerOffset.top + 36 / 2 - windowHeight / 2;
+      offset = this.$el.offset();
+      if (!((scrollTop != null) && (scrollTop + 100 < (_ref4 = offset.top) && _ref4 < scrollTop + windowHeight - 100))) {
+        scrollTop = offset.top + 36 / 2 - windowHeight / 2;
       }
       if (scrollTop >= pageHeight - windowHeight) {
         scrollTop = pageHeight - windowHeight;

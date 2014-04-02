@@ -22,10 +22,6 @@
   <link rel="apple-touch-icon" sizes="144x144" href="favicons/apple-touch-icon-144x144.png" />
   <link rel="apple-touch-icon" sizes="152x152" href="favicons/apple-touch-icon-152x152.png" />
 
-  <script>
-    window.FACTLINK_LOADED = true; // prevent Factlink from loading here
-  </script>
-
   <script src='fucking-cdn/jquery.min.js'></script>
   <script src="fucking-cdn/underscore-min.js"></script>
   <script src="fucking-cdn/backbone.js"></script>
@@ -36,457 +32,174 @@
 <body class="body-loading">
   <div class="background js-background"></div>
   <div class="content-container js-content-container"></div>
-  <div class="selected-item-container js-selected-item-container"></div>
+  <div class="js-item-animated-container"></div>
   <div class="menu-container js-menu-container">
     <div class="menu js-menu">
       <a href="#" class="menu-title js-title">Jan Paul&rsquo;s exposition</a>
       <img class="menu-planet" src="index/planet.png">
 
-      <div class="menu-list">
-        <div class="menu-list-header">Current projects</div>
-        <div class="menu-group">
-          <div class="menu-group-header">Factlink</div>
+      <div class="menu-explanation">
+        <div class="menu-explanation-header">Vision-driven development</div>
+        <div class="menu-explanation-content">
+          <p>
+            <em>We need to make things that improve humankind. Otherwise, what&rsquo;s the point?</em>
+          </p>
+          <p>
+            <strong>Factlink:</strong>
 
-          <div class="menu-item-container">
-            <a class="item js-item item-type-website" id="factlink" href="https://factlink.com">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Factlink website</div>
-                <div class="item-icon"><i class="icon-desktop"></i></div>
-                <div class="item-description">Curbing misinformation by demanding evidence.</div>
-                <div class="item-time"><span class="js-link item-link-container">factlink.com</span>, Factlink, 2013</div>
-              </div>
+            <a class="item js-item item-type-website" id="factlink" href="https://factlink.com" data-description="Curbing misinformation by demanding evidence." data-host="factlink.com" data-with="Factlink" data-time="2013">
+              <i class="icon-desktop item-icon"></i>Factlink website
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="factlink-hypothesis" href="https://www.quora.com/Factlink/How-does-Factlink-compare-to-Hypothes-is" data-href="factlink-hypothesis">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">How does Factlink compare to Hypothes.is?</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Two approaches, one ambitious mission.</div>
-                <div class="item-time"><span class="js-link item-link-container">quora.com</span>, 2013</div>
-              </div>
+            <a class="item js-item item-type-document" id="factlink-hypothesis" href="https://www.quora.com/Factlink/How-does-Factlink-compare-to-Hypothes-is" data-href="factlink-hypothesis" data-description="Two approaches, one ambitious mission." data-host="quora.com" data-time="2013">
+              <i class="icon-file item-icon"></i>How does Factlink compare to Hypothes.is?
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-repository" id="duplicationjs" href="/duplicationjs">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">duplication.js</div>
-                <div class="item-icon"><i class="icon-gear"></i></div>
-                <div class="item-description">Satire against testing the wrong things.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2013</div>
-              </div>
+            <a class="item js-item item-type-repository" id="duplicationjs" href="/duplicationjs" data-description="Satire against testing the wrong things." data-host="janpaulposma.nl" data-time="2013">
+              <i class="icon-gear item-icon"></i>duplication.js
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="one-legged-standup" href="http://blog.factlink.com/post/46496955547/one-legged-standup">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">One-legged standup</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Don&rsquo;t fall over.</div>
-                <div class="item-time"><span class="js-link item-link-container">blog.factlink.com</span>, 2013</div>
-              </div>
+            <a class="item js-item item-type-document" id="one-legged-standup" href="http://blog.factlink.com/post/46496955547/one-legged-standup" data-description="Don&rsquo;t fall over." data-host="blog.factlink" data-time="2013">
+              <i class="icon-file item-icon"></i>One-legged standup
             </a>
-          </div>
-        </div>
-        <div class="menu-group">
-          <div class="menu-group-header">Versal</div>
+          </p>
+          <p>
+            <strong>Versal:</strong>
 
-          <div class="menu-item-container">
-            <a class="item js-item item-type-website" id="versal" href="https://versal.com/about">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Versal website</div>
-                <div class="item-icon"><i class="icon-desktop"></i></div>
-                <div class="item-description">Building interactive courses.</div>
-                <div class="item-time"><span class="js-link item-link-container">versal.com</span>, Versal Group, 2013</div>
-              </div>
+            <a class="item js-item item-type-website" id="versal" href="https://versal.com/about" data-description="Building interactive courses." data-host="versal.com" data-with="Versal Group" data-time="2013">
+              <i class="icon-desktop item-icon"></i>Versal website
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-repository" id="word2markdown" href="http://engineering.versal.com/word2markdown/">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">word2markdown</div>
-                <div class="item-icon"><i class="icon-gear"></i></div>
-                <div class="item-description">Exporting complex documents.</div>
-                <div class="item-time"><span class="js-link item-link-container">github.com</span>, 2013</div>
-              </div>
+            <a class="item js-item item-type-repository" id="word2markdown" href="http://engineering.versal.com/word2markdown/" data-description="Exporting complex documents." data-host="github.com" data-time="2013">
+              <i class="icon-gear item-icon"></i>word2markdown
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="msc-proposal-education" href="/msc-proposal-education">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Building and Evaluating an Interactive Textbook Platform</span></div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Proposal that didn&rsquo;t quite make it, but is strikingly similar to Versal!</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2011</div>
-              </div>
+            <a class="item js-item item-type-document" id="msc-proposal-education" href="/msc-proposal-education" data-description="Proposal that didn&rsquo;t quite make it, but is strikingly similar to Versal!" data-host="janpaulposma.nl" data-time="2011">
+              <i class="icon-file item-icon"></i>Building and Evaluating an Interactive Textbook Platform</span>
             </a>
-          </div>
-        </div>
-        <div class="menu-group">
-          <div class="menu-group-header">jsdares</div>
+          </p>
+          <p>
+            <strong>jsdares:</strong>
 
-          <div class="menu-item-container">
-            <a class="item js-item item-type-website" id="jsdares" href="http://www.jsdares.com">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">jsdares website</div>
-                <div class="item-icon"><i class="icon-desktop"></i></div>
-                <div class="item-description">Next-generation programming education.</div>
-                <div class="item-time"><span class="js-link item-link-container">jsdares.com</span>, 2012</div>
-              </div>
+            <a class="item js-item item-type-website" id="jsdares" href="http://www.jsdares.com" data-description="Next-generation programming education." data-host="jsdares.com" data-time="2012">
+              <i class="icon-desktop item-icon"></i>jsdares website
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="peeking-under-the-blindfold" href="http://www.jsdares.com/blindfold">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Peeking under the blindfold <span class="star-icon"></span></div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Why should we improve programming education?</div>
-                <div class="item-time"><span class="js-link item-link-container">jsdares.com</span>, 2013</div>
-              </div>
+            <a class="item js-item item-type-document" id="peeking-under-the-blindfold" href="http://www.jsdares.com/blindfold" data-description="Why should we improve programming education?" data-host="jsdares.com" data-time="2013">
+              <i class="icon-file item-icon"></i>Peeking under the blindfold <span class="star-icon"></span>
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="jsdares-thesis" href="http://www.jsdares.com/thesis-jan-paul-posma.pdf">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">jsdare: a new approach to learning programming</span></div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">A thesis that is missing an &ldquo;s&rdquo;.</div>
-                <div class="item-time"><span class="js-link item-link-container">jsdares.com</span>, 2012</div>
-              </div>
+            <a class="item js-item item-type-document" id="jsdares-thesis" href="http://www.jsdares.com/thesis-jan-paul-posma.pdf" data-description="A thesis that is missing an &ldquo;s&rdquo;." data-host="jsdares.com" data-time="2012">
+              <i class="icon-file item-icon"></i>jsdare: a new approach to learning programming</span>
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="msc-proposal-programming" href="/msc-proposal-programming">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">A Novel Introduction to Programming</span></div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">The proposal that led to jsdares.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2012</div>
-              </div>
+            <a class="item js-item item-type-document" id="msc-proposal-programming" href="/msc-proposal-programming" data-description="The proposal that led to jsdares." data-host="janpaulposma.nl" data-time="2012">
+              <i class="icon-file item-icon"></i>A Novel Introduction to Programming</span>
             </a>
-          </div>
+          </p>
         </div>
       </div>
 
-      <div class="menu-list">
-        <div class="menu-list-header">Previous work</div>
-        <div class="menu-group">
-          <div class="menu-group-header" style="height: 2em">Building interfaces</div>
+      <div class="menu-explanation">
+        <div class="menu-explanation-header">Previous work</div>
+        <div class="menu-explanation-content">
+          <p>
+            <strong>Building interfaces:</strong>
 
-          <div class="menu-item-container">
-            <a class="item js-item item-type-website" id="vriendenpolitiek" href="http://www.vriendenpolitiek.nl">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Vriendenpolitiek</div>
-                <div class="item-icon"><i class="icon-desktop"></i></div>
-                <div class="item-description">Visualising voting combinations in parliament. (Dutch)</div>
-                <div class="item-time"><span class="js-link item-link-container">vriendenpolitiek.nl</span>, 2012</div>
-              </div>
+            <a class="item js-item item-type-website" id="vriendenpolitiek" href="http://www.vriendenpolitiek.nl" data-description="Visualising voting combinations in parliament. (Dutch)" data-host="vriendenpolitiek.nl" data-time="2012">
+              <i class="icon-desktop item-icon"></i>Vriendenpolitiek
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="help-i-want-to-change-wikipedia" href="help-i-want-to-change-wikipedia">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Help, I want to change Wikipedia! <span class="star-icon"></span></div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Parser-hacking deluxe.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2011</div>
-              </div>
+            <a class="item js-item item-type-document" id="help-i-want-to-change-wikipedia" href="help-i-want-to-change-wikipedia" data-description="Parser-hacking deluxe." data-host="janpaulposma.nl" data-time="2011">
+              <i class="icon-file item-icon"></i>Help, I want to change Wikipedia! <span class="star-icon"></span>
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-website" id="zwemmeninnoordholland" href="/zwemmeninnoordholland">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Zwemmen in Noord-Holland</div>
-                <div class="item-icon"><i class="icon-desktop"></i></div>
-                <div class="item-description">Visualising public pools. Golden prize at Apps for North-Holland. (Dutch)</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2011</div>
-              </div>
+            <a class="item js-item item-type-website" id="zwemmeninnoordholland" href="/zwemmeninnoordholland" data-description="Visualising public pools. Golden prize at Apps for North-Holland. (Dutch)" data-host="janpaulposma.nl" data-time="2011">
+              <i class="icon-desktop item-icon"></i>Zwemmen in Noord-Holland
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="wikilove" href="https://blog.wikimedia.org/2011/06/24/wikilove-an-experiment-in-appreciation/">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">WikiLove: An experiment in appreciation</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">I helped building this lovely feature.</div>
-                <div class="item-time"><span class="js-link item-link-container">blog.wikimedia.org</span>, Wikimedia Foundation, 2011</div>
-              </div>
+            <a class="item js-item item-type-document" id="wikilove" href="https://blog.wikimedia.org/2011/06/24/wikilove-an-experiment-in-appreciation/" data-description="I helped building this lovely feature." data-host="blog.wikimedia.org" data-with="Wikimedia Foundation" data-time="2011">
+              <i class="icon-file item-icon"></i>WikiLove: An experiment in appreciation
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="worldticketshop" href="http://www.worldticketshop.com/press_releases">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Worldticketshop marketplace</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Large, multi-lingual, multi-currency marketplace.</div>
-                <div class="item-time"><span class="js-link item-link-container">worldticketshop.com</span>, Worldticketshop, 2010</div>
-              </div>
+            <a class="item js-item item-type-document" id="worldticketshop" href="http://www.worldticketshop.com/press_releases" data-description="Large, multi-lingual, multi-currency marketplace." data-host="worldticketshop.com" data-with="Worldticketshop" data-time="2010">
+              <i class="icon-file item-icon"></i>Worldticketshop marketplace
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-website" id="audivididici" href="http://www.audivididici.nl">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Audivididici</div>
-                <div class="item-icon"><i class="icon-desktop"></i></div>
-                <div class="item-description">Visual &amp; auditory learning. (Dutch)</div>
-                <div class="item-time"><span class="js-link item-link-container">audivididici.nl</span>, with Simon Roosjen, 2009</div>
-              </div>
+            <a class="item js-item item-type-website" id="audivididici" href="http://www.audivididici.nl" data-description="Visual &amp; auditory learning. (Dutch)" data-host="audivididici.nl" data-with="Simon Roosjen" data-time="2009">
+              <i class="icon-desktop item-icon"></i>Audivididici
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="cantouch" href="cantouch">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Cantouch</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Building software for multitouch tables.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, Cantouch, 2009</div>
-              </div>
+            <a class="item js-item item-type-document" id="cantouch" href="cantouch" data-description="Building software for multitouch tables." data-host="janpaulposma.nl" data-with="Cantouch" data-time="2009">
+              <i class="icon-file item-icon"></i>Cantouch
             </a>
-          </div>
+          </p>
+          <p>
+            <strong>Pretty pictures:</strong>
 
-        </div>
-        <div class="menu-group">
-          <div class="menu-group-header" style="height: 2em">Pretty<br>pictures</div>
+            <a class="item js-item item-type-document" id="oxford-pictures" href="oxford-pictures" data-description="Photos around St Hugh&rsquo;s college." data-host="janpaulposma.nl" data-time="2012">
+              <i class="icon-file item-icon"></i>Oxford pictures
+            </a>
+            <a class="item js-item item-type-repository" id="raytracer" href="/cg" data-description="Evolution of learning about computer graphics." data-host="janpaulposma.nl" data-with="with Roan Kattouw" data-time="2011">
+              <i class="icon-gear item-icon"></i>Raytracer
+            </a>
+            <a class="item js-item item-type-document" id="analog-highlights-2010" href="analog-highlights-2010" data-description="Pretty pictures." data-host="janpaulposma.nl" data-time="2010">
+              <i class="icon-file item-icon"></i>Analog highlights of 2010
+            </a>
+          </p>
+          <p>
+            <strong>Electronics:</strong>
 
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="oxford-pictures" href="oxford-pictures">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Oxford pictures</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Photos around St Hugh&rsquo;s college.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2012</div>
-              </div>
+            <a class="item js-item item-type-document" id="pimpmybike-biking-at-night-with-style" href="pimpmybike-biking-at-night-with-style" data-description="Biking at night &mdash; with style." data-host="janpaulposma.nl" data-time="2009">
+              <i class="icon-file item-icon"></i>PimpMyBike <span class="star-icon"></span>
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-repository" id="raytracer" href="/cg">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Raytracer</div>
-                <div class="item-icon"><i class="icon-gear"></i></div>
-                <div class="item-description">Evolution of learning about computer graphics.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, with Roan Kattouw, 2011</div>
-              </div>
+            <a class="item js-item item-type-document" id="briefcase" href="briefcase" data-description="With touchscreen." data-host="janpaulposma.nl">
+              <i class="icon-file item-icon"></i>Briefcase computer</span>
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="analog-highlights-2010" href="analog-highlights-2010">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Analog highlights of 2010</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Pretty pictures.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2010</div>
-              </div>
-            </a>
-          </div>
+          </p>
+          <p>
+            <strong>Misc.:</strong>
 
-        </div>
-        <div class="menu-group">
-          <div class="menu-group-header">Electronics</div>
-
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="pimpmybike-biking-at-night-with-style" href="pimpmybike-biking-at-night-with-style">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">PimpMyBike <span class="star-icon"></span></div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Biking at night &mdash; with style.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2009</div>
-              </div>
+            <a class="item js-item item-type-document" id="pangrams" href="pangrams" data-description="Counting quick brown foxes and lazy dogs." data-host="janpaulposma.nl" data-time="2007">
+              <i class="icon-file item-icon"></i>Self-enumerating pangrams
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="briefcase" href="briefcase">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Briefcase computer</span></div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">With touchscreen.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span></div>
-              </div>
+            <a class="item js-item item-type-website" id="scn" href="http://stichting-scn.nl/" data-description="Amazing technical youth centre, where I volunteered for some years. (Dutch)" data-host="stichting-scn.nl">
+              <i class="icon-desktop item-icon"></i>SCN</span>
             </a>
-          </div>
-
-        </div>
-        <div class="menu-group">
-          <div class="menu-group-header">Misc.</div>
-
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="pangrams" href="pangrams">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Self-enumerating pangrams</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Counting quick brown foxes and lazy dogs.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2007</div>
-              </div>
+            <a class="item js-item item-type-document" id="cv" href="/cv" data-description="My course of life." data-host="janpaulposma.nl" data-time="2013">
+              <i class="icon-file item-icon"></i>Curriculum Vit&aelig;
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-website" id="scn" href="http://stichting-scn.nl/">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">SCN</span></div>
-                <div class="item-icon"><i class="icon-desktop"></i></div>
-                <div class="item-description">Amazing technical youth centre, where I volunteered for some years. (Dutch)</div>
-                <div class="item-time"><span class="js-link item-link-container">stichting-scn.nl</span></div>
-              </div>
-            </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="cv" href="/cv">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Curriculum Vit&aelig;</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">My course of life.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2013</div>
-              </div>
-            </a>
-          </div>
+          </p>
         </div>
       </div>
 
-      <div class="menu-list">
-        <div class="menu-list-header">Music</div>
-        <div class="menu-group">
-          <div class="menu-group-header">Glass harp</div>
+      <div class="menu-explanation">
+        <div class="menu-explanation-header">Music</div>
+        <div class="menu-explanation-content">
+          <p>
+            <strong>Glass harp:</strong>
 
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="sound-of-music" href="https://www.youtube.com/watch?v=olqz3_amG1E" data-href="media/sound-of-music.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Sound of Music</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">Yet Another Glass Harp Song.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2009</div>
-              </div>
+            <a class="item js-item item-type-music" id="sound-of-music" href="https://www.youtube.com/watch?v=olqz3_amG1E" data-href="media/sound-of-music.html" data-description="Yet Another Glass Harp Song." data-host="youtube.com" data-time="2009">
+              <i class="icon-music item-icon"></i>Sound of Music
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="mtv" href="https://www.youtube.com/watch?v=Y2CxSVGmTeo" data-href="media/mtv.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Make a big effort to sound like MTV</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">Featuring my glass harp.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, Lernert Engelberts &amp; Sander Plug, 2008</div>
-              </div>
+            <a class="item js-item item-type-music" id="mtv" href="https://www.youtube.com/watch?v=Y2CxSVGmTeo" data-href="media/mtv.html" data-description="Featuring my glass harp." data-host="youtube.com" data-with="Lernert Engelberts &amp; Sander Plug" data-time="2008">
+              <i class="icon-music item-icon"></i>Make a big effort to sound like MTV
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="auld-lang-syne" href="https://www.youtube.com/watch?v=eW3nTQSoMGI" data-href="media/auld-lang-syne.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Auld Lang Syne</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">Not for the light-eared.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2008</div>
-              </div>
+            <a class="item js-item item-type-music" id="auld-lang-syne" href="https://www.youtube.com/watch?v=eW3nTQSoMGI" data-href="media/auld-lang-syne.html" data-description="Not for the light-eared." data-host="youtube.com" data-time="2008">
+              <i class="icon-music item-icon"></i>Auld Lang Syne
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-document" id="glassharp" href="glassharp">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Glassharp construction</div>
-                <div class="item-icon"><i class="icon-file"></i></div>
-                <div class="item-description">Photos of wine glasses.</div>
-                <div class="item-time"><span class="js-link item-link-container">janpaulposma.nl</span>, 2008</div>
-              </div>
+            <a class="item js-item item-type-document" id="glassharp" href="glassharp" data-description="Photos of wine glasses." data-host="janpaulposma.nl" data-time="2008">
+              <i class="icon-file item-icon"></i>Glassharp construction
             </a>
-          </div>
-        </div>
+          </p>
+          <p>
+            <strong>Piano:</strong>
 
-        <div class="menu-group">
-          <div class="menu-group-header">Piano</div>
-
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="simple-life" href="https://www.youtube.com/watch?v=h7FpczUIseI" data-href="media/simple-life.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Jerry Martin &mdash; The Simple Life</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">Also known as &ldquo;Building Theme 6&rdquo; from The Sims.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2010</div>
-              </div>
+            <a class="item js-item item-type-music" id="simple-life" href="https://www.youtube.com/watch?v=h7FpczUIseI" data-href="media/simple-life.html" data-description="Also known as &ldquo;Building Theme 6&rdquo; from The Sims." data-host="youtube.com" data-time="2010">
+              <i class="icon-music item-icon"></i>Jerry Martin &mdash; The Simple Life
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="mad-rush" href="https://www.youtube.com/watch?v=3fhUudjH-5s" data-href="media/mad-rush.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Philip Glass &mdash; Mad Rush</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">One of my favourite piano pieces.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2009</div>
-              </div>
+            <a class="item js-item item-type-music" id="mad-rush" href="https://www.youtube.com/watch?v=3fhUudjH-5s" data-href="media/mad-rush.html" data-description="One of my favourite piano pieces." data-host="youtube.com" data-time="2009">
+              <i class="icon-music item-icon"></i>Philip Glass &mdash; Mad Rush
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="metamorphosis-three" href="https://www.youtube.com/watch?v=DP1mc9GkvpQ" data-href="media/metamorphosis-three.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Philip Glass &mdash; Metamorphosis Three</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">Moderately Fast.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2009</div>
-              </div>
+            <a class="item js-item item-type-music" id="metamorphosis-three" href="https://www.youtube.com/watch?v=DP1mc9GkvpQ" data-href="media/metamorphosis-three.html" data-description="Moderately Fast." data-host="youtube.com" data-time="2009">
+              <i class="icon-music item-icon"></i>Philip Glass &mdash; Metamorphosis Three
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="numb" href="https://www.youtube.com/watch?v=aRO-nCvlKWk#t=21" data-href="media/numb.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Linkin Park &mdash; Numb</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">Works surprisingly well on piano.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2009</div>
-              </div>
+            <a class="item js-item item-type-music" id="numb" href="https://www.youtube.com/watch?v=aRO-nCvlKWk#t=21" data-href="media/numb.html" data-description="Works surprisingly well on piano." data-host="youtube.com" data-time="2009">
+              <i class="icon-music item-icon"></i>Linkin Park &mdash; Numb
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="elite-four" href="https://www.youtube.com/watch?v=6Rgam4omJ2Q" data-href="media/elite-four.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Pok&eacute;mon &mdash; Elite Four</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">Game music!</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2009</div>
-              </div>
+            <a class="item js-item item-type-music" id="elite-four" href="https://www.youtube.com/watch?v=6Rgam4omJ2Q" data-href="media/elite-four.html" data-description="Game music!" data-host="youtube.com" data-time="2009">
+              <i class="icon-music item-icon"></i>Pok&eacute;mon &mdash; Elite Four
             </a>
-          </div>
-          <div class="menu-item-container">
-            <a class="item js-item item-type-music" id="metal-gear-solid" href="https://www.youtube.com/watch?v=h7FpczUIseI" data-href="media/metal-gear-solid.html">
-              <div class="js-back"></div>
-              <div class="item-inner">
-                <div class="item-title">Metal Gear Solid 2</div>
-                <div class="item-icon"><i class="icon-music"></i></div>
-                <div class="item-description">With strings.</div>
-                <div class="item-time"><span class="js-link item-link-container">youtube.com</span>, 2008</div>
-              </div>
+            <a class="item js-item item-type-music" id="metal-gear-solid" href="https://www.youtube.com/watch?v=h7FpczUIseI" data-href="media/metal-gear-solid.html" data-description="With strings." data-host="youtube.com" data-time="2008">
+              <i class="icon-music item-icon"></i>Metal Gear Solid 2
             </a>
-          </div>
+          </p>
         </div>
       </div>
 

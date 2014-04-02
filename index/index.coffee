@@ -12,9 +12,9 @@
 # - Content!!!!!!!
 
 # == Animations ==
-# - selectItemStart: move item to selected-item-container, give fixed position, .item-select-start (keeps it in place), store scroll position
-# - selectItemMiddle: give item .item-select-middle (moves it to top)
-# - selectItemEnd: remove .item-select-middle (becomes absolutely positioned or so)
+# - selectItemStart: move item to selected-item-container, give fixed position, .item-animated-select-start (keeps it in place), store scroll position
+# - selectItemMiddle: give item .item-animated-select-middle (moves it to top)
+# - selectItemEnd: remove .item-animated-select-middle (becomes absolutely positioned or so)
 
 # - deselectItemStart: give item fixed position, .item-deselect-start
 # - deselectItemMiddle: restore scroll position, move to position in menu
@@ -242,18 +242,25 @@ class MenuContainerView extends Backbone.Marionette.ItemView
   moveMenuContainerRightStart: =>
     log 'moveMenuContainerRightStart'
     @$el.off transitionEnd
+
+    # show in place so the item can be animated to it
     @$el.show()
-    @$el.addClass 'menu-container-move-left'
-    @$el.removeClass 'menu-container-animated'
+    @$el.css 'visibility', 'hidden'
+    @$el.removeClass 'menu-container-move-left menu-container-animated'
 
   moveMenuContainerRightMiddle: =>
     log 'moveMenuContainerRightMiddle'
     @$el.off transitionEnd
-    @$el.addClass 'menu-container-animated'
-    @$el.removeClass 'menu-container-move-left'
-    @$el.on transitionEnd, @moveMenuContainerRightEnd
-    contentContainerView.moveContentRightMiddle()
-    backgroundView.moveBackgroundRightMiddle()
+    @$el.addClass 'menu-container-move-left'
+    @$el.removeClass 'menu-container-animated'
+    @$el.css 'visibility', 'visible'
+
+    _.defer =>
+      @$el.addClass 'menu-container-animated'
+      @$el.removeClass 'menu-container-move-left'
+      @$el.on transitionEnd, @moveMenuContainerRightEnd
+      contentContainerView.moveContentRightMiddle()
+      backgroundView.moveBackgroundRightMiddle()
 
   moveMenuContainerRightEnd: (e) =>
     return unless e.target == @$el[0]
@@ -270,52 +277,34 @@ class MenuContainerView extends Backbone.Marionette.ItemView
 class ItemView extends Backbone.Marionette.ItemView
 
   initialize: ->
-    @_href = @$el.data('href') || @$el.attr('href')
-    @_link = @$el.attr('href')
-    @_id = @$el.attr('id')
-    @_linkText = @$('.js-link').html()
+    @_viewHref = @$el.data('href') || @$el.attr('href')
+    linkHref = @$el.attr('href')
+    @$el.attr 'href', '#' + @$el.attr('id')
 
-    @$originalContainer = @$el.parent()
+    innerLink = "<a href='#{linkHref}' target='_blank'>#{@$el.data('host')}</a>"
+    innerTime = _.compact([innerLink, @$el.data('with'), @$el.data('time')]).join(', ')
+    @$animatedEl = $("<div><a href='#' class='item-animated-back'><span class='icon-hand-left'></span> Back</a><div class='item-animated-inner'><div class='item-animated-inner-title'>#{@$el.html()}</div><div class='item-animated-inner-description'><div class='item-animated-inner-time'>#{innerTime}</div>#{@$el.data('description')}</div></div></div>")
+    @$animatedEl.addClass @$el.attr('class')
+    @$animatedEl.addClass 'item-animated'
+    $('.js-item-animated-container').append @$animatedEl
 
-    @_makeA()
-
-  href: -> @_href
-
-  _makeDiv: ->
-    $newEl = $("<div>" + @$el.html() + "</div>")
-    $newEl.addClass @$el.attr('class')
-    @$el.replaceWith($newEl)
-    @$el = $newEl
-
-    @$('.js-back').html '<a href="#" class="item-back"><span class="icon-hand-left"></span> Back</a>'
-    @$('.js-link').html """<a href="#{@_link}" class="item-link" target="_blank">#{@_linkText}</a>"""
-
-  _makeA: ->
-    @$('.js-back').html ''
-    @$('.js-link').html @_linkText
-
-    $newEl = $("<a>" + @$el.html() + "</a>")
-    $newEl.addClass @$el.attr('class')
-    $newEl.attr 'href', '#' + @_id
-    @$el.replaceWith($newEl)
-    @$el = $newEl
+  href: -> @_viewHref
 
   selectItemStart: =>
     log 'selectItemStart'
+
     window.selectedItemView?.deselectItemEnd()
     window.selectedItemView = this
     @lastScrollTop = $(window).scrollTop()
-    @_makeDiv()
+
     @reset()
-    offset = @$originalContainer.offset()
-    @$el.css
-      left: offset.left + 1
-      top: offset.top + 7 - $(window).scrollTop()
+    offset = @$el.offset()
+    @$animatedEl.css
+      left: offset.left
+      top: offset.top - $(window).scrollTop()
       right: $(window).width() - offset.left - @$el.outerWidth()
-    @$el.addClass 'item-select-start'
-    $('.js-selected-item-container').html(@$el)
-    $('.js-selected-item-container').addClass 'selected-item-container-active'
-    @$originalContainer.addClass 'menu-item-container-selected'
+    @$animatedEl.addClass 'item-animated-select-start item-animated-active'
+    @$el.addClass 'item-hidden'
 
     menuContainerView.moveMenuContainerLeftStart()
     backgroundView.moveBackgroundLeftStart()
@@ -324,31 +313,32 @@ class ItemView extends Backbone.Marionette.ItemView
 
   selectItemMiddle: =>
     log 'selectItemMiddle'
+
     @reset()
-    @$el.css left: '', top: '', right: ''
-    @$el.addClass 'item-select-middle'
-    $('.js-selected-item-container').addClass 'selected-item-container-active'
-    @$originalContainer.addClass 'menu-item-container-selected'
-    @$el.on transitionEnd, @selectItemEnd
+    @$animatedEl.addClass 'item-animated-select-middle item-animated-active'
+    @$el.addClass 'item-hidden'
+
+    @$animatedEl.on transitionEnd, @selectItemEnd
 
   selectItemEnd: (e) =>
-    return unless !e? || e.target == @$el[0]
+    return unless !e? || e.target == @$animatedEl[0]
 
     log 'selectItemEnd'
     window.selectedItemView?.deselectItemEnd()
     window.selectedItemView = this
-    @_makeDiv()
+
     @reset()
-    @$el.css left: '', top: '', right: ''
-    $('.js-selected-item-container').html(@$el)
-    $('.js-selected-item-container').addClass 'selected-item-container-active'
+    @$animatedEl.addClass 'item-animated-select-end item-animated-active'
+    @$el.addClass 'item-hidden'
 
   deselectItemStart: =>
     log 'deselectItemStart'
+
     @reset()
-    @$el.css left: '', top: '', right: ''
-    $('.js-selected-item-container').addClass 'selected-item-container-active selected-item-container-deselect-start'
-    @$el.css top: -Math.min(65, $(window).scrollTop())
+    @$el.addClass 'item-hidden'
+    @$animatedEl.addClass 'item-animated-deselect-start item-animated-active'
+    @$animatedEl.css top: -Math.min(65, $(window).scrollTop())
+
     backgroundView.moveBackgroundRightStart()
     menuContainerView.moveMenuContainerRightStart()
     contentContainerView.moveContentRightStart()
@@ -357,7 +347,8 @@ class ItemView extends Backbone.Marionette.ItemView
   deselectItemMiddle: =>
     log 'deselectItemMiddle'
     @reset()
-    $('.js-selected-item-container').addClass 'selected-item-container-deselect-middle'
+    @$el.addClass 'item-hidden'
+    @$animatedEl.addClass 'item-animated-deselect-middle'
     # Stuff above explicitly before scroll top, as that rerenders in FF
 
     # This seems to fix a bug in Chrome where the scroll position stays 0, even when trying to
@@ -368,35 +359,34 @@ class ItemView extends Backbone.Marionette.ItemView
     $(window).scrollTop newScrollTop
     log 'restoring scroll position', $(window).scrollTop(), newScrollTop, @lastScrollTop
 
-    windowWidth = $(window).width()
-    @$el.css
-      left: windowWidth/2 - 700/2 + 150
-      right: windowWidth/2 - 700/2
-      top: @$originalContainer.offset().top + 7 - $(window).scrollTop()
+    offset = @$el.offset()
+    @$animatedEl.css
+      left: offset.left
+      top: offset.top - $(window).scrollTop()
+      right: $(window).width() - offset.left - @$el.outerWidth()
 
     _.delay menuContainerView.moveMenuContainerRightMiddle, 300
 
   deselectItemEnd: =>
     log 'deselectItemEnd'
-    @_makeA()
     @reset()
-    @$el.css left: '', top: '', right: ''
-    @$originalContainer.html(@$el)
     window.selectedItemView = null
 
   reset: =>
-    @$el.removeClass 'item-select-start item-select-middle'
-    @$el.off transitionEnd
-    @$originalContainer.removeClass 'menu-item-container-selected'
-    $('.js-selected-item-container').removeClass 'selected-item-container-active selected-item-container-deselect-start selected-item-container-deselect-middle'
+    @$el.removeClass 'item-hidden'
+    @$animatedEl.css left: '', top: '', right: ''
+    @$animatedEl.removeClass 'item-animated-select-start item-animated-select-middle item-animated-select-end'
+    @$animatedEl.removeClass 'item-animated-deselect-start item-animated-deselect-middle'
+    @$animatedEl.removeClass 'item-animated-active'
+    @$animatedEl.off transitionEnd
 
   _restoreScrollTop: (scrollTop) ->
     windowHeight = $(window).height()
     pageHeight = menuContainerView.height()
-    containerOffset = @$originalContainer.offset()
+    offset = @$el.offset()
 
-    unless scrollTop? && scrollTop+100 < containerOffset.top < scrollTop+windowHeight-100
-      scrollTop = containerOffset.top + 36/2 - windowHeight/2
+    unless scrollTop? && scrollTop+100 < offset.top < scrollTop+windowHeight-100
+      scrollTop = offset.top + 36/2 - windowHeight/2
 
     if scrollTop >= pageHeight - windowHeight
       scrollTop = pageHeight - windowHeight
