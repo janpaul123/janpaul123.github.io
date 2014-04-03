@@ -213,8 +213,11 @@ class ContentContainerView extends Backbone.Marionette.Layout
     @$el.removeClass 'content-container-visible content-container-animated content-container-fixed content-container-move-right'
 
   showIframe: (url, onLoad) ->
+    onLoadOnce = _.once(onLoad)
+    setTimeout onLoadOnce, 500
+
     iframeView = new IframeView url: url
-    @listenTo iframeView, 'onLoad', onLoad
+    @listenTo iframeView, 'onLoad', onLoadOnce
     @iframeRegion.show iframeView
 
   scrollTop: ->

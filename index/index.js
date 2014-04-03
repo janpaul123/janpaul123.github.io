@@ -210,11 +210,13 @@
     };
 
     ContentContainerView.prototype.showIframe = function(url, onLoad) {
-      var iframeView;
+      var iframeView, onLoadOnce;
+      onLoadOnce = _.once(onLoad);
+      setTimeout(onLoadOnce, 500);
       iframeView = new IframeView({
         url: url
       });
-      this.listenTo(iframeView, 'onLoad', onLoad);
+      this.listenTo(iframeView, 'onLoad', onLoadOnce);
       return this.iframeRegion.show(iframeView);
     };
 
