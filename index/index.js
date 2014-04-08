@@ -575,7 +575,9 @@
     };
 
     Router.prototype._showPage = function(page) {
-      $(window).scrollTop(this._previousScrollTop);
+      if (!($("a[name=" + page + "]").length > 0)) {
+        $(window).scrollTop(this._previousScrollTop);
+      }
       return this._page(page);
     };
 

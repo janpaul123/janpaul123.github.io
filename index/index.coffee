@@ -468,7 +468,8 @@ class Router extends Backbone.Router
     @_index()
 
   _showPage: (page) ->
-    $(window).scrollTop @_previousScrollTop # prevent browser resetting of scrollTop
+    unless $("a[name=#{page}]").length > 0 # allow scrolling to anchors
+      $(window).scrollTop @_previousScrollTop # prevent browser resetting of scrollTop
     @_page(page)
 
   navigateToIndex: ->
