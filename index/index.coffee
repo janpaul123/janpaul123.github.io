@@ -376,7 +376,7 @@ class ItemView extends Backbone.Marionette.ItemView
     @$animatedEl.css
       left: offset.left
       top: offset.top - $(window).scrollTop()
-      right: $(window).width() - offset.left - @$el.outerWidth()
+      right: $(window).width() - offset.left - @$el.outerWidth() - 0.5 # small offset to prevent text being hidden, especially when zoomed in
 
     _.delay menuContainerView.moveMenuContainerRightMiddle, 300
 

@@ -420,7 +420,7 @@
       this.$animatedEl.css({
         left: offset.left,
         top: offset.top - $(window).scrollTop(),
-        right: $(window).width() - offset.left - this.$el.outerWidth()
+        right: $(window).width() - offset.left - this.$el.outerWidth() - 0.5
       });
       return _.delay(menuContainerView.moveMenuContainerRightMiddle, 300);
     };
