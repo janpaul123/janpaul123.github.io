@@ -78,6 +78,10 @@ setCss3 = ($element, name, value, addBrowserToValue) ->
     else
       $element.css browser + name, value
 
+
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame
+
 log = ->
   # console.info arguments...
 
@@ -258,12 +262,15 @@ class MenuContainerView extends Backbone.Marionette.ItemView
     @$el.removeClass 'menu-container-animated'
     @$el.css 'visibility', 'visible'
 
-    _.defer =>
-      @$el.addClass 'menu-container-animated'
-      @$el.removeClass 'menu-container-move-left'
-      @$el.on transitionEnd, @moveMenuContainerRightEnd
-      contentContainerView.moveContentRightMiddle()
-      backgroundView.moveBackgroundRightMiddle()
+    window.requestAnimationFrame =>
+      # in this frame the styles are being applied, so wait another frame
+      # to set new styles
+      window.requestAnimationFrame =>
+        @$el.addClass 'menu-container-animated'
+        @$el.removeClass 'menu-container-move-left'
+        @$el.on transitionEnd, @moveMenuContainerRightEnd
+        contentContainerView.moveContentRightMiddle()
+        backgroundView.moveBackgroundRightMiddle()
 
   moveMenuContainerRightEnd: (e) =>
     return unless e.target == @$el[0]
@@ -345,7 +352,10 @@ class ItemView extends Backbone.Marionette.ItemView
     backgroundView.moveBackgroundRightStart()
     menuContainerView.moveMenuContainerRightStart()
     contentContainerView.moveContentRightStart()
-    _.defer @deselectItemMiddle
+    window.requestAnimationFrame =>
+      # in this frame the styles are being applied, so wait another frame
+      # to set new styles
+      window.requestAnimationFrame @deselectItemMiddle
 
   deselectItemMiddle: =>
     log 'deselectItemMiddle'

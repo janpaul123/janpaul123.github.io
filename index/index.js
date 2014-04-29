@@ -19,6 +19,8 @@
     return _results;
   };
 
+  window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
   log = function() {};
 
   transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd';
@@ -276,12 +278,14 @@
       this.$el.addClass('menu-container-move-left');
       this.$el.removeClass('menu-container-animated');
       this.$el.css('visibility', 'visible');
-      return _.defer(function() {
-        _this.$el.addClass('menu-container-animated');
-        _this.$el.removeClass('menu-container-move-left');
-        _this.$el.on(transitionEnd, _this.moveMenuContainerRightEnd);
-        contentContainerView.moveContentRightMiddle();
-        return backgroundView.moveBackgroundRightMiddle();
+      return window.requestAnimationFrame(function() {
+        return window.requestAnimationFrame(function() {
+          _this.$el.addClass('menu-container-animated');
+          _this.$el.removeClass('menu-container-move-left');
+          _this.$el.on(transitionEnd, _this.moveMenuContainerRightEnd);
+          contentContainerView.moveContentRightMiddle();
+          return backgroundView.moveBackgroundRightMiddle();
+        });
       });
     };
 
@@ -386,6 +390,7 @@
     };
 
     ItemView.prototype.deselectItemStart = function() {
+      var _this = this;
       log('deselectItemStart');
       this.reset();
       this.$el.addClass('item-hidden');
@@ -396,7 +401,9 @@
       backgroundView.moveBackgroundRightStart();
       menuContainerView.moveMenuContainerRightStart();
       contentContainerView.moveContentRightStart();
-      return _.defer(this.deselectItemMiddle);
+      return window.requestAnimationFrame(function() {
+        return window.requestAnimationFrame(_this.deselectItemMiddle);
+      });
     };
 
     ItemView.prototype.deselectItemMiddle = function() {
