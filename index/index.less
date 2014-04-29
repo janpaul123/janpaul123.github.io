@@ -24,12 +24,14 @@ html, body {
 }
 
 body {
-  color: #ddd;
+  color: #eee;
   overflow-y: scroll;
 
-  font-family: "Marvel", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   font-size: 16px;
   line-height: 1.8;
+  text-shadow: 0px 0px 1px black;
+  font-weight: 300;
 }
 
 p {
@@ -39,6 +41,7 @@ p {
 
 a {
   color: white;
+  font-weight: 400;
 
   &:hover {
     text-decoration: none;
@@ -110,7 +113,7 @@ em {
   color: #ddd;
 
   font-family: "Londrina Solid", sans-serif;
-  font-size: 3.5em;
+  font-size: 4em;
   text-align: center;
   font-weight: bold;
   padding-top: 20px;
@@ -123,12 +126,6 @@ em {
     color: white;
     .transform(translateZ(1px) scale(1.1) rotate(-1deg));
   }
-}
-
-.menu-subtitle {
-  font-family: 'Ruthie', cursive;
-  font-size: 2.5em;
-  text-align: center;
 }
 
 .floating-planet() {
@@ -154,6 +151,7 @@ em {
   text-align: center;
   font-size: 0.9em;
   margin-bottom: 20px;
+  font-weight: 200;
 }
 
 /// Menu explanations
@@ -164,21 +162,21 @@ em {
 
 .menu-explanation-header {
   font-family: "Londrina Solid", sans-serif;
-  font-size: 3em;
+  font-size: 3.5em;
   text-align: center;
 
-  .transform(scale(1) translateZ(1px));
+  .transform(scale(0.9) translateZ(1px));
   .transition(all @itemAnimationTime);
 }
 
 .menu-explanation-content {
-  background: #333;
+  background: rgba(60,60,60,0.8);
   display: inline-block; // new block formatting context
   width: 100%;
 }
 
 .menu-explanation:hover .menu-explanation-header {
-  .transform(scale(1.1) translateZ(1px));
+  .transform(scale(1) translateZ(1px));
 }
 
 // Item
@@ -193,6 +191,7 @@ em {
   .transform(translateZ(3px));
   outline: 1px solid transparent; // http://stackoverflow.com/questions/9235342/3d-css-transform-jagged-edges-in-firefox
   text-decoration: none;
+  color: white;
 
   .transition(background-color @itemAnimationTime);
 }
@@ -329,14 +328,13 @@ em {
 
 .item-animated-inner-title {
   color: white;
+  font-weight: 400;
 }
 
 .item-animated-inner-description {
-  font-style: italic;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: 1px; // for italic overflow
 }
 
 .item-animated-inner-time {
