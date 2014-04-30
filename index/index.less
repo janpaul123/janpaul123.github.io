@@ -154,6 +154,10 @@ em {
   .animation(floating-planet 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite); /* easeInOutSine */
 }
 
+.menu-container-animated .menu-planet {
+  .animation-play-state(paused);
+}
+
 .menu-planet-subtext {
   font-style: italic;
   text-align: center;
@@ -512,6 +516,10 @@ iframe.content-iframe {
   .animation2(floating-satellite 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite, rotating-satellite 60s ease infinite);
 }
 
+.menu-container-animated .menu-social-satellite {
+  .animation-play-state(paused);
+}
+
 .rotating-satellite-dish() {
   from {.transform(rotate(50deg));}
   50% { .transform(rotate(15deg));}
@@ -534,6 +542,10 @@ iframe.content-iframe {
   background: url(dish.png);
 
   .animation(rotating-satellite-dish 20s linear infinite);
+}
+
+.menu-container-animated .menu-social-satellite-dish {
+  .animation-play-state(paused);
 }
 
 
