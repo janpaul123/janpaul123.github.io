@@ -7,8 +7,9 @@ article {
   background: white;
 }
 
-b {
-  color: black;
+strong, b {
+  font-weight: bold;
+  color: white;
 }
 
 a, a:visited, a:active {

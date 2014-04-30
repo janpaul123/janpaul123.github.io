@@ -19,8 +19,13 @@ p, li, div, ul {
   margin-bottom: 1.5em;
 }
 
-b {
-  color: white;
+strong, b {
+  font-weight: bold;
+  color: black;
+}
+
+em, i {
+  font-style: italic;
 }
 
 a, a:visited, a:active {
