@@ -263,8 +263,9 @@ em {
   left: 0;
   right: 0;
   top: 0;
-  height: 50px;
+  height: 66px;
   padding: 5px 60px;
+  line-height: 1.8em;
 
   display: none;
 }
@@ -273,6 +274,7 @@ em {
   display: block;
   position: fixed;
   height: 20px;
+  line-height: 20px;
   padding: 0 @itemPaddingHorizontal;
 
   .item-animated-back, .item-animated-inner-description, .item-animated-inner-time {
@@ -284,7 +286,7 @@ em {
   display: block;
   position: fixed;
 
-  // left, right, top, height, padding
+  // left, right, top, height, padding, line-height
   .transition(all @itemSelectMiddleTime cubic-bezier(0.175, 0.885, 0.320, 1.275)) !important; /* easeOutBack */
 
   .item-animated-back, .item-animated-inner-description, .item-animated-inner-time {
@@ -305,6 +307,7 @@ em {
   display: block;
   position: fixed;
   height: 20px;
+  line-height: 20px;
   padding: 0 @itemPaddingHorizontal;
   .transition(all @itemDeselectMiddleTime);
 
@@ -318,7 +321,7 @@ em {
 .item-animated-back {
   position: absolute;
   top: 5px;
-  left: 5px;
+  left: 10px;
 }
 
 .item-animated-inner {
@@ -347,7 +350,7 @@ em {
   position: absolute;
   left: 0;
   right: 0;
-  top: 50px;
+  top: 66px;
   bottom: 0;
   z-index: 30;
   .transform(translate3d(0, 0, 1px));
