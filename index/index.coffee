@@ -474,13 +474,24 @@ class Router extends Backbone.Router
     @_previousScrollTop = @_scrollTop = @$window.scrollTop()
 
   _showIndex: ->
-    $(window).scrollTop @_previousScrollTop # prevent browser resetting of scrollTop
+    @_restoreScrollTop() # prevent browser resetting of scrollTop
     @_index()
 
   _showPage: (page) ->
     unless $("a[name=#{page}]").length > 0 # allow scrolling to anchors
-      $(window).scrollTop @_previousScrollTop # prevent browser resetting of scrollTop
+      @_restoreScrollTop() # prevent browser resetting of scrollTop
     @_page(page)
+
+  _restoreScrollTop: ->
+    if /(iPad|iPhone|iPod)/g.test(navigator.userAgent)
+      # iOS seems to not scroll immediately...
+      scrollTop = @_scrollTop
+    else
+      scrollTop = @_previousScrollTop
+
+    $(window).scrollTop scrollTop
+    window.requestAnimationFrame =>
+      $(window).scrollTop scrollTop
 
   navigateToIndex: ->
     @navigate ''

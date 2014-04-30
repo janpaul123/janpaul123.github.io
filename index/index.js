@@ -577,15 +577,29 @@
     };
 
     Router.prototype._showIndex = function() {
-      $(window).scrollTop(this._previousScrollTop);
+      this._restoreScrollTop();
       return this._index();
     };
 
     Router.prototype._showPage = function(page) {
       if (!($("a[name=" + page + "]").length > 0)) {
-        $(window).scrollTop(this._previousScrollTop);
+        this._restoreScrollTop();
       }
       return this._page(page);
+    };
+
+    Router.prototype._restoreScrollTop = function() {
+      var scrollTop,
+        _this = this;
+      if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
+        scrollTop = this._scrollTop;
+      } else {
+        scrollTop = this._previousScrollTop;
+      }
+      $(window).scrollTop(scrollTop);
+      return window.requestAnimationFrame(function() {
+        return $(window).scrollTop(scrollTop);
+      });
     };
 
     Router.prototype.navigateToIndex = function() {
