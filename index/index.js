@@ -395,9 +395,6 @@
       this.reset();
       this.$el.addClass('item-hidden');
       this.$animatedEl.addClass('item-animated-deselect-start item-animated-active');
-      this.$animatedEl.css({
-        top: -Math.min(66, $(window).scrollTop())
-      });
       backgroundView.moveBackgroundRightStart();
       menuContainerView.moveMenuContainerRightStart();
       contentContainerView.moveContentRightStart();

@@ -347,7 +347,6 @@ class ItemView extends Backbone.Marionette.ItemView
     @reset()
     @$el.addClass 'item-hidden'
     @$animatedEl.addClass 'item-animated-deselect-start item-animated-active'
-    @$animatedEl.css top: -Math.min(66, $(window).scrollTop())
 
     backgroundView.moveBackgroundRightStart()
     menuContainerView.moveMenuContainerRightStart()
