@@ -17,8 +17,6 @@
 
 /////
 
-@sideMargin: 150px;
-
 html, body {
   height: 100%;
 }
@@ -32,6 +30,17 @@ body {
   line-height: 1.8;
   text-shadow: 0px 0px 1px black;
   font-weight: 300;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media only screen and (max-device-width: 480px) {
+  body {
+    font-size: 24px;
+  }
+
+  .menu {
+    width: 880px !important;
+  }
 }
 
 p {
@@ -116,7 +125,7 @@ em {
   font-size: 4em;
   text-align: center;
   font-weight: bold;
-  padding-top: 20px;
+  padding-top: 1.25em;
   .transition(all @itemAnimationTime);
   cursor: pointer;
   .transform(translateZ(1px) scale(1) rotate(0));
@@ -141,7 +150,7 @@ em {
 
 .menu-planet {
   display: block;
-  margin: 20px auto;
+  margin: 1.25em auto;
   .animation(floating-planet 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite); /* easeInOutSine */
 }
 
@@ -149,14 +158,14 @@ em {
   font-style: italic;
   text-align: center;
   font-size: 0.9em;
-  margin-bottom: 25px;
+  margin-bottom: 1.5em;
   font-weight: 200;
 }
 
 /// Menu explanations
 
 .menu-explanation {
-  padding: 0 30px 30px;
+  padding: 0 1.8em 1.8em;
 }
 
 .menu-explanation-header {
@@ -183,8 +192,8 @@ em {
 .item {
   display: inline-block;
   background-color: #333;
-  height: 20px;
-  line-height: 20px;
+  height: 1.25em;
+  line-height: 1.25em;
   vertical-align: text-top;
   padding: 0 @itemPaddingHorizontal;
   overflow: hidden;
@@ -263,8 +272,8 @@ em {
   left: 0;
   right: 0;
   top: 0;
-  height: 66px;
-  padding: 5px 10px 5px 70px;
+  height: 4.125em;
+  padding: 5px 10px 5px 4.375em;
   line-height: 1.8em;
 
   display: none;
@@ -273,8 +282,8 @@ em {
 .item-animated-select-start {
   display: block;
   position: fixed;
-  height: 20px;
-  line-height: 20px;
+  height: 1.25em;
+  line-height: 1.25em;
   padding: 0 @itemPaddingHorizontal;
 
   .item-animated-back, .item-animated-inner-description, .item-animated-inner-time {
@@ -306,8 +315,8 @@ em {
 .item-animated-deselect-middle {
   display: block;
   position: fixed;
-  height: 20px;
-  line-height: 20px;
+  height: 1.25em;
+  line-height: 1.25em;
   padding: 0 @itemPaddingHorizontal;
   .transition(all @itemDeselectMiddleTime);
 
@@ -350,7 +359,7 @@ em {
   position: absolute;
   left: 0;
   right: 0;
-  top: 66px;
+  top: 4.125em;
   bottom: 0;
   z-index: 30;
   .transform(translate3d(0, 0, 1px));
@@ -396,9 +405,9 @@ iframe.content-iframe {
 
 .menu-social-container {
   position: relative;
-  padding: 50px;
+  padding: 3em;
   text-align: right;
-  margin: 15px 0 5px;
+  margin: 1em 0 0.3em;
 }
 
 .menu-social {
@@ -474,11 +483,9 @@ iframe.content-iframe {
 .menu-social-satellite-container {
   position: absolute;
   left: 70px;
-  top: -20px;
+  top: -1.25em;
   width: 136px;
   height: 136px;
-
-  .animation(floating-satellite 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite); /* easeInOutSine */
 }
 
 .rotating-satellite() {
@@ -501,7 +508,8 @@ iframe.content-iframe {
   height: 136px;
   background: url(satellite.png);
 
-  .animation(rotating-satellite 60s ease infinite);
+  /* easeInOutSine */
+  .animation2(floating-satellite 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite, rotating-satellite 60s ease infinite);
 }
 
 .rotating-satellite-dish() {
