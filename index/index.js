@@ -360,10 +360,10 @@
       this.$el.addClass('item-hidden');
       menuContainerView.moveMenuContainerLeftStart();
       backgroundView.moveBackgroundLeftStart();
-      _.delay(this.selectItemMiddle, 150);
+      _.delay(this.selectItemMiddle, 300);
       return _.delay((function() {
         return contentContainerView.showContentStart(_this.href());
-      }), 500);
+      }), 650);
     };
 
     ItemView.prototype.selectItemMiddle = function() {

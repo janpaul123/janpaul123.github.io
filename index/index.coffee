@@ -318,8 +318,8 @@ class ItemView extends Backbone.Marionette.ItemView
 
     menuContainerView.moveMenuContainerLeftStart()
     backgroundView.moveBackgroundLeftStart()
-    _.delay @selectItemMiddle, 150
-    _.delay (=> contentContainerView.showContentStart @href()), 500
+    _.delay @selectItemMiddle, 300
+    _.delay (=> contentContainerView.showContentStart @href()), 650
 
   selectItemMiddle: =>
     log 'selectItemMiddle'
