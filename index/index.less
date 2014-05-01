@@ -1,4 +1,5 @@
 @import '../common/mixins.less';
+@import 'factlink_browser.less';
 
 @itemAnimationTime: 0.2s;
 @itemSelectMiddleTime: 0.7s;
@@ -172,6 +173,8 @@ em {
 
 .menu-explanation {
   padding: 0 1.8em 1.8em;
+  position: relative;
+  .transform(translateZ(2px));
 }
 
 .menu-explanation-header {
@@ -180,7 +183,7 @@ em {
   text-align: center;
   color: white;
 
-  .transform(scale(0.9) translateZ(1px));
+  .transform(scale(0.9) translateZ(3px));
   .transition(all @itemAnimationTime);
 }
 
