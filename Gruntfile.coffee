@@ -5,7 +5,8 @@ module.exports = (grunt) ->
     less:
       all:
         options:
-          yuicompress: true
+          compress: true
+          cleancss: true
         files:
           'index/index.css': 'index/index.less'
           'media/metamorphosis-three.css': 'media/metamorphosis-three.less'

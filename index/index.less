@@ -8,6 +8,10 @@
 
 @itemPaddingHorizontal: 5px;
 
+.mobile(@rules) {
+  @media only screen and (max-device-width: 480px) { @rules(); }
+}
+
 /////
 
 * {
@@ -31,16 +35,10 @@ body {
   text-shadow: 0px 0px 1px black;
   font-weight: 300;
   -webkit-text-size-adjust: 100%;
-}
 
-@media only screen and (max-device-width: 480px) {
-  body {
+  .mobile({
     font-size: 24px;
-  }
-
-  .menu {
-    width: 880px !important;
-  }
+  });
 }
 
 p {
@@ -114,6 +112,10 @@ em {
 .menu {
   width: 660px;
   margin: 0 auto;
+
+  .mobile({
+    width: 880px !important;
+  });
 }
 
 .menu-title {
