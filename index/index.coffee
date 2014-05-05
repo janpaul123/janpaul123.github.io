@@ -129,7 +129,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @_stopUpdating = false
     @_movedLeft = true
     @_movedUp = true
-    @_updateScroll()
+    @_onScroll()
     @$el.addClass 'background-animating'
     @$el.on transitionEnd, @moveBackgroundLeftEnd
 
@@ -140,13 +140,13 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @_movedLeft = true
     @_movedUp = false
     @$el.removeClass 'background-animating'
-    @_updateScroll()
+    @_onScroll()
 
   moveBackgroundRightStart: =>
     log 'moveBackgroundRightStart'
     @$el.off transitionEnd
 
-    @_updateScroll()
+    @_onScroll()
     @_stopUpdating = true
     @_movedLeft = false
     @_movedUp = false
@@ -159,7 +159,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @_stopUpdating = false
     @_movedLeft = false
     @_movedUp = false
-    @_updateScroll()
+    @_onScroll()
     @$el.on transitionEnd, @moveBackgroundRightEnd
 
   moveBackgroundRightEnd: =>
@@ -169,7 +169,7 @@ class BackgroundView extends Backbone.Marionette.ItemView
     @_stopUpdating = false
     @_movedLeft = false
     @_movedUp = false
-    @_updateScroll()
+    @_onScroll()
 
 
 class ContentContainerView extends Backbone.Marionette.Layout

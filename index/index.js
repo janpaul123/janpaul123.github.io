@@ -95,7 +95,7 @@
       this._stopUpdating = false;
       this._movedLeft = true;
       this._movedUp = true;
-      this._updateScroll();
+      this._onScroll();
       this.$el.addClass('background-animating');
       return this.$el.on(transitionEnd, this.moveBackgroundLeftEnd);
     };
@@ -107,13 +107,13 @@
       this._movedLeft = true;
       this._movedUp = false;
       this.$el.removeClass('background-animating');
-      return this._updateScroll();
+      return this._onScroll();
     };
 
     BackgroundView.prototype.moveBackgroundRightStart = function() {
       log('moveBackgroundRightStart');
       this.$el.off(transitionEnd);
-      this._updateScroll();
+      this._onScroll();
       this._stopUpdating = true;
       this._movedLeft = false;
       return this._movedUp = false;
@@ -126,7 +126,7 @@
       this._stopUpdating = false;
       this._movedLeft = false;
       this._movedUp = false;
-      this._updateScroll();
+      this._onScroll();
       return this.$el.on(transitionEnd, this.moveBackgroundRightEnd);
     };
 
@@ -137,7 +137,7 @@
       this._stopUpdating = false;
       this._movedLeft = false;
       this._movedUp = false;
-      return this._updateScroll();
+      return this._onScroll();
     };
 
     return BackgroundView;
