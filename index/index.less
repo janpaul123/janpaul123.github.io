@@ -168,7 +168,11 @@ em {
   position: relative;
   .transform(translateZ(2px));
   margin: 0 auto;
+
   max-width: @menuWidth;
+  .mobile({
+    max-width: none;
+  });
 }
 
 .menu-explanation-header {
@@ -411,7 +415,11 @@ iframe.content-iframe {
   padding: 3em;
   text-align: right;
   margin: 2em auto 1em;
+
   max-width: @menuWidth;
+  .mobile({
+    max-width: none;
+  });
 }
 
 .menu-social {
