@@ -6,6 +6,7 @@
 @itemDeselectMiddleTime: 1.0s;
 @menuMoveTime: 1.0s;
 @contentFadeInTime: 0.7s;
+@menuWidth: 660px;
 
 @itemPaddingHorizontal: 5px;
 
@@ -167,7 +168,7 @@ em {
   position: relative;
   .transform(translateZ(2px));
   margin: 0 auto;
-  max-width: 660px;
+  max-width: @menuWidth;
 }
 
 .menu-explanation-header {
@@ -409,7 +410,8 @@ iframe.content-iframe {
   position: relative;
   padding: 3em;
   text-align: right;
-  margin: 2em 0 1em;
+  margin: 2em auto 1em;
+  max-width: @menuWidth;
 }
 
 .menu-social {
