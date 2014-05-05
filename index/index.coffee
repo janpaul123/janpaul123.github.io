@@ -383,6 +383,7 @@ class ItemView extends Backbone.Marionette.ItemView
     log 'deselectItemEnd'
     @reset()
     window.selectedItemView = null
+    _.defer globalOnScroll
 
   reset: =>
     @$el.removeClass 'item-hidden'
@@ -466,11 +467,12 @@ class Router extends Backbone.Router
 
   _onScroll: =>
     @_previousScrollTop = @_scrollTop
-    @_scrollTop = @$window.scrollTop()
+    @_scrollTop = window.pageYOffset
     log '@_scrollTop', @_scrollTop
+    globalOnScroll()
 
   fixScrollPosition: ->
-    @_previousScrollTop = @_scrollTop = @$window.scrollTop()
+    @_previousScrollTop = @_scrollTop = window.pageYOffset
 
   _showIndex: ->
     @_restoreScrollTop() # prevent browser resetting of scrollTop
@@ -488,9 +490,9 @@ class Router extends Backbone.Router
     else
       scrollTop = @_previousScrollTop
 
-    $(window).scrollTop scrollTop
+    @$window.scrollTop scrollTop
     window.requestAnimationFrame =>
-      $(window).scrollTop scrollTop
+      @$window.scrollTop scrollTop
 
   navigateToIndex: ->
     @navigate ''
@@ -514,6 +516,7 @@ class Router extends Backbone.Router
     else
       @_index()
     @_showBodyContent()
+    pauseAllVimeoPlayers()
 
   _showFirstItemView: (itemView) ->
     itemView.selectItemEnd()
@@ -540,3 +543,48 @@ $ ->
   email = 'mailto:j' + '@' + 'npaulpos'
   email += '.ma'
   $('#email').attr 'href', email
+
+
+#############
+
+
+globalOnScroll = ->
+  updateVimeoPlayers()
+
+vimeoPlayers = []
+$ ->
+  $('.js-vimeo-player').each ->
+    $iframe = $(this)
+    player = $f(this)
+    player.addEvent 'ready', ->
+      vimeoPlayers.push $iframe: $iframe, player: player
+
+      player.addEvent 'pause', ->
+        $iframe.data 'playing', ''
+        log 'vimeo paused', $iframe[0]
+
+      player.addEvent 'play', ->
+        $iframe.data 'playing', 'true'
+        log 'vimeo playing', $iframe[0]
+
+      updateVimeoPlayers()
+
+updateVimeoPlayers = ->
+  return if selectedItemView
+
+  for vimeoPlayer in vimeoPlayers
+    boundingRect = vimeoPlayer.$iframe[0].getBoundingClientRect()
+    if boundingRect.bottom > 0 && boundingRect.top < window.innerHeight
+      if vimeoPlayer.$iframe.data('playing') != 'true'
+        vimeoPlayer.player.api 'play'
+        log 'vimeo starting to play', vimeoPlayer.$iframe[0]
+    else if vimeoPlayer.$iframe.data('playing') == 'true'
+      vimeoPlayer.player.api 'pause'
+      log 'vimeo starting to pause', vimeoPlayer.$iframe[0]
+
+pauseAllVimeoPlayers = ->
+  log 'pauseAllVimeoPlayers'
+  for vimeoPlayer in vimeoPlayers
+    if vimeoPlayer.$iframe.data('playing') == 'true'
+      vimeoPlayer.player.api 'pause'
+      log 'vimeo starting to pause', vimeoPlayer.$iframe[0]

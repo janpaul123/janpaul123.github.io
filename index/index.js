@@ -1,5 +1,5 @@
 (function() {
-  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, log, setCss3, transitionEnd, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
+  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, log, pauseAllVimeoPlayers, setCss3, transitionEnd, updateVimeoPlayers, vimeoPlayers, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -425,7 +425,8 @@
     ItemView.prototype.deselectItemEnd = function() {
       log('deselectItemEnd');
       this.reset();
-      return window.selectedItemView = null;
+      window.selectedItemView = null;
+      return _.defer(globalOnScroll);
     };
 
     ItemView.prototype.reset = function() {
@@ -565,12 +566,13 @@
 
     Router.prototype._onScroll = function() {
       this._previousScrollTop = this._scrollTop;
-      this._scrollTop = this.$window.scrollTop();
-      return log('@_scrollTop', this._scrollTop);
+      this._scrollTop = window.pageYOffset;
+      log('@_scrollTop', this._scrollTop);
+      return globalOnScroll();
     };
 
     Router.prototype.fixScrollPosition = function() {
-      return this._previousScrollTop = this._scrollTop = this.$window.scrollTop();
+      return this._previousScrollTop = this._scrollTop = window.pageYOffset;
     };
 
     Router.prototype._showIndex = function() {
@@ -593,9 +595,9 @@
       } else {
         scrollTop = this._previousScrollTop;
       }
-      $(window).scrollTop(scrollTop);
+      this.$window.scrollTop(scrollTop);
       return window.requestAnimationFrame(function() {
-        return $(window).scrollTop(scrollTop);
+        return _this.$window.scrollTop(scrollTop);
       });
     };
 
@@ -626,7 +628,8 @@
       } else {
         this._index();
       }
-      return this._showBodyContent();
+      this._showBodyContent();
+      return pauseAllVimeoPlayers();
     };
 
     Router.prototype._showFirstItemView = function(itemView) {
@@ -670,5 +673,76 @@
     email += '.ma';
     return $('#email').attr('href', email);
   });
+
+  globalOnScroll = function() {
+    return updateVimeoPlayers();
+  };
+
+  vimeoPlayers = [];
+
+  $(function() {
+    return $('.js-vimeo-player').each(function() {
+      var $iframe, player;
+      $iframe = $(this);
+      player = $f(this);
+      return player.addEvent('ready', function() {
+        vimeoPlayers.push({
+          $iframe: $iframe,
+          player: player
+        });
+        player.addEvent('pause', function() {
+          $iframe.data('playing', '');
+          return log('vimeo paused', $iframe[0]);
+        });
+        player.addEvent('play', function() {
+          $iframe.data('playing', 'true');
+          return log('vimeo playing', $iframe[0]);
+        });
+        return updateVimeoPlayers();
+      });
+    });
+  });
+
+  updateVimeoPlayers = function() {
+    var boundingRect, vimeoPlayer, _i, _len, _results;
+    if (selectedItemView) {
+      return;
+    }
+    _results = [];
+    for (_i = 0, _len = vimeoPlayers.length; _i < _len; _i++) {
+      vimeoPlayer = vimeoPlayers[_i];
+      boundingRect = vimeoPlayer.$iframe[0].getBoundingClientRect();
+      if (boundingRect.bottom > 0 && boundingRect.top < window.innerHeight) {
+        if (vimeoPlayer.$iframe.data('playing') !== 'true') {
+          vimeoPlayer.player.api('play');
+          _results.push(log('vimeo starting to play', vimeoPlayer.$iframe[0]));
+        } else {
+          _results.push(void 0);
+        }
+      } else if (vimeoPlayer.$iframe.data('playing') === 'true') {
+        vimeoPlayer.player.api('pause');
+        _results.push(log('vimeo starting to pause', vimeoPlayer.$iframe[0]));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+
+  pauseAllVimeoPlayers = function() {
+    var vimeoPlayer, _i, _len, _results;
+    log('pauseAllVimeoPlayers');
+    _results = [];
+    for (_i = 0, _len = vimeoPlayers.length; _i < _len; _i++) {
+      vimeoPlayer = vimeoPlayers[_i];
+      if (vimeoPlayer.$iframe.data('playing') === 'true') {
+        vimeoPlayer.player.api('pause');
+        _results.push(log('vimeo starting to pause', vimeoPlayer.$iframe[0]));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
 
 }).call(this);
