@@ -1,0 +1,70 @@
+@imageHeight: 250px;
+@imageMargin: 10px;
+@numberOfImages: 6;
+@imageAngle: 360deg / @numberOfImages;
+@imageDistance: (@imageHeight/2 + @imageMargin) / tan(@imageAngle/2);
+
+.carousel {
+  position: absolute;
+  left: 685px;
+  top: 300px;
+  width: @imageHeight*1.5;
+  height: @imageHeight;
+  -webkit-perspective: 1000px;
+  display: none;
+
+  .carousel-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform: translateZ(-@imageDistance);
+    transition: -webkit-transform 1s;
+  }
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: @imageHeight;
+    transition: opacity 1s;
+  }
+
+  .carousel-frame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 1px solid white;
+    box-shadow: 0 0 30px 15px rgba(255,255,255,0.25);
+  }
+}
+
+.mixin-inner-loop (@i, @j) when (@j > 0) {
+  .carousel-selected-@{i} img:nth-child(@{j}) {
+    opacity: cos((@i - @j)*@imageAngle)/2+0.6;
+  }
+  .mixin-inner-loop(@i, @j - 1);
+}
+
+.mixin-outer-loop (@i) when (@i > 0) {
+  .carousel img:nth-child(@{i}) {
+    -webkit-transform: rotateX(-(@i - 1)*@imageAngle) translateZ(@imageDistance) translateX(-50%);
+  }
+  .carousel-selected-@{i} .carousel-inner {
+    -webkit-transform: translateZ(-@imageDistance) rotateX((@i - 1)*@imageAngle);
+  }
+  .mixin-inner-loop(@i, @numberOfImages);
+  .mixin-outer-loop(@i - 1);
+}
+.mixin-outer-loop(@numberOfImages);
+
+@media only screen and (min-width: 1100px) {
+  .menu-explanation-previous-work {
+    left: -215px;
+    width: 800px !important;
+  }
+
+  .carousel {
+    display: block;
+  }
+}

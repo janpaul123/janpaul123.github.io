@@ -745,4 +745,18 @@
     return _results;
   };
 
+  $(function() {
+    return $('[data-carousel-index]').each(function() {
+      var carouselIndex;
+      carouselIndex = $(this).data('carousel-index');
+      return $(this).on('mouseenter', function() {
+        var i, _i;
+        for (i = _i = 0; _i <= 100; i = ++_i) {
+          $('.carousel').removeClass("carousel-selected-" + i);
+        }
+        return $('.carousel').addClass("carousel-selected-" + carouselIndex);
+      });
+    });
+  });
+
 }).call(this);

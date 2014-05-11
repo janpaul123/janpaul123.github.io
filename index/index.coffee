@@ -588,3 +588,15 @@ pauseAllVimeoPlayers = ->
     if vimeoPlayer.$iframe.data('playing') == 'true'
       vimeoPlayer.player.api 'pause'
       log 'vimeo starting to pause', vimeoPlayer.$iframe[0]
+
+
+
+############
+
+$ ->
+  $('[data-carousel-index]').each ->
+    carouselIndex = $(this).data('carousel-index')
+    $(this).on 'mouseenter', ->
+      for i in [0..100]
+        $('.carousel').removeClass "carousel-selected-#{i}"
+      $('.carousel').addClass "carousel-selected-#{carouselIndex}"
