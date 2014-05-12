@@ -1,5 +1,5 @@
 (function() {
-  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, imageAngle, imageDistance, imageHeight, imageMargin, lastRotateAngle, log, makeBetweenMinus180And180, numberOfImages, pauseAllVimeoPlayers, setCss3, transitionEnd, updateVimeoPlayers, vimeoPlayers, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
+  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, imageAngle, imageDistance, imageHeight, imageMargin, lastRotateAngle, log, makeBetweenMinus180And180, numberOfImages, pauseAllVimeoPlayers, rotateCarouselTo, setCss3, transitionEnd, updateCarouselOpacities, updateVimeoPlayers, vimeoPlayers, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -761,20 +761,37 @@
     return ((angle + 180 + 360 * 10000) % 360) - 180;
   };
 
+  updateCarouselOpacities = function(selectedIndex) {
+    return $('.carousel-inner img').each(function(index) {
+      return $(this).css('opacity', Math.cos((selectedIndex - index) * imageAngle / 360 * 2 * Math.PI) / 2 + 0.6);
+    });
+  };
+
+  rotateCarouselTo = function(selectedIndex) {
+    var rotateAngle;
+    rotateAngle = (selectedIndex - 1) * imageAngle;
+    rotateAngle = lastRotateAngle - makeBetweenMinus180And180(lastRotateAngle - rotateAngle);
+    lastRotateAngle = rotateAngle;
+    return setCss3($('.carousel-inner'), 'transform', "translateZ(-" + imageDistance + "px) rotateX(" + rotateAngle + "deg)");
+  };
+
   $(function() {
+    $('.carousel-inner img').each(function(index) {
+      var angle;
+      angle = -(index - 1) * imageAngle;
+      return setCss3($(this), 'transform', "rotateX(" + angle + "deg) translateZ(" + imageDistance + "px) translateX(-50%)");
+    });
+    rotateCarouselTo(0);
+    updateCarouselOpacities(0);
+    _.defer(function() {
+      return setCss3($('.carousel-inner'), 'transition', 'transform 1s', true);
+    });
     return $('[data-carousel-index]').each(function() {
       var carouselIndex;
       carouselIndex = $(this).data('carousel-index');
       return $(this).on('mouseenter', function() {
-        var i, rotateAngle, _i;
-        for (i = _i = 0; _i <= 100; i = ++_i) {
-          $('.carousel').removeClass("carousel-selected-" + i);
-        }
-        $('.carousel').addClass("carousel-selected-" + carouselIndex);
-        rotateAngle = (carouselIndex - 1) * imageAngle;
-        rotateAngle = lastRotateAngle - makeBetweenMinus180And180(lastRotateAngle - rotateAngle);
-        lastRotateAngle = rotateAngle;
-        return setCss3($('.carousel-inner'), 'transform', "translateZ(-" + imageDistance + "px) rotateX(" + rotateAngle + "deg)");
+        rotateCarouselTo(carouselIndex);
+        return updateCarouselOpacities(carouselIndex);
       });
     });
   });

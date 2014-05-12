@@ -603,15 +603,27 @@ lastRotateAngle = 0
 
 makeBetweenMinus180And180 = (angle) -> ((angle+180+360*10000)%360)-180
 
+updateCarouselOpacities = (selectedIndex) ->
+  $('.carousel-inner img').each (index) ->
+    $(this).css 'opacity', Math.cos((selectedIndex - index)*imageAngle/360*2*Math.PI)/2+0.6;
+
+rotateCarouselTo = (selectedIndex) ->
+  rotateAngle = (selectedIndex-1)*imageAngle
+  rotateAngle = lastRotateAngle - makeBetweenMinus180And180(lastRotateAngle-rotateAngle)
+  lastRotateAngle = rotateAngle
+  setCss3 $('.carousel-inner'), 'transform', "translateZ(-#{imageDistance}px) rotateX(#{rotateAngle}deg)"
+
 $ ->
+  $('.carousel-inner img').each (index) ->
+    angle = -(index-1)*imageAngle
+    setCss3 $(this), 'transform', "rotateX(#{angle}deg) translateZ(#{imageDistance}px) translateX(-50%)"
+
+  rotateCarouselTo 0
+  updateCarouselOpacities 0
+  _.defer -> setCss3 $('.carousel-inner'), 'transition', 'transform 1s', true
+
   $('[data-carousel-index]').each ->
     carouselIndex = $(this).data('carousel-index')
     $(this).on 'mouseenter', ->
-      for i in [0..100]
-        $('.carousel').removeClass "carousel-selected-#{i}"
-      $('.carousel').addClass "carousel-selected-#{carouselIndex}"
-
-      rotateAngle = (carouselIndex-1)*imageAngle
-      rotateAngle = lastRotateAngle - makeBetweenMinus180And180(lastRotateAngle-rotateAngle)
-      lastRotateAngle = rotateAngle
-      setCss3 $('.carousel-inner'), 'transform', "translateZ(-#{imageDistance}px) rotateX(#{rotateAngle}deg)"
+      rotateCarouselTo carouselIndex
+      updateCarouselOpacities carouselIndex
