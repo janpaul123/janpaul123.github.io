@@ -1,3 +1,4 @@
+// Keep in sync with JS
 @imageHeight: 250px;
 @imageMargin: 10px;
 @numberOfImages: 6;
@@ -51,7 +52,8 @@
     -webkit-transform: rotateX(-(@i - 1)*@imageAngle) translateZ(@imageDistance) translateX(-50%);
   }
   .carousel-selected-@{i} .carousel-inner {
-    -webkit-transform: translateZ(-@imageDistance) rotateX((@i - 1)*@imageAngle);
+    // Done in JS
+    // -webkit-transform: translateZ(-@imageDistance) rotateX((@i - 1)*@imageAngle);
   }
   .mixin-inner-loop(@i, @numberOfImages);
   .mixin-outer-loop(@i - 1);

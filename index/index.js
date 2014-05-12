@@ -1,5 +1,5 @@
 (function() {
-  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, log, pauseAllVimeoPlayers, setCss3, transitionEnd, updateVimeoPlayers, vimeoPlayers, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
+  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, imageAngle, imageDistance, imageHeight, imageMargin, lastRotateAngle, log, makeBetweenMinus180And180, numberOfImages, pauseAllVimeoPlayers, setCss3, transitionEnd, updateVimeoPlayers, vimeoPlayers, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -745,16 +745,36 @@
     return _results;
   };
 
+  imageHeight = 250;
+
+  imageMargin = 10;
+
+  numberOfImages = 6;
+
+  imageAngle = 360 / numberOfImages;
+
+  imageDistance = (imageHeight / 2 + imageMargin) / Math.tan(imageAngle / 360 * Math.PI);
+
+  lastRotateAngle = 0;
+
+  makeBetweenMinus180And180 = function(angle) {
+    return ((angle + 180 + 360 * 10000) % 360) - 180;
+  };
+
   $(function() {
     return $('[data-carousel-index]').each(function() {
       var carouselIndex;
       carouselIndex = $(this).data('carousel-index');
       return $(this).on('mouseenter', function() {
-        var i, _i;
+        var i, rotateAngle, _i;
         for (i = _i = 0; _i <= 100; i = ++_i) {
           $('.carousel').removeClass("carousel-selected-" + i);
         }
-        return $('.carousel').addClass("carousel-selected-" + carouselIndex);
+        $('.carousel').addClass("carousel-selected-" + carouselIndex);
+        rotateAngle = (carouselIndex - 1) * imageAngle;
+        rotateAngle = lastRotateAngle - makeBetweenMinus180And180(lastRotateAngle - rotateAngle);
+        lastRotateAngle = rotateAngle;
+        return setCss3($('.carousel-inner'), 'transform', "translateZ(-" + imageDistance + "px) rotateX(" + rotateAngle + "deg)");
       });
     });
   });

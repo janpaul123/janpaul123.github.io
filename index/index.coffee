@@ -593,6 +593,16 @@ pauseAllVimeoPlayers = ->
 
 ############
 
+# Keep in sync with CSS
+imageHeight = 250
+imageMargin = 10
+numberOfImages = 6
+imageAngle = 360 / numberOfImages
+imageDistance = (imageHeight / 2 + imageMargin) / Math.tan(imageAngle / 360 * Math.PI);
+lastRotateAngle = 0
+
+makeBetweenMinus180And180 = (angle) -> ((angle+180+360*10000)%360)-180
+
 $ ->
   $('[data-carousel-index]').each ->
     carouselIndex = $(this).data('carousel-index')
@@ -600,3 +610,8 @@ $ ->
       for i in [0..100]
         $('.carousel').removeClass "carousel-selected-#{i}"
       $('.carousel').addClass "carousel-selected-#{carouselIndex}"
+
+      rotateAngle = (carouselIndex-1)*imageAngle
+      rotateAngle = lastRotateAngle - makeBetweenMinus180And180(lastRotateAngle-rotateAngle)
+      lastRotateAngle = rotateAngle
+      setCss3 $('.carousel-inner'), 'transform', "translateZ(-#{imageDistance}px) rotateX(#{rotateAngle}deg)"
