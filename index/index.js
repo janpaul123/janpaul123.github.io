@@ -1,5 +1,5 @@
 (function() {
-  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, imageAngle, imageDistance, imageHeight, imageMargin, lastRotateAngle, log, makeBetweenMinus180And180, numberOfImages, pauseAllVimeoPlayers, rotateCarouselTo, setCss3, transitionEnd, updateCarouselOpacities, updateVimeoPlayers, vimeoPlayers, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
+  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, imageAngle, imageDistance, imageHeight, imageMargin, lastRotateAngle, log, makeBetweenMinus180And180, numberOfImages, pauseAllVimeoPlayers, rotateCarouselTo, setCss3, transitionEnd, updateCarouselOpacities, updateVimeoPlayers, vimeoPlayers,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -37,8 +37,7 @@
       this.moveBackgroundLeftEnd = __bind(this.moveBackgroundLeftEnd, this);
       this.moveBackgroundLeftStart = __bind(this.moveBackgroundLeftStart, this);
       this._onScroll = __bind(this._onScroll, this);
-      _ref = BackgroundView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return BackgroundView.__super__.constructor.apply(this, arguments);
     }
 
     BackgroundView.prototype._topOffset = 100;
@@ -85,8 +84,8 @@
     };
 
     BackgroundView.prototype._scrollTop = function() {
-      var _ref1, _ref2;
-      return (_ref1 = (_ref2 = window.contentContainerView) != null ? _ref2.scrollTop() : void 0) != null ? _ref1 : this.$window.scrollTop();
+      var _ref, _ref1;
+      return (_ref = (_ref1 = window.contentContainerView) != null ? _ref1.scrollTop() : void 0) != null ? _ref : this.$window.scrollTop();
     };
 
     BackgroundView.prototype.moveBackgroundLeftStart = function() {
@@ -154,8 +153,7 @@
       this.showContentEnd = __bind(this.showContentEnd, this);
       this.showContentStart = __bind(this.showContentStart, this);
       this.template = __bind(this.template, this);
-      _ref1 = ContentContainerView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return ContentContainerView.__super__.constructor.apply(this, arguments);
     }
 
     ContentContainerView.prototype.template = function() {
@@ -167,14 +165,15 @@
     };
 
     ContentContainerView.prototype.showContentStart = function(url) {
-      var _this = this;
       log('showContentStart');
       this._reset();
       $(window).scrollTop(0);
-      return this.showIframe(url, function() {
-        _this.$el.on(transitionEnd, _this.showContentEnd);
-        return _this.$el.addClass('content-container-visible content-container-animated');
-      });
+      return this.showIframe(url, (function(_this) {
+        return function() {
+          _this.$el.on(transitionEnd, _this.showContentEnd);
+          return _this.$el.addClass('content-container-visible content-container-animated');
+        };
+      })(this));
     };
 
     ContentContainerView.prototype.showContentEnd = function() {
@@ -186,12 +185,12 @@
     };
 
     ContentContainerView.prototype.moveContentRightStart = function() {
-      var _ref2;
+      var _ref;
       log('moveContentRightStart');
       this._reset();
       this.$el.addClass('content-container-visible content-container-fixed');
       $(window).scrollTop(0);
-      return (_ref2 = this.iframeRegion.currentView) != null ? _ref2.deactivate() : void 0;
+      return (_ref = this.iframeRegion.currentView) != null ? _ref.deactivate() : void 0;
     };
 
     ContentContainerView.prototype.moveContentRightMiddle = function() {
@@ -223,8 +222,8 @@
     };
 
     ContentContainerView.prototype.scrollTop = function() {
-      var _ref2;
-      return (_ref2 = this.iframeRegion.currentView) != null ? _ref2.scrollTop() : void 0;
+      var _ref;
+      return (_ref = this.iframeRegion.currentView) != null ? _ref.scrollTop() : void 0;
     };
 
     return ContentContainerView;
@@ -240,8 +239,7 @@
       this.moveMenuContainerRightStart = __bind(this.moveMenuContainerRightStart, this);
       this.moveMenuContainerLeftEnd = __bind(this.moveMenuContainerLeftEnd, this);
       this.moveMenuContainerLeftStart = __bind(this.moveMenuContainerLeftStart, this);
-      _ref2 = MenuContainerView.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return MenuContainerView.__super__.constructor.apply(this, arguments);
     }
 
     MenuContainerView.prototype.moveMenuContainerLeftStart = function() {
@@ -272,21 +270,22 @@
     };
 
     MenuContainerView.prototype.moveMenuContainerRightMiddle = function() {
-      var _this = this;
       log('moveMenuContainerRightMiddle');
       this.$el.off(transitionEnd);
       this.$el.addClass('menu-container-move-left');
       this.$el.removeClass('menu-container-animated');
       this.$el.css('visibility', 'visible');
-      return window.requestAnimationFrame(function() {
-        return window.requestAnimationFrame(function() {
-          _this.$el.addClass('menu-container-animated');
-          _this.$el.removeClass('menu-container-move-left');
-          _this.$el.on(transitionEnd, _this.moveMenuContainerRightEnd);
-          contentContainerView.moveContentRightMiddle();
-          return backgroundView.moveBackgroundRightMiddle();
-        });
-      });
+      return window.requestAnimationFrame((function(_this) {
+        return function() {
+          return window.requestAnimationFrame(function() {
+            _this.$el.addClass('menu-container-animated');
+            _this.$el.removeClass('menu-container-move-left');
+            _this.$el.on(transitionEnd, _this.moveMenuContainerRightEnd);
+            contentContainerView.moveContentRightMiddle();
+            return backgroundView.moveBackgroundRightMiddle();
+          });
+        };
+      })(this));
     };
 
     MenuContainerView.prototype.moveMenuContainerRightEnd = function(e) {
@@ -319,8 +318,7 @@
       this.selectItemEnd = __bind(this.selectItemEnd, this);
       this.selectItemMiddle = __bind(this.selectItemMiddle, this);
       this.selectItemStart = __bind(this.selectItemStart, this);
-      _ref3 = ItemView.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return ItemView.__super__.constructor.apply(this, arguments);
     }
 
     ItemView.prototype.initialize = function() {
@@ -341,11 +339,10 @@
     };
 
     ItemView.prototype.selectItemStart = function() {
-      var offset, _ref4,
-        _this = this;
+      var offset, _ref;
       log('selectItemStart');
-      if ((_ref4 = window.selectedItemView) != null) {
-        _ref4.deselectItemEnd();
+      if ((_ref = window.selectedItemView) != null) {
+        _ref.deselectItemEnd();
       }
       window.selectedItemView = this;
       this.lastScrollTop = $(window).scrollTop();
@@ -361,9 +358,11 @@
       menuContainerView.moveMenuContainerLeftStart();
       backgroundView.moveBackgroundLeftStart();
       _.delay(this.selectItemMiddle, 300);
-      return _.delay((function() {
-        return contentContainerView.showContentStart(_this.href());
-      }), 650);
+      return _.delay(((function(_this) {
+        return function() {
+          return contentContainerView.showContentStart(_this.href());
+        };
+      })(this)), 650);
     };
 
     ItemView.prototype.selectItemMiddle = function() {
@@ -375,13 +374,13 @@
     };
 
     ItemView.prototype.selectItemEnd = function(e) {
-      var _ref4;
+      var _ref;
       if (!((e == null) || e.target === this.$animatedEl[0])) {
         return;
       }
       log('selectItemEnd');
-      if ((_ref4 = window.selectedItemView) != null) {
-        _ref4.deselectItemEnd();
+      if ((_ref = window.selectedItemView) != null) {
+        _ref.deselectItemEnd();
       }
       window.selectedItemView = this;
       this.reset();
@@ -390,7 +389,6 @@
     };
 
     ItemView.prototype.deselectItemStart = function() {
-      var _this = this;
       log('deselectItemStart');
       this.reset();
       this.$el.addClass('item-hidden');
@@ -398,9 +396,11 @@
       backgroundView.moveBackgroundRightStart();
       menuContainerView.moveMenuContainerRightStart();
       contentContainerView.moveContentRightStart();
-      return window.requestAnimationFrame(function() {
-        return window.requestAnimationFrame(_this.deselectItemMiddle);
-      });
+      return window.requestAnimationFrame((function(_this) {
+        return function() {
+          return window.requestAnimationFrame(_this.deselectItemMiddle);
+        };
+      })(this));
     };
 
     ItemView.prototype.deselectItemMiddle = function() {
@@ -443,11 +443,11 @@
     };
 
     ItemView.prototype._restoreScrollTop = function(scrollTop) {
-      var offset, pageHeight, windowHeight, _ref4;
+      var offset, pageHeight, windowHeight, _ref;
       windowHeight = $(window).height();
       pageHeight = menuContainerView.height();
       offset = this.$el.offset();
-      if (!((scrollTop != null) && (scrollTop + 100 < (_ref4 = offset.top) && _ref4 < scrollTop + windowHeight - 100))) {
+      if (!((scrollTop != null) && (scrollTop + 100 < (_ref = offset.top) && _ref < scrollTop + windowHeight - 100))) {
         scrollTop = offset.top + 36 / 2 - windowHeight / 2;
       }
       if (scrollTop >= pageHeight - windowHeight) {
@@ -464,8 +464,7 @@
     __extends(IframeView, _super);
 
     function IframeView() {
-      _ref4 = IframeView.__super__.constructor.apply(this, arguments);
-      return _ref4;
+      return IframeView.__super__.constructor.apply(this, arguments);
     }
 
     IframeView.prototype.template = function() {
@@ -473,12 +472,13 @@
     };
 
     IframeView.prototype.onRender = function() {
-      var _this = this;
       log('iframe onRender', this.options.url);
       this.$el.html("<iframe class='content-iframe' scrolling='yes' frameborder='0' src='" + this.options.url + "'></iframe>");
-      return this._iframe().on('load', function() {
-        return _this.onLoad();
-      });
+      return this._iframe().on('load', (function(_this) {
+        return function() {
+          return _this.onLoad();
+        };
+      })(this));
     };
 
     IframeView.prototype.onLoad = function() {
@@ -517,17 +517,17 @@
     };
 
     IframeView.prototype.scrollTop = function() {
-      var _ref5;
+      var _ref;
       if (!this._active) {
         return null;
       }
-      return (_ref5 = this._document()) != null ? _ref5.body.scrollTop : void 0;
+      return (_ref = this._document()) != null ? _ref.body.scrollTop : void 0;
     };
 
     IframeView.prototype._document = function() {
-      var e, _ref5;
+      var e, _ref;
       try {
-        return (_ref5 = this._iframe()[0].contentDocument) != null ? _ref5 : this._iframe()[0].contentWindow.document;
+        return (_ref = this._iframe()[0].contentDocument) != null ? _ref : this._iframe()[0].contentWindow.document;
       } catch (_error) {
         e = _error;
         console.error(e);
@@ -548,8 +548,7 @@
 
     function Router() {
       this._onScroll = __bind(this._onScroll, this);
-      _ref5 = Router.__super__.constructor.apply(this, arguments);
-      return _ref5;
+      return Router.__super__.constructor.apply(this, arguments);
     }
 
     Router.prototype.routes = {
@@ -588,17 +587,18 @@
     };
 
     Router.prototype._restoreScrollTop = function() {
-      var scrollTop,
-        _this = this;
+      var scrollTop;
       if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
         scrollTop = this._scrollTop;
       } else {
         scrollTop = this._previousScrollTop;
       }
       this.$window.scrollTop(scrollTop);
-      return window.requestAnimationFrame(function() {
-        return _this.$window.scrollTop(scrollTop);
-      });
+      return window.requestAnimationFrame((function(_this) {
+        return function() {
+          return _this.$window.scrollTop(scrollTop);
+        };
+      })(this));
     };
 
     Router.prototype.navigateToIndex = function() {
@@ -649,7 +649,7 @@
   })(Backbone.Router);
 
   $(function() {
-    var el, email, _i, _len, _ref6;
+    var el, email, _i, _len, _ref;
     window.backgroundView = new BackgroundView({
       el: $('.js-background')
     }).render();
@@ -660,9 +660,9 @@
       el: $('.js-menu-container')
     });
     window.itemViews = {};
-    _ref6 = $('.js-item');
-    for (_i = 0, _len = _ref6.length; _i < _len; _i++) {
-      el = _ref6[_i];
+    _ref = $('.js-item');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      el = _ref[_i];
       window.itemViews[$(el).attr('id')] = new ItemView({
         el: el
       });
