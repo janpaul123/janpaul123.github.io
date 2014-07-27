@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+
+  <link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+
+  <style>
+    body {
+      font: 15px/1.55 'Merriweather', serif;
+      color: #f7f7f7;
+      background: black !important;
+    }
+
+    article {
+      width: 600px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+    }
+
+    #canvas-left {
+      right: 600px;
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+
+    #canvas-right {
+      left: 600px;
+    }
+
+    em {
+      color: red;
+      font-style: normal;
+    }
+  </style>
+
+  <title>Nightmare</title>
+
+  <article>
+    <p>It felt like a <em>nightmare.</em></p>
+
+    <p>It was dark outside, and the only thing I could see were the lights of the machine overlords, as they flashed by. I had been travelling for a while now, and I just wanted to get home in one piece. As I kept going, I could see people staring at me in the faint street lights. I wondered if those were stares of admiration, of seeing a fellow rebel taking on the machines. Or were they staring disapprovingly, as I looked too different from them? (I refused to wear the typical rebels&rsquo; clothes and silly hats.)</p>
+
+    <p>In the distance I saw a familiar sight, and I knew I had to fight. I had always been able to take on the machines, but it takes only one mistake, and you&rsquo;re done for. I could feel the adrenaline rush through my body. I was so close now, yet I knew this was one of the most tricky parts of my journey. I carefully but swiftly manoeuvred through the moving machines &mdash; dodged one, went around another, made one move out of the way &mdash; until I came to a stop.</p>
+
+    <p>I let out a sigh of relief; I had arrived at the final checkpoint. I would have to get the green light before I could finish my journey. I could feel the machines swoosh by on both sides while I was waiting, even closer than before. After a minute or so, it dawned on me: they would never let me pass. The checkpoint was designed specifically for the machines, and would refuse to let me through.</p>
+
+    <p>Finally defeated, I jumped off, and crossed the intersection on foot. I felt sad. Not for myself, but for society.</p>
+
+    <p>For it wasn&rsquo;t a dream &mdash; it was <em>bicycling</em> in the United States of America.</p>
+
+  </article>
+
+  <script>
+    function makeLanes(canvas, color) {
+        var context = canvas.getContext('2d');
+
+        var laneWidth = 30;
+        var lanes = Math.floor(canvas.width/laneWidth);
+
+        context.fillStyle = 'black';
+        context.fillRect(0,0, laneWidth*lanes, canvas.height);
+
+        context.strokeStyle = color;
+
+        var particles = [];
+        var tickLastT = +new Date()*0.001;
+        var lastSpawn = 0;
+
+        var getLaneX = function(lane) {
+            return laneWidth*lanes - lane*laneWidth - laneWidth/2;
+        }
+
+        var particleInFront = function(plane, py) {
+            var p = particles[i];
+            for (j=0; j<particles.length; j++) {
+                if (i != j) {
+                    var p2 = particles[j];
+                    if (p2.lane == plane && p2.y < py && p2.y > py-40) {
+                        return j;
+                    }
+                }
+            }
+            return false;
+        }
+
+        var cleanup = function() {
+          var newParticles = [];
+          for (i=0; i<particles.length; i++) {
+            var p = particles[i];
+            if (p.y > 0 && p.y <= canvas.height) {
+              newParticles.push({lane: p.lane, x: p.x, y: p.y, v: p.v, lastRandom: p.lastRandom, isBike: p.isBike});
+            }
+          }
+          particles = newParticles;
+        };
+
+        var tick = function(t) {
+            var dt = t - tickLastT;
+            tickLastT = t;
+
+            if (t - lastSpawn > 0.3 && Math.random() < 0.7 && particles.length < 70) {
+                var isBike = Math.random() < 0.015;
+
+                particles.push({
+                    lane: isBike ? 0 : (1+Math.round(Math.random()*0.6)),
+                    x: getLaneX(0),
+                    y: canvas.height+200,
+                    v: isBike ? 50 : (50 + Math.random()*100),
+                    lastRandom: 0,
+                    isBike: isBike
+                });
+                lastSpawn = t;
+            }
+
+            context.fillStyle = 'rgba(0,0,0,0.05)';
+            context.fillRect(0,0, laneWidth*lanes, canvas.height);
+
+            context.fillStyle = color;
+
+            for (i=0; i<particles.length; i++) {
+                var p = particles[i];
+                var origX = p.x, origY = p.y;
+                var laneX = getLaneX(p.lane);
+
+                if (p.v < 0) p.v = 0;
+                p.y -= dt * p.v;
+
+                if (p.isBike) {
+                  if (p.x > laneX) p.x-=dt/0.025;
+                  if (p.x < laneX) p.x+=dt/0.025;
+
+                  if (p.y < canvas.height*2/3 && particleInFront(p.lane+1, p.y+5) === false && p.lane<lanes && t - p.lastRandom > 1.5 && Math.random() < 0.1) {
+                    p.lane++;
+                    p.lastRandom = t;
+                  }
+
+                  context.beginPath();
+                  context.moveTo(p.x, p.y);
+                  context.arc(p.x, p.y, 0.5, 0, Math.PI*2, true);
+                  context.fill();
+                } else {
+                  if (p.x > laneX) p.x-=dt/0.02;
+                  if (p.x < laneX) p.x+=dt/0.02;
+
+                  var pInFrontIndex = particleInFront(p.lane, p.y);
+                  if (Math.random() < 0.1 && pInFrontIndex !== false && p.v > particles[pInFrontIndex].v && particleInFront(p.lane+1, p.y+20) === false && p.lane<lanes-1) {
+                      p.lane++;
+                      p.v += 3 + Math.random() * 5;
+                  } else if (Math.random() < 0.001 && particleInFront(p.lane+1, p.y+20) === false && t - p.lastRandom > 1 && p.lane<lanes-1) {
+                      p.lane++;
+                      p.lastRandom = t;
+                  } else if (Math.random() < 0.003 && p.lane > 1 && particleInFront(p.lane-1, p.y+20) === false && t - p.lastRandom > 1) {
+                      p.lane--;
+                      p.v += 3 + Math.random() * 5;
+                      p.lastRandom = t;
+                  } else if (Math.random() < 0.1) {
+                      p.v += 1 + Math.random() * 3;
+                  } else {
+                    if (pInFrontIndex !== false) {
+                        if (p.v > particles[pInFrontIndex].v) p.v = particles[pInFrontIndex].v - 10;
+                    }
+                  }
+
+                  var angle = (p.x - origX)*2;
+                  context.beginPath();
+                  context.moveTo(origX-3, origY-angle);
+                  context.lineTo(p.x-3, p.y-angle);
+                  context.stroke();
+                  context.arc(p.x-3, p.y-angle, 1, 0, Math.PI*2, true);
+                  context.fill();
+
+                  context.beginPath();
+                  context.moveTo(origX+3, origY+angle);
+                  context.lineTo(p.x+3, p.y+angle);
+                  context.stroke();
+                  context.arc(p.x+3, p.y+angle, 1, 0, Math.PI*2, true);
+                  context.fill();
+                }
+            }
+        };
+
+        var loopLastT = +new Date()*0.001;;
+        var loop = function() {
+            var t = +new Date()*0.001;
+            var dt = t - loopLastT;
+            var stepSize = 0.015, steps = Math.max(0, Math.ceil(dt/stepSize));
+
+            if (steps > 30) {
+              tickLastT = t-stepSize;
+              tick(t);
+              loopLastT = t;
+            } else {
+              for(var step=0; step<steps; step++){
+                tick(loopLastT + step*stepSize);
+              }
+              loopLastT += steps*stepSize;
+            }
+
+            if (particles.length > 60) {
+              cleanup();
+            }
+
+            window.requestAnimationFrame(loop);
+        }
+        loop();
+    };
+
+    window.setTimeout(function() { // setTimeout because of font loading
+      var article = document.getElementsByTagName('article')[0];
+
+      var canvasLeft = document.createElement('canvas');
+      canvasLeft.id = 'canvas-left';
+      canvasLeft.setAttribute('width', '120');
+      canvasLeft.setAttribute('height', parseInt(getComputedStyle(article).height));
+      article.appendChild(canvasLeft);
+      makeLanes(canvasLeft, 'white');
+
+      var canvasRight = document.createElement('canvas');
+      canvasRight.id = 'canvas-right';
+      canvasRight.setAttribute('width', '120');
+      canvasRight.setAttribute('height', parseInt(getComputedStyle(article).height));
+      article.appendChild(canvasRight);
+      makeLanes(canvasRight, 'red');
+    }, 1000);
+  </script>
+</html>
