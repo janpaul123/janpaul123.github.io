@@ -3,7 +3,6 @@
 # - Cross-browser testing
 # - Better performance
 # - Planet should say stuff
-# - Planet should fall down when clicked
 # - Spaceship when clicking title
 # - Better title
 # - Rainbows and unicorns for Femke
@@ -627,3 +626,7 @@ $ ->
     $(this).on 'mouseenter', ->
       rotateCarouselTo carouselIndex
       updateCarouselOpacities carouselIndex
+
+  $('.js-menu-planet').click ->
+    $('.js-menu-planet-container').addClass 'menu-planet-container-fallen'
+    $('.js-menu-planet-subtext').addClass 'menu-planet-subtext-crooked'

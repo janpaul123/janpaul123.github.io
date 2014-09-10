@@ -133,9 +133,9 @@ em {
 }
 
 .floating-planet() {
-  from {.transform(translate(0, 0px) rotate(20deg));}
-  50% { .transform(translate(0, 5px) rotate(20deg));}
-  to {  .transform(translate(0, 0px) rotate(20deg));}
+  from {.transform(translate3d(0, 0px, 2px) rotate(20deg));}
+  50% { .transform(translate3d(0, 5px, 2px) rotate(20deg));}
+  to {  .transform(translate3d(0, 0px, 2px) rotate(20deg));}
 }
 
 @-webkit-keyframes floating-planet { .floating-planet(); }
@@ -147,11 +147,22 @@ em {
 .menu-planet {
   display: block;
   margin: 0 auto 1.25em;
+  cursor: pointer;
   .animation(floating-planet 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite); /* easeInOutSine */
 }
 
 .menu-container-animated .menu-planet {
   .animation-play-state(paused);
+}
+
+&.menu-planet-container-fallen {
+  .transform(translate(0, 40px) rotate(-40deg));
+  .transition(all 0.2s);
+
+  .menu-planet {
+    .animation-play-state(paused);
+    cursor: default;
+  }
 }
 
 .menu-planet-subtext {
@@ -160,6 +171,11 @@ em {
   font-size: 0.9em;
   margin-bottom: 2.5em;
   font-weight: 200;
+
+  &.menu-planet-subtext-crooked {
+    .transform(translate(0, 5px) rotate(-3deg));
+    .transition(all 0.1s ease 0.1s);
+  }
 }
 
 /// Menu explanations

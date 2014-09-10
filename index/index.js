@@ -786,13 +786,17 @@
     _.defer(function() {
       return setCss3($('.carousel-inner'), 'transition', 'transform 1s', true);
     });
-    return $('[data-carousel-index]').each(function() {
+    $('[data-carousel-index]').each(function() {
       var carouselIndex;
       carouselIndex = $(this).data('carousel-index');
       return $(this).on('mouseenter', function() {
         rotateCarouselTo(carouselIndex);
         return updateCarouselOpacities(carouselIndex);
       });
+    });
+    return $('.js-menu-planet').click(function() {
+      $('.js-menu-planet-container').addClass('menu-planet-container-fallen');
+      return $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
     });
   });
 
