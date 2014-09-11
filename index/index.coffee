@@ -631,8 +631,11 @@ $ ->
     if $('.js-menu-planet-container').hasClass 'menu-planet-container-startled'
       $('.js-menu-planet-container').addClass 'menu-planet-container-fallen'
       $('.js-menu-planet-subtext').addClass 'menu-planet-subtext-crooked'
+      clearTimeout(window.planetStartledTimeout) if window.planetStartledTimeout?
     else
       $('.js-menu-planet-container').addClass 'menu-planet-container-startled'
+
+      window.planetStartledTimeout = setTimeout (-> $('.js-menu-planet-container').removeClass 'menu-planet-container-startled'), 5000
 
   $('.js-menu-social-satellite-container').click ->
     if $('.js-menu-social-satellite-container').hasClass 'menu-social-satellite-container-startled2'

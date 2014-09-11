@@ -186,23 +186,21 @@ em {
   font-size: 1em;
   position: absolute;
   .transform(translateX(0));
+  .transition(all 0.15s);
 }
 
 .menu-planet-caption-1 {
-  .transition(all 0.15s);
   top: 0px;
   left: 50%;
   margin-left: 30px;
 }
 
 .menu-planet-caption-2 {
-  .transition(all 0.15s ease-in-out 1s);
   top: 20px;
   left: 50%;
   margin-left: 55px;
 }
 .menu-planet-caption-3 {
-  .transition(all 0.15s ease-in-out 2s);
   left: 50%;
   top: 70px;
   margin-left: 35px;
@@ -213,6 +211,9 @@ em {
   .menu-planet-caption-2 {
     opacity: 1;
     .transform(translateX(20px));
+  }
+  .menu-planet-caption-2 {
+    .transition(all 0.15s ease-in-out 1s);
   }
 }
 
@@ -237,6 +238,7 @@ em {
   .menu-planet-caption-3 {
     opacity: 1;
     .transform(translateX(20px));
+    .transition(all 0.15s ease-in-out 2s);
   }
 }
 

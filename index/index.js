@@ -797,9 +797,15 @@
     $('.js-menu-planet').click(function() {
       if ($('.js-menu-planet-container').hasClass('menu-planet-container-startled')) {
         $('.js-menu-planet-container').addClass('menu-planet-container-fallen');
-        return $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
+        $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
+        if (window.planetStartledTimeout != null) {
+          return clearTimeout(window.planetStartledTimeout);
+        }
       } else {
-        return $('.js-menu-planet-container').addClass('menu-planet-container-startled');
+        $('.js-menu-planet-container').addClass('menu-planet-container-startled');
+        return window.planetStartledTimeout = setTimeout((function() {
+          return $('.js-menu-planet-container').removeClass('menu-planet-container-startled');
+        }), 5000);
       }
     });
     return $('.js-menu-social-satellite-container').click(function() {
