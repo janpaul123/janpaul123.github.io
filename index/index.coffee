@@ -628,19 +628,24 @@ $ ->
       updateCarouselOpacities carouselIndex
 
   $('.js-menu-planet').click ->
+    clearTimeout(window.planetStartledTimeout) if window.planetStartledTimeout?
+
     if $('.js-menu-planet-container').hasClass 'menu-planet-container-startled'
       $('.js-menu-planet-container').addClass 'menu-planet-container-fallen'
       $('.js-menu-planet-subtext').addClass 'menu-planet-subtext-crooked'
-      clearTimeout(window.planetStartledTimeout) if window.planetStartledTimeout?
     else
       $('.js-menu-planet-container').addClass 'menu-planet-container-startled'
-
       window.planetStartledTimeout = setTimeout (-> $('.js-menu-planet-container').removeClass 'menu-planet-container-startled'), 5000
 
   $('.js-menu-social-satellite-container').click ->
-    if $('.js-menu-social-satellite-container').hasClass 'menu-social-satellite-container-startled2'
-      $('.js-menu-social-satellite-container').addClass 'menu-social-satellite-container-startled3'
-    else if $('.js-menu-social-satellite-container').hasClass 'menu-social-satellite-container-startled'
-      $('.js-menu-social-satellite-container').addClass 'menu-social-satellite-container-startled2'
+    clearTimeout(window.satelliteStartledTimeout) if window.satelliteStartledTimeout?
+    unstartle = -> $('.js-menu-social-container').removeClass 'menu-social-container-startled menu-social-container-startled2'
+
+    if $('.js-menu-social-container').hasClass 'menu-social-container-startled2'
+      $('.js-menu-social-container').addClass 'menu-social-container-startled3'
+    else if $('.js-menu-social-container').hasClass 'menu-social-container-startled'
+      $('.js-menu-social-container').addClass 'menu-social-container-startled2'
+      window.satelliteStartledTimeout = setTimeout unstartle, 5000
     else
-      $('.js-menu-social-satellite-container').addClass 'menu-social-satellite-container-startled'
+      $('.js-menu-social-container').addClass 'menu-social-container-startled'
+      window.satelliteStartledTimeout = setTimeout unstartle, 5000

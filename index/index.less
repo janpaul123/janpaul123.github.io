@@ -602,8 +602,34 @@ iframe.content-iframe {
   cursor: pointer;
 }
 
-.menu-social-satellite-container-startled {
-  .transform(translateZ(2px) rotate(-120deg));
+.menu-social-satellite-caption1,
+.menu-social-satellite-caption2,
+.menu-social-satellite-caption3,
+.menu-social-satellite-caption4,
+.menu-social-satellite-caption5 {
+  opacity: 0;
+  font-family: "Londrina Solid", sans-serif;
+  font-size: 1em;
+  position: absolute;
+  .transform(translate(0,0));
+  .transition(all 0.15s);
+}
+
+.menu-social-satellite-caption1 { top: 60px; left: 195px; }
+.menu-social-satellite-caption2 { top: 80px; left: 200px; }
+.menu-social-satellite-caption3 { top: 90px; left: 100px;  .transition(all 0.15s ease-in-out 0.05s); }
+.menu-social-satellite-caption4 { top: 110px; left: 102px; .transition(all 0.15s ease-in-out 0.10s); }
+.menu-social-satellite-caption5 { top: 130px; left: 102px; .transition(all 0.15s ease-in-out 0.15s); }
+
+.menu-social-container-startled {
+  .menu-social-satellite-container {
+    .transform(translateZ(2px) rotate(-120deg));
+  }
+
+  .menu-social-satellite-caption1 {
+    opacity: 1;
+    .transform(translate(20px, 0));
+  }
 
   .menu-social-satellite {
     .animation-play-state(paused);
@@ -614,13 +640,35 @@ iframe.content-iframe {
   }
 }
 
-.menu-social-satellite-container-startled2 {
-  .animation(shaking-satellite 0.3s);
+.menu-social-container-startled2 {
+  .menu-social-satellite-container {
+    .animation(shaking-satellite 0.3s);
+  }
+
+  .menu-social-satellite-caption2 {
+    opacity: 1;
+    .transform(translate(20px, 0));
+    .transition(all 0.15s ease-in-out 0.3s);
+  }
 }
 
-.menu-social-satellite-container-startled3 {
-  .transition(all 0.5s);
-  .transform(translateZ(2px) translateY(300px) rotate(-122deg));
+.menu-social-container-startled3 {
+  .menu-social-satellite-container {
+    .transition(all 0.5s);
+    .transform(translateZ(2px) translateY(300px) rotate(-122deg));
+  }
+
+  .menu-social-satellite-caption1,
+  .menu-social-satellite-caption2 {
+    display: none;
+  }
+
+  .menu-social-satellite-caption3,
+  .menu-social-satellite-caption4,
+  .menu-social-satellite-caption5 {
+    opacity: 1;
+    .transform(translate(0, 20px));
+  }
 }
 
 .floating-satellite() {

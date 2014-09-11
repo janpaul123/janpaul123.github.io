@@ -795,12 +795,12 @@
       });
     });
     $('.js-menu-planet').click(function() {
+      if (window.planetStartledTimeout != null) {
+        clearTimeout(window.planetStartledTimeout);
+      }
       if ($('.js-menu-planet-container').hasClass('menu-planet-container-startled')) {
         $('.js-menu-planet-container').addClass('menu-planet-container-fallen');
-        $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
-        if (window.planetStartledTimeout != null) {
-          return clearTimeout(window.planetStartledTimeout);
-        }
+        return $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
       } else {
         $('.js-menu-planet-container').addClass('menu-planet-container-startled');
         return window.planetStartledTimeout = setTimeout((function() {
@@ -809,12 +809,21 @@
       }
     });
     return $('.js-menu-social-satellite-container').click(function() {
-      if ($('.js-menu-social-satellite-container').hasClass('menu-social-satellite-container-startled2')) {
-        return $('.js-menu-social-satellite-container').addClass('menu-social-satellite-container-startled3');
-      } else if ($('.js-menu-social-satellite-container').hasClass('menu-social-satellite-container-startled')) {
-        return $('.js-menu-social-satellite-container').addClass('menu-social-satellite-container-startled2');
+      var unstartle;
+      if (window.satelliteStartledTimeout != null) {
+        clearTimeout(window.satelliteStartledTimeout);
+      }
+      unstartle = function() {
+        return $('.js-menu-social-container').removeClass('menu-social-container-startled menu-social-container-startled2');
+      };
+      if ($('.js-menu-social-container').hasClass('menu-social-container-startled2')) {
+        return $('.js-menu-social-container').addClass('menu-social-container-startled3');
+      } else if ($('.js-menu-social-container').hasClass('menu-social-container-startled')) {
+        $('.js-menu-social-container').addClass('menu-social-container-startled2');
+        return window.satelliteStartledTimeout = setTimeout(unstartle, 5000);
       } else {
-        return $('.js-menu-social-satellite-container').addClass('menu-social-satellite-container-startled');
+        $('.js-menu-social-container').addClass('menu-social-container-startled');
+        return window.satelliteStartledTimeout = setTimeout(unstartle, 5000);
       }
     });
   });
