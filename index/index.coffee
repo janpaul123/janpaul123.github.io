@@ -630,3 +630,11 @@ $ ->
   $('.js-menu-planet').click ->
     $('.js-menu-planet-container').addClass 'menu-planet-container-fallen'
     $('.js-menu-planet-subtext').addClass 'menu-planet-subtext-crooked'
+
+  $('.js-menu-social-satellite-container').click ->
+    if $('.js-menu-social-satellite-container').hasClass 'menu-social-satellite-container-startled2'
+      $('.js-menu-social-satellite-container').addClass 'menu-social-satellite-container-startled3'
+    else if $('.js-menu-social-satellite-container').hasClass 'menu-social-satellite-container-startled'
+      $('.js-menu-social-satellite-container').addClass 'menu-social-satellite-container-startled2'
+    else
+      $('.js-menu-social-satellite-container').addClass 'menu-social-satellite-container-startled'

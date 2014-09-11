@@ -443,9 +443,10 @@ iframe.content-iframe {
 
 .menu-social-container {
   position: relative;
-  padding: 3em;
+  padding: 5em 3em 4em;
   text-align: right;
-  margin: 2em auto 1em;
+  margin: 0 auto;
+  overflow: hidden;
 
   max-width: @menuWidth;
   .mobile({
@@ -510,6 +511,54 @@ iframe.content-iframe {
   .transform(rotate(0deg) translateZ(1px) scale(1));
 }
 
+.shaking-satellite() {
+  0% {.transform(translateZ(2px) rotate(-120deg));}
+  20% { .transform(translateZ(2px) rotate(-122deg));}
+  40% { .transform(translateZ(2px) rotate(-120deg));}
+  60% {  .transform(translateZ(2px) rotate(-122deg));}
+  80% {  .transform(translateZ(2px) rotate(-120deg));}
+  100% {  .transform(translateZ(2px) rotate(-122deg));}
+}
+
+@-webkit-keyframes shaking-satellite { .shaking-satellite(); }
+@-moz-keyframes shaking-satellite { .shaking-satellite(); }
+@-ms-keyframes shaking-satellite { .shaking-satellite(); }
+@-o-keyframes shaking-satellite { .shaking-satellite(); }
+@keyframes shaking-satellite { .shaking-satellite(); }
+
+
+.menu-social-satellite-container {
+  position: absolute;
+  left: 70px;
+  top: 1.75em;
+  width: 136px;
+  height: 136px;
+  .transition(all 0.2s);
+  .transform(translateZ(2px));
+  cursor: pointer;
+}
+
+.menu-social-satellite-container-startled {
+  .transform(translateZ(2px) rotate(-120deg));
+
+  .menu-social-satellite {
+    .animation-play-state(paused);
+  }
+
+  .menu-social-satellite-dish {
+    .animation-play-state(paused);
+  }
+}
+
+.menu-social-satellite-container-startled2 {
+  .animation(shaking-satellite 0.3s);
+}
+
+.menu-social-satellite-container-startled3 {
+  .transition(all 0.5s);
+  .transform(translateZ(2px) translateY(300px) rotate(-122deg));
+}
+
 .floating-satellite() {
   from {.transform(translate3d(0, 0px, 1px));}
   50% { .transform(translate3d(0, 5px, 1px));}
@@ -521,14 +570,6 @@ iframe.content-iframe {
 @-ms-keyframes floating-satellite { .floating-satellite(); }
 @-o-keyframes floating-satellite { .floating-satellite(); }
 @keyframes floating-satellite { .floating-satellite(); }
-
-.menu-social-satellite-container {
-  position: absolute;
-  left: 70px;
-  top: -1.25em;
-  width: 136px;
-  height: 136px;
-}
 
 .rotating-satellite() {
   from {.transform(rotate(-20deg));}

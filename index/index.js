@@ -794,9 +794,18 @@
         return updateCarouselOpacities(carouselIndex);
       });
     });
-    return $('.js-menu-planet').click(function() {
+    $('.js-menu-planet').click(function() {
       $('.js-menu-planet-container').addClass('menu-planet-container-fallen');
       return $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
+    });
+    return $('.js-menu-social-satellite-container').click(function() {
+      if ($('.js-menu-social-satellite-container').hasClass('menu-social-satellite-container-startled2')) {
+        return $('.js-menu-social-satellite-container').addClass('menu-social-satellite-container-startled3');
+      } else if ($('.js-menu-social-satellite-container').hasClass('menu-social-satellite-container-startled')) {
+        return $('.js-menu-social-satellite-container').addClass('menu-social-satellite-container-startled2');
+      } else {
+        return $('.js-menu-social-satellite-container').addClass('menu-social-satellite-container-startled');
+      }
     });
   });
 
