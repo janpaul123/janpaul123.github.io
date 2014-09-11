@@ -628,8 +628,11 @@ $ ->
       updateCarouselOpacities carouselIndex
 
   $('.js-menu-planet').click ->
-    $('.js-menu-planet-container').addClass 'menu-planet-container-fallen'
-    $('.js-menu-planet-subtext').addClass 'menu-planet-subtext-crooked'
+    if $('.js-menu-planet-container').hasClass 'menu-planet-container-startled'
+      $('.js-menu-planet-container').addClass 'menu-planet-container-fallen'
+      $('.js-menu-planet-subtext').addClass 'menu-planet-subtext-crooked'
+    else
+      $('.js-menu-planet-container').addClass 'menu-planet-container-startled'
 
   $('.js-menu-social-satellite-container').click ->
     if $('.js-menu-social-satellite-container').hasClass 'menu-social-satellite-container-startled2'

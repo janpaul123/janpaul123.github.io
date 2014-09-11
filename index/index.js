@@ -795,8 +795,12 @@
       });
     });
     $('.js-menu-planet').click(function() {
-      $('.js-menu-planet-container').addClass('menu-planet-container-fallen');
-      return $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
+      if ($('.js-menu-planet-container').hasClass('menu-planet-container-startled')) {
+        $('.js-menu-planet-container').addClass('menu-planet-container-fallen');
+        return $('.js-menu-planet-subtext').addClass('menu-planet-subtext-crooked');
+      } else {
+        return $('.js-menu-planet-container').addClass('menu-planet-container-startled');
+      }
     });
     return $('.js-menu-social-satellite-container').click(function() {
       if ($('.js-menu-social-satellite-container').hasClass('menu-social-satellite-container-startled2')) {

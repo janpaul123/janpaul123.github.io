@@ -132,10 +132,18 @@ em {
   }
 }
 
+
+.menu-planet {
+  display: block;
+  margin: 0 auto 1.25em;
+  cursor: pointer;
+  .transform(rotate(20deg));
+}
+
 .floating-planet() {
-  from {.transform(translate3d(0, 0px, 2px) rotate(20deg));}
-  50% { .transform(translate3d(0, 5px, 2px) rotate(20deg));}
-  to {  .transform(translate3d(0, 0px, 2px) rotate(20deg));}
+  from {.transform(translate3d(0, 0px, 2px));}
+  50% { .transform(translate3d(0, 5px, 2px));}
+  to {  .transform(translate3d(0, 0px, 2px));}
 }
 
 @-webkit-keyframes floating-planet { .floating-planet(); }
@@ -144,25 +152,17 @@ em {
 @-o-keyframes floating-planet { .floating-planet(); }
 @keyframes floating-planet { .floating-planet(); }
 
-.menu-planet {
-  display: block;
-  margin: 0 auto 1.25em;
-  cursor: pointer;
+.menu-planet-container {
+  position: relative;
+}
+
+.menu-planet-container-inner {
+  position: relative;
   .animation(floating-planet 5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite); /* easeInOutSine */
 }
 
-.menu-container-animated .menu-planet {
+.menu-container-animated .menu-planet-container-inner {
   .animation-play-state(paused);
-}
-
-&.menu-planet-container-fallen {
-  .transform(translate(0, 40px) rotate(-40deg));
-  .transition(all 0.2s);
-
-  .menu-planet {
-    .animation-play-state(paused);
-    cursor: default;
-  }
 }
 
 .menu-planet-subtext {
@@ -175,6 +175,68 @@ em {
   &.menu-planet-subtext-crooked {
     .transform(translate(0, 5px) rotate(-3deg));
     .transition(all 0.1s ease 0.1s);
+  }
+}
+
+.menu-planet-caption-1,
+.menu-planet-caption-2,
+.menu-planet-caption-3 {
+  opacity: 0;
+  font-family: "Londrina Solid", sans-serif;
+  font-size: 1em;
+  position: absolute;
+  .transform(translateX(0));
+}
+
+.menu-planet-caption-1 {
+  .transition(all 0.15s);
+  top: 0px;
+  left: 50%;
+  margin-left: 30px;
+}
+
+.menu-planet-caption-2 {
+  .transition(all 0.15s ease-in-out 1s);
+  top: 20px;
+  left: 50%;
+  margin-left: 55px;
+}
+.menu-planet-caption-3 {
+  .transition(all 0.15s ease-in-out 2s);
+  left: 50%;
+  top: 70px;
+  margin-left: 35px;
+}
+
+.menu-planet-container-startled {
+  .menu-planet-caption-1,
+  .menu-planet-caption-2 {
+    opacity: 1;
+    .transform(translateX(20px));
+  }
+}
+
+.menu-planet-container-fallen {
+  .menu-planet-container-middle {
+    .transform(translate(0, 40px) rotate(-40deg));
+    .transition(all 0.2s);
+  }
+
+  .menu-planet-container-inner {
+    .animation-play-state(paused);
+
+    .menu-planet {
+      cursor: default;
+    }
+  }
+
+  .menu-planet-caption-1,
+  .menu-planet-caption-2 {
+    display: none;
+  }
+  .menu-planet-caption-3 {
+    opacity: 1;
+    .transform(translateX(20px));
   }
 }
 
