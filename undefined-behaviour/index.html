@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-white.css" />
+
+  <script src="codemirror.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="codemirror.css" />
+
+  <style>
+    body {
+      background: white;
+      font: 16px/1.65 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    h1 {
+      font: 3em/1 "Arial Black", sans-serif;
+    }
+
+    article {
+      width: 910px;
+    }
+
+    header {
+      margin-bottom: 2em;
+    }
+
+    time {
+      display: block;
+      margin-bottom: 0.5em;
+      font-style: italic;
+    }
+
+    p {
+      margin: 0; /* for contenteditable */
+    }
+
+    .color-container { color: rgb(233, 78, 27);}
+    .color-top { color: rgb(152, 209, 0);}
+    .color-bottom { color: rgb(54, 169, 225);}
+
+    .example1-container {
+        background: rgb(237, 160, 134);
+        width: 300px;
+        height: 400px;
+        padding: 5px;
+        box-sizing: content-box;
+    }
+    .example1-top {
+        background: rgb(197, 225, 121);
+        overflow-y: scroll;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+    img.example1-image { width: 250px; }
+    .example1-bottom {
+        background: rgb(148, 203, 233);
+        padding: 15px;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+
+    .example2-container,
+    .example3-container,
+    .example4-container,
+    .example5-container,
+    .example6-container {
+      background: rgb(237, 160, 134);
+    }
+    .example2-top,
+    .example3-top,
+    .example4-top,
+    .example5-top,
+    .example6-top {
+      background: rgb(197, 225, 121);
+    }
+    .example2-bottom,
+    .example3-bottom,
+    .example4-bottom,
+    .example5-bottom,
+    .example6-bottom {
+      background: rgb(148, 203, 233);
+      outline: none;
+    }
+
+
+    .example {
+      overflow: hidden;
+    }
+    .example-preview {
+      width: 320px;
+      overflow: hidden;
+      float: left;
+    }
+    .example-editor {
+      width: calc(100% - 320px - 10px*2);
+      float: right;
+      margin: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+  </style>
+
+  <script>
+    function createExampleEditor(element) {
+      var exampleCode = element.innerHTML;
+      element.innerHTML = '<div class="example-preview"></div><div class="example-editor"></div>';
+      element.className += ' example';
+      var codeMirror = CodeMirror(element.querySelector('.example-editor'), {
+        value: exampleCode,
+        mode: "htmlmixed"
+      });
+      var showPreview = function() {
+        element.querySelector('.example-preview').innerHTML = codeMirror.getValue();
+      };
+      codeMirror.on('change', showPreview);
+      showPreview();
+      codeMirror.setSize(null, 390);
+    }
+  </script>
+
+  <title>Undefined Behaviour</title>
+
+  <article>
+    <header>
+      <time pubdate>September 2014</time>
+      <h1>Undefined Behaviour</h1>
+    </header>
+
+    <section>When you discover a trick, and then read in the W3C specs that it relies on undefined behaviour, you know you are in for a treat. Like the olden days of the web.</section>
+
+    <section>What I tried to do shouldn&rsquo;t be hard, yet it is. I wanted to split a <span class="color-container">container of fixed but relative height</span> into two parts: a <span class="color-top">top part</span> that fills up almost the entire container, and is scrollable inside, and a <span class="color-bottom">bottom part</span> that resizes based on the content in it. Like this:</section>
+
+    <section>
+      <div class="example1-container">
+        <div class="example1-top">
+          <p>I am scrollable. This should work in Chrome, Firefox, and IE.</p>
+          <img class="example1-image" src="longcat.jpg"/>
+        </div>
+        <div class="example1-bottom" contenteditable>
+          Click to edit me, and add some lines!
+        </div>
+      </div>
+
+      <script>
+        setInterval(function() {
+          var bottomHeight = document.querySelector('.example1-bottom').offsetHeight;
+          document.querySelector('.example1-top').style.height = (400 - bottomHeight) + 'px';
+        }, 20);
+      </script>
+    </section>
+
+    <section>This was how we had designed the <span class="color-container">sidebar</span> in the <a href="http://versal.com/create">Versal course builder</a>. It contained both a <span class="color-top">scrollable area</span> for lessons and sections, and an <span class="color-bottom">dynamically sized area</span> for editing controls:</section>
+
+    <section><img src="versal-screenshot.png"></section>
+
+    <section>Now, this isn&rsquo;t terribly hard to do with just Javascript, but it is slightly annoying. You have to manually calculates the heights of the different areas, and keep watching in a smart way for updates. Also, the height of the <span class="color-container">container</span> wasn&rsquo;t completely fixed &mdash; it stretched the entire page, and so we also had to watch for window resizes.</section>
+
+    <section>Can we do this in pure CSS? Well, the <span class="color-top">scrollable area</span> would need an explicit height, otherwise there is no way to determine how high it should be. This height is dependent on the height of the <span class="color-container">container</span> (which can change) and the height of the <span class="color-bottom">flexible area</span> (which can change). As far as I know there is no way to express such a relationship with either <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Visual_formatting_model">normal flow, floats, or absolute positioning</a>.</section>
+
+    <section>Let&rsquo;s first simplify the problem, to try to get a feel for it. What if, for example, the <span class="color-bottom">bottom area</span> wasn&rsquo;t flexible. What if we knew its size, say <code>100px</code>? Then we could wrap the <span class="color-top">top area</span> in a <code>&lt;div&gt;</code>, which we would stretch to the full height of the <span class="color-container">container</span> using <code>height: 100%</code>, but in which we would then leave some space for the <span class="color-bottom">bottom area</span> using <code>padding-bottom: 100px; box-sizing: border-box</code>. Note that the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing">border-box</a> setting is necessary, as otherwise the padding would be <em>added</em> to the <code>height: 100%</code>, instead of being included in the height. Browser support for border-box is good. All modern browsers up from IE8 support it, and even in earlier browsers if you force them into <a href="http://quirks.spec.whatwg.org/#the-table-cell-height-box-sizing-quirk">quirks mode</a>. Finally we would move up the <span class="color-bottom">bottom area</span> into the created space using <code>margin-bottom: -100px</code>. Try playing with this code:</section>
+
+    <section id="example2">
+<!-- Some styles are set globally,
+     such as some colours -->
+
+<style>
+  .example2-container {
+    width: 300px;
+    height: 400px;
+    padding: 5px;
+  }
+
+  .example2-top {
+    overflow-y: scroll;
+    height: 100%;
+
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .example2-top-wrapper {
+    height: 100%;
+    box-sizing: border-box;
+    padding-bottom: 100px;
+    margin-bottom: -100px;
+  }
+
+  .example2-bottom {
+    height: 100px;
+
+    padding: 15px;
+    box-sizing: border-box;
+  }
+</style>
+
+<div class="example2-container">
+  <div class="example2-top-wrapper">
+    <div class="example2-top">
+      <p>I am scrollable. This should work in Chrome, Firefox, and IE.</p>
+      <img width="200" src="longcat.jpg">
+    </div>
+  </div>
+  <div class="example2-bottom" contenteditable>
+    Click to edit me, and add some lines!
+  </div>
+</div>
+    </section>
+    <script>
+      createExampleEditor(document.querySelector('#example2'));
+    </script>
+
+    <section>Another solution with an inflexible <span class="color-bottom">bottom area</span>, is using the new CSS <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/calc">calc()</a> function. With that function we can do the same trick as above, only by expressing it with math, like this: <code>height: calc(100% - 100px)</code>. Then we don&rsquo;t need the wrapping <code>&lt;div&gt;</code>.</section>
+
+    <section id="example3">
+<!-- Some styles are set globally,
+     such as some colours -->
+
+<style>
+  .example3-container {
+    width: 300px;
+    height: 400px;
+    padding: 5px;
+  }
+
+  .example3-top {
+    overflow-y: scroll;
+    height: calc(100% - 100px);
+
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .example3-bottom {
+    height: 100px;
+
+    padding: 15px;
+    box-sizing: border-box;
+  }
+</style>
+
+<div class="example3-container">
+  <div class="example3-top">
+    <p>I am scrollable. This should work in Chrome, Firefox, and IE.</p>
+    <img width="200" src="longcat.jpg">
+  </div>
+  <div class="example3-bottom" contenteditable>
+    Click to edit me, and add some lines!
+  </div>
+</div>
+    </section>
+    <script>
+      createExampleEditor(document.querySelector('#example3'));
+    </script>
+
+    <section>Now, why can&rsquo;t we do a similar trick with a flexible <span class="color-bottom">bottom area</span>? Well, in the previous examples the height of the <span class="color-top">top area</span> depended on the height of the <span class="color-container">container</span>, and some variable. You could also make it dependent on its content, by just adding margins and paddings. But you cannot do both, especially not if you want to use the size of its sibling. That would open up the door to circular dependencies, and make the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Visual_formatting_model">layout algorithms</a> of browsers needlessly complicated.</section>
+
+    <section>If you are an experienced web developer, at this point you might think, but what about using tables? After all, the table layout algorithms are weird. And indeed, with some tinkering, you'll figure out that the following code works. However, as it turns out, only in Google Chrome. If you're using another browser now, believe me, it does work in Chrome.</section>
+
+    <section id="example4">
+<!-- Some styles are set globally,
+     such as some colours -->
+
+<style>
+  .example4-container {
+    width: 300px;
+    height: 400px;
+    border: 5px solid transparent;
+  }
+
+  .example4-top-wrapper {
+    height: 100%;
+    /* padding is tricky here, so this
+       example doesn&rsquo;t include it. */
+  }
+
+  .example4-top {
+    overflow-y: scroll;
+    height: 100%;
+  }
+</style>
+
+<table class="example4-container">
+  <tr>
+    <td class="example4-top-wrapper">
+      <div class="example4-top">
+        <p>I am scrollable. This should work in Chrome.</p>
+        <img width="200" src="longcat.jpg">
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="example4-bottom" contenteditable>
+        Click to edit me, and add some lines!
+      </div>
+    </td>
+  </tr>
+</table>
+    </section>
+    <script>
+      createExampleEditor(document.querySelector('#example4'));
+    </script>
+
+    <section>In this example, we give turned the <span class="color-container">container</span> into a table, and gave it some height. The table first contains a row with a table cell with <code>height: 100%</code>, and in there our <span class="color-top">top area</span>, also with <code>height: 100%</code>. Then there is another table row, with a table cell, with our <span class="color-bottom">bottom area</span>. The idea is that the first table cell stretches as far as possible, but leaving some room for the second cell, that also needs to fit in the table.</section>
+
+    <section>After I discovered that, I immediately went searching the W3C specifications, to figure out how this is works. Reading the specs is important. Otherwise it&rsquo;s like discovering that things fall, but not learning about the mathematical principles of gravity. We need to understand the mathematical principles of the table layout algorithm.</section>
+
+    <section>As it turns out, the <a href="http://www.w3.org/TR/CSS21/tables.html#height-layout">CSS 2.1 specs</a> say something about this: <em>&ldquo;CSS 2.1 does not define how the height of table cells and table rows is calculated when their height is specified using percentage values.&rdquo;</em> So it&rsquo;s completely coincidental that my trick  happened to work in Chrome! And, in fact, it doesn&rsquo;t work in other browsers, because they implement different behaviour.</section>
+
+    <section>Now the fun part starts. Can we find a way to make the desired behaviour work across all major browsers, knowing they can do whatever they want with percentage heights in table cells?</section>
+
+    <section>First, lets fix the CSS for Firefox, while keeping it working in Chrome. Earlier we have set the <span class="color-top">top area</span> to stretch to the height of the first table cell, by using <code>height: 100%</code>. But there is another way to stretch vertically: using <code>position: absolute; top: 0; bottom: 0</code>. This triggers a different layout algorithm, which happens to work in both Chrome and Firefox.</section>
+
+    <section id="example5">
+<!-- Some styles are set globally,
+     such as some colours -->
+
+<style>
+  .example5-container {
+    width: 300px;
+    height: 400px;
+    border: 5px solid transparent;
+  }
+
+  .example5-top-wrapper {
+    height: 100%;
+    position: relative;
+  }
+
+  .example5-top {
+    overflow-y: scroll;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+  }
+
+  .example5-bottom {
+    padding: 15px;
+    box-sizing: border-box;
+  }
+</style>
+
+<table class="example5-container">
+  <tr>
+    <td class="example5-top-wrapper">
+      <div class="example5-top">
+        <p>I am scrollable. This should work in Chrome and Firefox.</p>
+        <img width="200" src="longcat.jpg">
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="example5-bottom" contenteditable>
+        Click to edit me, and add some lines!
+      </div>
+    </td>
+  </tr>
+</table>
+    </section>
+    <script>
+      createExampleEditor(document.querySelector('#example5'));
+    </script>
+
+    <section>Then Internet Explorer. Sadly, they use yet another algorithm, and the none of the tricks so far work. While the first table cell stretches correctly, the height that the <span class="color-top">top area</span> gets ends up being zero. This happens both when we use <code>height: 100%</code> or <code>position: absolute</code>. It seems to use the height of the <em>content</em> of the table cell, not the actual rendered height of the table cell.</section>
+
+    <section>So alas, I couldn&rsquo;t find a way to make our desired behaviour work in IE. However, we can use the next best thing &mdash; setting a fixed height on the <span class="color-bottom">bottom area</span> &mdash; combined with the better solution that works in Chrome and Firefox. Since the height that the <span class="color-top">top area</span> gets in IE is the same as the content height, we can add another <code>&lt;div&gt;</code> to the first table cell that we give a fixed height using <code>calc()</code>, as we saw before. This <code>&lt;div&gt;</code> will be considered content as it does not depend on the height of the table cell, and thus the <span class="color-top">top area</span> will stretch to this value.</section>
+
+    <section>This way we can set a reasonable fallback that works in IE, by using some maximum height that the <span class="color-bottom">bottom area</span> will never exceed.</section>
+
+    <section id="example6">
+<!-- Some styles are set globally,
+     such as some colours -->
+
+<style>
+  .example6-container {
+    width: 300px;
+    height: 400px;
+    border: 5px solid transparent;
+  }
+
+  .example6-top-wrapper {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .example6-top {
+    overflow-y: scroll;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+  }
+
+  .example6-top-ie-fix {
+    height: calc(100% - 200px);
+  }
+
+  .example6-bottom {
+    padding: 15px;
+    box-sizing: border-box;
+  }
+</style>
+
+<table class="example6-container">
+  <tr>
+    <td class="example6-top-wrapper">
+      <div class="example6-top-ie-fix"></div>
+      <div class="example6-top">
+        <p>I am scrollable. This should work in Chrome, Firefox, and IE (with fixed height).</p>
+        <img width="200" src="longcat.jpg">
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="example6-bottom" contenteditable>
+        Click to edit me, and add some lines!
+      </div>
+    </td>
+  </tr>
+</table>
+    </section>
+    <script>
+      createExampleEditor(document.querySelector('#example6'));
+    </script>
+
+    <section>Thus, based on the different browser implementations, we have found a solution that works perfectly in Chrome and Firefox, and falls back to a reasonable alternative in Internet Explorer.</section>
+
+    <section style="overflow: hidden">
+      <figure style="float: left">
+        <img src="chrome.png" style="width: 300px">
+        <figcaption style="font-style: italic">Google Chrome (flexible)</figcaption>
+      </figure>
+      <figure style="float: left">
+        <img src="firefox.png" style="width: 300px">
+        <figcaption style="font-style: italic">Mozilla Firefox (flexible)</figcaption>
+      </figure>
+      <figure style="float: left">
+        <img src="ie.png" style="width: 300px">
+        <figcaption style="font-style: italic">Microsoft Internet Explorer (fixed)</figcaption>
+      </figure>
+    </section>
+
+    <section>Not bad for undefined behaviour.</section>
+  </article>
+</html>

@@ -15,7 +15,7 @@ article {
   border: 1px solid transparent; /* for block formatting context */
 }
 
-p, li, div, ul {
+p, li, ul, section {
   margin-bottom: 1.5em;
 }
 

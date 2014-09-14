@@ -69,7 +69,7 @@
 
     <p>To get the correspondence between wikitext and HTML I use a trick: <em>annotation</em>. Before the wikitext is transformed to HTML, I add some codes to it to mark some positions. These codes are chosen in such a way that they are not transformed into anything else, and they are also all unique. They are placed around basic elements, such as paragraphs, sentences, in fact everything we want to make editable and is easy to recognise. For every added code, we also record the exact position of the code inside the original wikitext. After this, the <em>annotated wikitext</em> is transformed into HTML, and the codes survive this transformation. Finally, the codes themselves are transformed again to make a valid HTML page. This way, every editable element gets a unique identifier based on the code it belongs to, so now it is possible to look up positions in the original wikitext whenever an such an element is clicked.</p>
 
-    <div class="img" style="padding: 20px">
+    <section class="img" style="padding: 20px">
       <ul style="list-style-type: lower-alpha">
       <li><code>This is an example. A sentence with a [[link]].</code></li>
       <li><code>&lt;paragraph-0&gt;<br />
