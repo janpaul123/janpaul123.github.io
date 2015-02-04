@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-white.css" />
+  <link href='http://fonts.googleapis.com/css?family=Londrina+Solid|PT+Mono|Source+Sans+Pro:400,400italic,900,900italic' rel='stylesheet' type='text/css'>
+
+  <style>
+    body {
+      background: white;
+      font: 16px/1.65 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    h1 {
+      font: 3em/1 'Londrina Solid', 'Arial Black', sans-serif;
+      font-weight: bold;
+    }
+
+    h2 {
+      font: 2em/1.65 'Londrina Solid', 'Arial Black', sans-serif;
+      font-weight: bold;
+    }
+
+    article {
+      width: 605px;
+      padding: 50px 50px 20px;
+    }
+
+    header {
+      margin-bottom: 2em;
+    }
+
+    time {
+      display: block;
+      margin-bottom: 0.5em;
+      font-style: italic;
+    }
+
+    quote {
+      font-style: italic;
+    }
+
+    bold {
+      font-weight: 900;
+    }
+
+    iframe {
+      margin-top: 0.5em;
+    }
+  </style>
+
+  <title>Visualising Program Execution</title>
+
+  <article>
+    <header>
+      <time pubdate>February 2015</time>
+      <h1>Visualising Program Execution</h1>
+    </header>
+
+    <section>
+      <quote>We are not trying to understand complex physical systems, where setting up an experiment is hard. We are in complete control over our programs &mdash; it is <strong>our system!</strong> The computer does exactly what <strong>we tell it to,</strong> deterministically, in a predictable way. It doesn&rsquo;t make sense to carefully probe using console logs, all variables pass through the processor at some point, so why can&rsquo;t we just <strong>know their values?</strong></quote>
+    </section>
+    <section>
+      <quote>It is our system, we are the gods, <strong>we should be omniscient.</strong></quote>
+    </section>
+
+    <section>This month I&rsquo;m giving a talk at <a href="http://forwardjs.com/schedule#janpaul">Forward 2</a> about how important and easy it is to make tools that enable us to <em>truly see</em> how our programs execute. This page contains further resources on the history and the state of the art of visualising program execution &mdash; with a particular focus on web development.</section>
+
+    <h2>Talk</h2>
+
+    <section>
+      <div style="width: 100%; padding-top: 15%; padding-bottom: 15%; background: #333; text-align: center; color: white">talk video will go here some day</div>
+    </section>
+
+    <section>The slides can be <a href="http://janpaulposma.nl/visualising-program-execution-slides/">viewed online</a> and the source is available on <a href="https://github.com/janpaul123/visualising-program-execution-slides">GitHub</a>. Most interesting are <a href="https://github.com/janpaul123/visualising-program-execution-slides/blob/gh-pages/sparklines.js">sparklines.js</a> and the giant <a href="https://github.com/janpaul123/visualising-program-execution-slides/blob/gh-pages/index.html">index.html</a> <em>(yikes)</em>.</section>
+
+    <section>The programming environment at the end is <a href="http://jsdares.com">jsdares</a>, which is also <a href="https://github.com/janpaul123/jsdares">open source</a>. I&rsquo;ve written an <a href="http://www.jsdares.com/blindfold">introduction</a> on the design of jsdares, as well as a more extensive <a href="https://www.youtube.com/watch?v=BDMaAorPMj0">talk</a> and <a href="http://www.jsdares.com/thesis-jan-paul-posma.pdf">thesis</a>.</section>
+
+    <h2>Existing tools</h2>
+
+    <section>Probably the first thing you want to know: which tools can I start using <em>right now?</em> So here they are.</section>
+
+    <section>
+      <a href="http://blog.brackets.io/2013/08/28/theseus-javascript-debugger-for-chrome-and-nodejs/?lang=en">Theseus JavaScript Debugger for Adobe Brackets</a> (open source, <a href="http://www.joelbrandt.org/publications/lieber_chi2014_always-on_programming_visualizations.pdf">paper</a>)<br>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/T6d5C3rLeFY" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      <a href="http://www.chris-granger.com/2013/08/22/light-table-050/">Light Table</a> (open source)<br>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/d8-b6QEN-rk" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      <a href="https://msdn.microsoft.com/en-us/magazine/ee336126.aspx">Microsoft Intellitrace</a> (commercial)<br>
+      <iframe width="420" height="315" src="https://www.youtube.com/embed/WNvUHGnVsDs" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      <a href="https://developer.apple.com/library/ios/recipes/xcode_help-source_editor/chapters/ExploringandEvaluatingSwiftCodeinaPlayground.html">Apple Playgrounds</a> (commercial)<br>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/vogFSIxprUo" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      <a href="http://chrononsystems.com/products/chronon-time-travelling-debugger">Chronon Debugger</a> (formerly "Silver Bullet", commercial)<br>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/LpfmKIxusZY" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <h2>More context</h2>
+
+    <section>
+      The advanced techniques I show in my presentation &mdash; snapshotting and deterministic replay &mdash; have mostly been used for debugging. And you can do it even with with entire operating systems:<br>
+      <iframe width="420" height="315" src="https://www.youtube.com/embed/RvMlihjqlhY" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      Jakob Engblom has written a comprehensive overview of the history of such debugging tools: <a href="http://jakob.engbloms.se/archives/1547">Concepts</a>, <a href="http://jakob.engbloms.se/archives/1554">Research</a>, <a href="http://jakob.engbloms.se/archives/1564">Products</a>. And even his list doesn&rsquo;t come close to describing all research and products that visualise program execution. With a bit of searching you can find <a href="https://web.archive.org/web/20090404200514/http://smallwiki.unibe.ch/codecrawler/anon-exhaustivelistofsoftwarevisualizationtools">many</a> <a href="https://github.com/enjalot/algovis">more</a> <a href="https://softvis.wordpress.com/tools/">products</a>, a <a href="http://www.amazon.com/Software-Visualization-Series-Engineering-Knowledge/dp/9810228260">whole</a> <a href="http://www.amazon.com/Software-Visualization-John-T-Stasko/dp/0262193957/ref=sr_1_1?s=books&ie=UTF8&qid=1422944430&sr=1-1&keywords=9780262193955">bunch</a> of <a href="http://www.amazon.com/Software-Visualization-Practice-International-Engineering/dp/1402074484/ref=sr_1_1?s=books&ie=UTF8&qid=1422944439&sr=1-1&keywords=9781402074486">books</a>, <a href="http://www.st.uni-trier.de/~diehl/softvis/org/index.php">numerous</a> <a href="http://www.program-comprehension.org/">academic</a> <a href="http://cs.brown.edu/research/softvis/icsesv.html">conferences</a>.
+    </section>
+
+    <section>
+      An early example of a truly graphical visualisation of program execution for debugging is <a href="http://web.media.mit.edu/~lieber/Lieberary/ZStep/ZStep.html">MIT&rsquo;s ZStep</a>.<br>
+      <iframe width="420" height="315" src="https://www.youtube.com/embed/VzGj59hg2io" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      A popular research project is <a href="http://www.cs.cmu.edu/~NatProg/whyline.html">Whyline</a>, which answers the question "Why did this happen?"<br>
+      <iframe width="420" height="315" src="https://www.youtube.com/embed/t6gVZ-qZ4sI" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      This list wouldn&rsquo;t be complete without at least mentioning the <a href="http://www.lambdacs.com/debugger/">Omniscient Debugger</a>.<br>
+      <iframe width="420" height="315" src="https://www.youtube.com/embed/gBVQYNfckhQ" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      Lots of these projects attempt to make visible what is otherwise hidden, but no-one has managed to do so more beautifully than Bret Victor. <a href="http://vimeo.com/36579366">In</a> <a href="http://vimeo.com/66085662">his</a> <a href="http://vimeo.com/64895205">many</a> <a href="http://worrydream.com/LadderOfAbstraction/">examples</a> <a href="http://worrydream.com/ScientificCommunicationAsSequentialArt/">he</a> <a href="http://worrydream.com/MagicInk/">shows</a> <a href="http://worrydream.com/LearnableProgramming/">that</a> <a href="http://worrydream.com/ExplorableExplanations/">you</a> <a href="http://worrydream.com/DynamicPicturesMotivation/">can</a> <a href="http://worrydream.com/InteractiveExplorationOfADynamicalSystem/">use</a> <a href="http://worrydream.com/TenBrighterIdeas/">media</a> to think in ways previously unimaginable.<br>
+
+      <iframe src="http://player.vimeo.com/video/67076984?portrait=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    </section>
+
+    <h2>Further reading and watching</h2>
+
+    <section>
+      <a href="http://scattered-thoughts.net/blog/2014/01/27/were-not-even-trying/">We&rsquo;re not even trying</a><br>
+      <a href="http://tv.adobe.com/watch/max-2011-sneak-peeks/max-2011-sneak-peek-reverse-debugging-in-flash-builder/">Reverse Debugging in Flash Builder</a><br>
+      <a href="http://www.visus.uni-stuttgart.de/uploads/tx_vispublications/vissoft13-numeric.pdf">Visual Monitoring of Numeric Variables Embedded in Source Code</a> (inspiration for the sparklines in the talk)<br>
+    </section>
+
+    <!-- https://www.youtube.com/watch?v=EpYMRd1ZWDM -->
+  </article>
+</html>
