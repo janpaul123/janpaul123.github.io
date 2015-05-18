@@ -12,7 +12,7 @@
 @itemPaddingHorizontal: 5px;
 
 .mobile(@rules) {
-  @media only screen and (max-device-width: 480px) { @rules(); }
+  @media only screen and (max-width: 480px) { @rules(); }
 }
 
 /////
@@ -119,9 +119,10 @@ em {
 
   font-family: "Londrina Solid", sans-serif;
   font-size: 4em;
+  line-height: 1;
   text-align: center;
   font-weight: bold;
-  padding-top: 1.25em;
+  padding: 1em 0 0.5em;
   .transition(all @itemAnimationTime);
   cursor: pointer;
   .transform(translateZ(1px) scale(1) rotate(0));
@@ -259,6 +260,8 @@ em {
 .menu-explanation-header {
   font-family: "Londrina Solid", sans-serif;
   font-size: 3.5em;
+  line-height: 1;
+  margin: 0.3em 0;
   text-align: center;
   color: white;
 
@@ -515,6 +518,8 @@ iframe.content-iframe {
   max-width: @menuWidth;
   .mobile({
     max-width: none;
+    text-align: center;
+    padding: 48px 48px 176px;
   });
 }
 
@@ -590,11 +595,18 @@ iframe.content-iframe {
 @-o-keyframes shaking-satellite { .shaking-satellite(); }
 @keyframes shaking-satellite { .shaking-satellite(); }
 
+.menu-social-satellite-outer {
+  position: relative;
+
+  .mobile({
+    top: 120px;
+  });
+}
 
 .menu-social-satellite-container {
   position: absolute;
-  left: 70px;
-  top: 1.75em;
+  left: 22px;
+  top: -52px;
   width: 136px;
   height: 136px;
   .transition(all 0.2s);
@@ -610,16 +622,17 @@ iframe.content-iframe {
   opacity: 0;
   font-family: "Londrina Solid", sans-serif;
   font-size: 1em;
+  line-height: 1;
   position: absolute;
   .transform(translate(0,0));
   .transition(all 0.15s);
 }
 
-.menu-social-satellite-caption1 { top: 60px; left: 195px; }
-.menu-social-satellite-caption2 { top: 80px; left: 200px; }
-.menu-social-satellite-caption3 { top: 90px; left: 100px;  .transition(all 0.15s ease-in-out 0.05s); }
-.menu-social-satellite-caption4 { top: 110px; left: 102px; .transition(all 0.15s ease-in-out 0.10s); }
-.menu-social-satellite-caption5 { top: 130px; left: 102px; .transition(all 0.15s ease-in-out 0.15s); }
+.menu-social-satellite-caption1 { top: -20px; left: 147px; }
+.menu-social-satellite-caption2 { top: 0px; left: 152px; }
+.menu-social-satellite-caption3 { top: 10px; left: 52px;  .transition(all 0.15s ease-in-out 0.05s); }
+.menu-social-satellite-caption4 { top: 30px; left: 54px; .transition(all 0.15s ease-in-out 0.10s); }
+.menu-social-satellite-caption5 { top: 50px; left: 54px; .transition(all 0.15s ease-in-out 0.15s); }
 
 .menu-social-container-startled {
   .menu-social-satellite-container {
