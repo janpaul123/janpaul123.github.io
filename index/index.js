@@ -749,7 +749,7 @@
 
   imageMargin = 0;
 
-  numberOfImages = 16;
+  numberOfImages = 17;
 
   imageAngle = 360 / numberOfImages;
 
