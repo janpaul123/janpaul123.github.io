@@ -595,7 +595,7 @@ pauseAllVimeoPlayers = ->
 # Keep in sync with CSS
 imageHeight = 250
 imageMargin = 0
-numberOfImages = 18
+numberOfImages = 19
 imageAngle = 360 / numberOfImages
 imageDistance = (imageHeight / 2 + imageMargin) / Math.tan(imageAngle / 360 * Math.PI);
 lastRotateAngle = 0
