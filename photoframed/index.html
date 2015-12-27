@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+
+  <style>
+    body {
+      font: 16px/1.5 Helvetica, Arial, sans-serif;
+      text-align: justify;
+    }
+
+    header {
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 30px;
+    }
+
+    img {
+      width: 100%;
+    }
+  </style>
+
+  <title>Photoframe(d)</title>
+
+  <article>
+    <header>
+      <h1>Photoframe(d)</h1>
+      <em>Built in 2007; written in <time pubdate>January 2010</time>; edited in December 2015.<br>Apologies for the poor photo quality.</em>
+    </header>
+
+    <p>In 2007 I decided it would be cool to build a digital photo frame, out of a broken laptop. I bought the laptop from a <a href="https://en.wikipedia.org/wiki/Alexander_Brouwer">friend</a> of mine, as it was pretty old and useless, considering the keyboard didn&#8217;t work. With some help of my grandpa and his tools, I built it. Later, I added speech recognition and control of the lights in my room. </p>
+    <p>Most of the original source code is lost, and I have since redesigned it, but I thought a writeup of the old design would be nice.</p>
+
+    <p><img src="IMG_0104.jpg"></p>
+
+    <p>It started with an old laptop. In an impulse I decided to see how quickly I was able to strip it until only the bare essentials were left. It was quite easy to disassemble it, and the wires were long enough to separate the display from the other components.</p>
+
+    <p><img src="DSC00222.jpg"></p>
+    <p><img src="DSC00223.jpg"></p>
+    <p><img src="DSC00224.jpg"></p>
+
+    <p>Once the laptop was disassembled, it was easy enough to go to the DIY store and buy some materials. With some careful measuring, patience and painting twice, the job was done in a few evenings.</p>
+
+    <p><img src="DSC00225.jpg"></p>
+    <p><img src="DSC00227.jpg"></p>
+    <p><img src="DSC00228.jpg"></p>
+    <p><img src="DSC00231.jpg"></p>
+    <p><img src="DSC00232.jpg"></p>
+    <p><img src="DSC00233.jpg"></p>
+    <p><img src="DSC00234.jpg"></p>
+    <p><img src="DSC00235.jpg"></p>
+    <p><img src="DSC00236.jpg"></p>
+    <p><img src="DSC00238.jpg"></p>
+    <p><img src="DSC00239.jpg"></p>
+    <p><img src="DSC00240.jpg"></p>
+    <p><img src="DSC00241.jpg"></p>
+    <p><img src="DSC00248.jpg"></p>
+    <p><img src="DSC00249.jpg"></p>
+    <p><img src="DSC00243.jpg"></p>
+    <p><img src="DSC00244.jpg"></p>
+
+    <p>To display the photos, a clock, and some RSS feeds, I used a <a href="http://gathering.tweakers.net/forum/list_message/27709204#27709204">PHP script</a> by Tommy van der Vorst, running in a fullscreen Firefox window. It worked pretty well. After some modifications &mdash; resulting in a fork that I called <a href="https://github.com/janpaul123/photoframed">Photoframed</a> &mdash; it was used by myself and others for 3 years.</p>
+
+    <p><img src="DSC00245.jpg"></p>
+    <p><img src="DSC00246.jpg"></p>
+    <p><img src="DSC00247.jpg"></p>
+    <p><img src="DSC00258.jpg"></p>
+    <p><img src="DSC00257.jpg"></p>
+    <p><img src="DSC00256.jpg"></p>
+
+    <p>A few months later I stumbled upon <a href="http://gathering.tweakers.net/forum/list_messages/1077675">this post</a> on a forum, which describes how to easily hack a cheap home automation remote control to hook it up to a computer. There were sets available for about &euro;20 to control lights and devices with a remote control. So I bought two of these sets. The first hack was to hook it up to ordinary lights that are directly connected to a power source, without a wall socket in between. The setup wasn&#8217;t very safe, but it worked.</p>
+
+    <p><img src="DSC00259.jpg"></p>
+    <p><img src="DSC00262.jpg"></p>
+    <p><img src="DSC00264.jpg"></p>
+    <p><img src="DSC00265.jpg"></p>
+    <p><img src="DSC00267.jpg"></p>
+
+    <p>Next, I followed the instructions on the forum post: hook up the remote control to the serial port, detect commands using <a href="http://www.lirc.org/">LIRC</a>, and send them back to the remote control.</p>
+
+    <p><img src="DSC00268.jpg"></p>
+    <p><img src="DSC00271.jpg"></p>
+    <p><img src="DSC00272.jpg"></p>
+    <p><img src="DSC00278.jpg"></p>
+    <p><img src="DSC00277.jpg"></p>
+
+    <p>It worked fine on the computer, but the problem is that on laptops the serial port is weaker: it usually won&#8217;t give a <a href="http://hackaday.com/2007/05/19/serial-port-power-booster/">nice and strong 12 volt signal</a>. The solution was rather simple: by hooking up transistors to every button, you can simulate a press of that button simply by putting a small voltage on the transistor. The easiest way to do this is by using the parallel port. Fortunately, the laptop was pretty old so this was no problem.</p>
+
+    <p><img src="IMG_0186.jpg"></p>
+
+    <p>With some Visual Basic programming, the <a href="http://www.microsoft.com/speech/default.aspx">Microsoft Speech API</a> and some PHP scripts it was possible to control the lights by voice and over the internet. Unfortunately, I lost most of the source code, so I won&#8217;t be able to share it here. In the next post I cover <a href="/simple-home-automation-system">rebuilding</a> it.</p>
+  </article>
+</html>

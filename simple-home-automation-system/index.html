@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+
+  <style>
+    body {
+      font: 16px/1.5 Helvetica, Arial, sans-serif;
+      text-align: justify;
+    }
+
+    header {
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 30px;
+    }
+
+    img {
+      width: 100%;
+    }
+  </style>
+
+  <title>Simple home automation system</title>
+
+  <article>
+    <header>
+      <h1>Simple home automation system</h1>
+      <em>Built and written in <time pubdate>March 2010</time>; edited in December 2015.<br>Apologies for the poor photo quality.</em>
+    </header>
+
+    <p><a href="/photoframed">Last time</a> I talked about my photoframe and room control setup. It was a laptop modification, and some hacking around in cheap remote controlled switches and simple scripts. I rebuilt most of the system now: a silent PC with normal screen serves the photos, it can control the lights and devices using a commercial product, there are cameras in the room and on the street, it&#8217;s all being shown and controlled by a slick webinterface, and my grandparents are quite happy with my old photoframe in their living room. :-)</p>
+
+    <p><img src="IMG_00011.jpg"></p>
+
+    <p>Let&#8217;s get into details! The system is running on <a href="http://www.aleutia.com/products/t1-fanless-pc">Aleutia T1</a>, which is a really nice, silent PC-ish thing. PC-ish, because the performance is not really up to todays standards, but on the other hand it&#8217;s quite cheap, really silent and comes pre-installed with Ubuntu. Cool! <span style="font-size: 80%; color: #AAA">(However, I installed Windows XP&#8230;)</span> I got mine with a <a href="https://en.wikipedia.org/wiki/Solid-state_drive">SSD</a>, which means that there are no moving parts whatsoever, therefore it can stay on 24/7.</p>
+    <p>Using a simple <a href="http://www.apachefriends.org">XAMPP</a> setup, it runs my <a href="http://github.com/janpaul123/photoframed">photoframed</a> software mentioned in the previous post.</p>
+
+    <p><img src="IMG_0002.jpg"></p>
+    <p><img src="IMG_0010.jpg"></p>
+    <p><img src="IMG_0008.jpg"></p>
+
+    <p>The webcam setup is quite interesting. First I tried to plug the webcams using some <a href="https://en.wikipedia.org/wiki/USB">USB</a> extension cords. It was highly unstable, so now the PC is actually positioned in a cardboard box, lifted from the ground, so all the cables fit exactly.</p>
+    <p>Another issue with the webcams is having it stream, but also have it stream securely. A promising format seemed to be <a href="https://en.wikipedia.org/wiki/Motion_JPEG">MJPEG</a>: this is just like sending out JPEG frames as fast as the connection can manage. I run the following code to generate a MJPEG stream using <a href="http://videolan.org">VLC</a>. The stream is only accessible from localhost for security reasons.</p>
+
+    <p><code>
+      <pre>vlc.exe dshow:// :dshow-vdev="USB Video Device"
+:dshow-adev=none :dshow-size=640x480 --no-sout-audio
+--sout=#transcode{vcodec=mjpg, vb=512, fps=1, width=640, height=480}
+:standard{
+  access=http{mime="multipart/x-mixed-replace; boundary=7b3cc56e5f51db803f790dad720ed50a"},
+  mux=mpjpeg, dst=127.0.0.1:8080/cam.mjpg
+}</pre>
+    </code></p>
+    <p>The boundary thing is a code required for modern browsers to correctly recognize the data type. If you remove the IP-address at the end, you&#8217;ll allow anyone to watch the stream. Now the next proxy is to make sure only authenticated people are able to see the stream. I tried this using a PHP script which simply read the stream and echo&#8217;ed it (and some other variants). I also tried using the Apache proxy module. But both options have the same problem: as I have a terrible internet connection, I really need the last frame. Once a frame is transmitted, the new frame must be the most recent frame possible. However, all options I tried seem to cache the data, so you&#8217;ll see 1 second of recording spread out on, like, half a minute on the client.</p>
+    <p>In the end I just went with a simple script I found online somewhere, that reads exactly one MJPEG frame and spits it out as ordinary JPEG:</p>
+
+    <p><code>
+      <pre>$boundary="\n--";
+$f = fopen($_GET['url'],"r");
+if($f) {
+  while (substr_count($r,"Content-Length") != 2) $r.=fread($f,512);
+  $start = strpos($r,'Ø');
+  $end   = strpos($r,$boundary,$start)-1;
+  $frame = substr("$r",$start,$end - $start);
+  header("Content-type: image/jpeg");
+  echo $frame;
+}
+fclose($f);</pre>
+    </code></p>
+
+    <p>Now you have to refresh the image using for example Javascript, so that&#8217;s fine too. The webinterface I&#8217;ve written for this purpose also features a slider to set refresh interval, which is pretty handy if you&#8217;ve got a shitty connection like myself. Also, this brings me to the home automation part, which is actually pretty brief. All devices in my room are plugged into a <a href="http://klikaanklikuit.nl">KlikAanKlikUit</a> unit, and the PC&#8217;s got a <a href="http://klikaanklikuit.nl/product_detail.asp?id=25">TPC-200</a> interface plugged in, and a <a href="http://github.com/janpaul123/kakurc">little bit of software</a> does the trick.</p>
+    <p>The TPC-200 interface comes with a <a href="https://en.wikipedia.org/wiki/Dynamic-link_library">DLL</a> which has one single command: <em>Send(id, value)</em>, with <em>id</em> being an integer and <em>value</em> a boolean. A simple executable wrapper, hacked together in <a href="https://en.wikipedia.org/wiki/Visual_Basic">Visual Basic</a>, makes it easy to send commands from PHP, using <em>exec</em>.</p>
+
+    <p><img src="mac_screenshot.png"></p>
+    <p><img src="IMG_0003.jpg"></p>
+    <p><img src="IMG_0005.jpg"></p>
+
+    <p>The first room control breach has happened already: I used the inferior Apache Basic Authentication for the login procedure, and it turns out that sessions can keep open for a long period of time. Even when the server restarts during that time. I logged on the system on the laptop of a <a href="https://www.herbertkruitbosch.com/">friend of mine</a>, and 3 days later, he scared the crap out of me by playing with my lights. ;-) <!-- The PC restarts every night at 5am, so I&#8217;m still amazed that the session lasted that long. --> </p>
+    <p>Anyway, I quickly tracked him down using the access logs and we had a good laugh about it, but I still don&#8217;t trust the security anymore: the inside camera is pointed at the ceiling now&#8230; If you&#8217;re considering building the same setup, don&#8217;t plug in your nuclear power plant.</p>
+  </article>
+</html>
