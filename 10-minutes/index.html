@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../fonts/orbitron/stylesheet.css" />
+
+  <style>
+    body {
+      font: 16px/1.5 Helvetica, Arial, sans-serif;
+      text-align: justify;
+    }
+
+    header {
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font: 39px/1 "Orbitron", "Arial Black", Arial, Helvetica, sans-serif;
+      font-weight: bold;
+    }
+
+    sup {
+      font-size: 0.7em;
+      position: relative;
+      top: -.15em;
+      vertical-align: top;
+    }
+
+    .quote {
+      background: rgba(255,255,255,0.2);
+      padding: 1.5em;
+      font-style: italic;
+    }
+
+    .divider {
+      font-family: "Orbitron";
+      font-weight: lighter;
+      text-align: center;
+      color: #666;
+    }
+
+    th {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    th, td {
+      padding: 0.5em;
+      text-align: left; // "justify" doesn't look good for <code>…
+    }
+
+    code {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
+
+  <title>Moving data in 10 minutes</title>
+
+  <article>
+    <header>
+      <h1>Moving data in 10 minutes</h1>
+      <em><time pubdate>May 2017</time>; list at the bottom regularly updated</em>
+    </header>
+
+    <p>
+      Data needs to move. Those backup hard drives sitting in the closet? They have quite a few bits fallen over already. Or they may <a href="https://www.backblaze.com/b2/hard-drive-test-data.html">not work at all</a>, next time I use them. And that is digital, binary data&mdash;let's not even think about those photo albums in my grandma's basement, which "we are going to digitise soon."
+    </p>
+
+    <p>
+      And what about link rot? The stories on this website were only written a few years ago, and yet when I ran an <a href="http://www.brokenlinkcheck.com">analysis</a><sup>1</sup>, many links didn't work any more. The world moves, and data needs to move with it.
+    </p>
+
+    <p>
+      But at least those hard drives and photo albums are my own responsibility. What worries me more is the trust we place in institutions. Merely 10 years ago I used a <a href="https://en.wikipedia.org/wiki/Hyves">social network</a> that I never thought would simply vanish.<sup>2</sup> From photo albums to VHS to DVD to MKV. From tapes, to zip drives, to SSD, to the cloud. From IRC to MSN to Facebook to Ello<sup>3</sup>. <strong>Data needs to move.</strong>
+    </p>
+
+    <p>
+      <em><sup>1</sup> This link will probably be broken within a few years…</em><br>
+      <em><sup>2</sup> Thanks to the heroic efforts of the <a href="http://www.archiveteam.org/index.php?title=Hyves">Archive Team</a>, I was able to retrieve some of my data.</em><br>
+      <em><sup>3</sup> Just kidding.</em>
+    </p>
+
+    <p class="divider">
+      I I O O O O I O I I O I O I O I O I I I O I O I O I I I O I O I O O I I O O O I I
+    </p>
+
+    <p>
+      Now, most of my data can be moved around easily, with several backups in different locations. But I realised that the data that I entrusted some institutions with&mdash;Facebook, Twitter, Youtube, and more&mdash;can not be easily moved. Therefore I set a goal for myself:
+    </p>
+
+    <p class="quote">
+      For any system that I use, I should be able to move my data to another system within 10 minutes.
+    </p>
+
+    <p>
+      The time constraint is important. With sufficient effort one can move data out of any system, but one shouldn't need to. Also, ideally it would be done automatically, so I can create a backup script that periodically copies my data from various systems.
+    </p>
+
+    <p>I realised that for a lot of systems that I use, this isn't true yet, so I set out to make it so. This page trackers my efforts so far, and I hope to include other relevant projects here as well.
+    </p>
+
+    <p>
+      Luckily, for once, we have a major force on our side: the European Union. The <a href="http://ec.europa.eu/justice/data-protection/reform/files/regulation_oj_en.pdf">General Data Protection Regulation</a> Article 20, which will go into effect on 25 May 2018, requires service providers to provide users' data "in a structured, commonly used and machine-readable format." Hopefully this legislation will speed up the efforts described on this page.
+    </p>
+
+    <p class="divider">
+      I O I O I I I O I O I O O I I O O O I I I I O O O O I O I I O I O I O I O I I I O
+    </p>
+
+    <p>Here's an overview of the services that I actively backup my data from. Some methods are more technical than others. For the technically inclined I've included some script snippets, which I actually use (in <a href="https://en.wikipedia.org/wiki/Z_shell">zsh</a>, though they should typically also work in <a href="https://en.wikipedia.org/wiki/Bourne_shell">sh</a>). I'll update this list when I discover new methods.</p>
+
+    <p>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Within 10<br>minutes?</th>
+          <th>Automatic?</th>
+          <th>How/why?</th>
+        </tr>
+        <tr>
+          <td><a href="https://facebook.com">Facebook</a></td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>Their <a href="https://www.facebook.com/help/131112897028467">archive tool</a> exports a lot, but not the most important thing: my likes and comments. It says "Jan Paul Posma likes a link," but it doesn't say <em>which</em> link. This is unacceptable, and I haven't found a solution for this yet.</td>
+        </tr>
+        <tr>
+          <td><a href="https://twitter.com">Twitter</a></td>
+          <td>⚠️</td>
+          <td>❌</td>
+          <td>Their <a href="https://support.twitter.com/articles/20170160">archive tool</a> is pretty good: it exports tweets, retweets, pictures, all with links to the originals. It does link to its URL shortener (which is <a href="http://www.archiveteam.org/index.php?title=URLTeam">problematic</a>), but has the original URL in the HTML <em>title</em> attribute. 👏 Unfortunately it doesn't export direct messages, and there doesn't seem to be a way to automate exporting an archive.</td>
+        </tr>
+        <tr>
+          <td><a href="https://youtube.com">Youtube</a></td>
+          <td>⚠️</td>
+          <td>✅</td>
+          <td>I want to backup the videos that I watched, but their <a href="https://www.youtube.com/static?template=terms">Terms of Service</a> don't allow that. However, if I would want to (I would never do this Youtube, don't sue me), I could use <a href="https://rg3.github.io/youtube-dl/">youtube-dl</a> pretty easily, for example like this: <code>youtube-dl --write-info-json --write-description --write-thumbnail --write-annotations --all-subs --ignore-errors --output "%(title)s-%(id)s.%(ext)s" &lt;my-liked-video-playlist-url&gt;</code>. This even skips over already downloaded videos, and resumes aborted downloads!</td>
+        </tr>
+        <tr>
+          <td><a href="https://slack.com/">Slack</a></td>
+          <td>✅️</td>
+          <td>✅</td>
+          <td>They provide <a href="https://get.slack.help/hc/en-us/articles/201658943-Export-your-team-s-Slack-history">exports</a> for admins, but unfortunately not for regular users. I also want to backup my private conversations, which their exports typically don't provide. They do provide an API which we can use to create a backup. For this you can use <a href="https://github.com/jesusmb1995/SlackBackup">SlackBackup</a>, which is easy to setup. I fixed some bugs in that script, and my fixed version can be found <a href="SlackBackup_JP.jar">here</a> (they have also merged it into their repo, but just not cut a release yet). Use it like this: <code>java -jar SlackBackup_JP.jar &lt;your-token&gt; cgpf</code></td>
+        </tr>
+        <tr>
+          <td><a href="https://mail.google.com">Google Mail</a></td>
+          <td>✅️</td>
+          <td>✅</td>
+          <td>E-mail is a super-portable format, and Google Mail is no exception. Besides being able to (incrementally) make a copy using <a href="https://support.google.com/mail/answer/7126229">IMAP</a> or <a href="https://support.google.com/a/answer/6089246">POP</a>, they also provide an archive tool through <a href="https://takeout.google.com/settings/takeout">Google Takeout</a>. If that is not enough, you can use <a href="http://gmvault.org/">Gmvault</a>, which claims to smooth over some bugs in Google's APIs (that is what I use).</td>
+        </tr>
+        <tr>
+          <td><a href="https://calendar.google.com/">Google Calendar</a></td>
+          <td>✅️</td>
+          <td>✅</td>
+          <td>Super easy. Use <a href="https://support.google.com/calendar/answer/37111">exports</a> to manually download a copy, or <a href="https://support.google.com/calendar/answer/37648">private addresses</a> if you want to automatically download them. I use: <code>curl -o "jpp-`date +%Y-%m-%d`.ics" &lt;private-address-url&gt;</code></td>
+        </tr>
+      </table>
+    </p>
+
+    <p class="divider">
+      I O I O I I I O I I I O I O I O O I I O O O I O I O I I I O I O O O I O I I O I O
+    </p>
+
+    <p>
+      One interesting question is where to store the data. I've thought about several options, and for now settled on something simple: multiple external hard drives (mirrors with the same data), plus Dropbox for the most important stuff. As my friend <a href="https://jbeekman.nl/">Jethro</a> said, you need at least 3 hard drives: one will fail, then the second one might also fail as you copy data off it, and then you'll be happy to have a third one!
+    </p>
+
+    <p>
+      I've also considered cloud storage, but it's not very attractive. For example, <a href="https://aws.amazon.com/s3/pricing/">Amazon S3</a> costs $0.023 per GB per month, but I can buy a 5TB external hard drive for $120 (in <a href="https://www.amazon.com/Seagate-Backup-Desktop-External-STDT5000100/dp/B00J0O5R2I">May 2017</a>), which is $0.024 per GB. That means I can buy one external hard drive per month for the same price! <a href="https://aws.amazon.com/glacier/">Amazon Glacier</a> and <a href="https://www.backblaze.com">Backblaze</a> seem a lot cheaper, so I might use those for last-resort backups.
+    </p>
+
+    <p class="divider">
+      I O I I I O I O I O O I I O O O I I I I O O O O I O I I O I O I O I O I I I O I O
+    </p>
+
+    <p>
+      How do you move your data? Please let me know about your backup methods by tweeting me at <a href="https://twitter.com/JanPaul123">@JanPaul123</a> or emailing me at j@npaulpos.ma!
+    </p>
+  </article>
+</html>
