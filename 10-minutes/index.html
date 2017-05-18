@@ -5,6 +5,8 @@
   <link rel="stylesheet" type="text/css" href="../common/reset.css" />
   <link rel="stylesheet" type="text/css" href="../common/article.css" />
   <link rel="stylesheet" type="text/css" href="../fonts/orbitron/stylesheet.css" />
+  <script src='../fucking-cdn/jquery.min.js'></script>
+  <script src="index.js"></script>
 
   <style>
     body {
@@ -14,6 +16,22 @@
 
     header {
       margin-bottom: 30px;
+    }
+
+    article {
+      padding: 50px 22vh 20px 20px;
+    }
+
+    @media (min-height: 700px) {
+      article {
+        padding-right: 154px; /* 700px * 22vh * 0.01px/vh */
+      }
+    }
+
+    @media (max-width: 600px) {
+      article {
+        padding-right: 75px; /* Hard-coded */
+      }
     }
 
     h1 {
@@ -42,17 +60,99 @@
     }
 
     th {
-      font-weight: bold;
-      white-space: nowrap;
     }
 
     th, td {
       padding: 0.5em;
-      text-align: left; // "justify" doesn't look good for <code>…
     }
 
     code {
       background: rgba(255,255,255,0.2);
+    }
+
+    /* Table */
+    .table {
+      text-align: left; /* "justify" doesn't look good for <code>… */
+    }
+    .table-header {
+      font-weight: bold;
+      white-space: nowrap;
+      display: flex;
+      align-items: flex-end;
+    }
+    .table-header-name,
+    .table-header-10-minutes,
+    .table-header-automatic,
+    .table-header-how,
+    .table-row-name,
+    .table-row-10-minutes,
+    .table-row-automatic,
+    .table-row-second-half {
+      padding: 10px 0;
+      box-sizing: border-box;
+    }
+    .table-header-name,
+    .table-row-name {
+      width: 120px;
+    }
+    .table-header-10-minutes,
+    .table-row-10-minutes {
+      width: 100px;
+    }
+    .table-header-automatic,
+    .table-row-automatic {
+      width: 110px;
+    }
+    .table-row-first-half {
+      display: flex;
+      min-width: calc(120px + 100px + 110px);
+    }
+    @media (max-width: 650px) {
+      .table-header-how {
+        display: none;
+      }
+    }
+    .table-row {
+      display: flex;
+      align-items: flex-start;
+    }
+    @media (max-width: 650px) {
+      .table-row {
+        flex-direction: column;
+        margin-top: 1em;
+      }
+    }
+
+    /* Counter */
+    .counter-container {
+      position: fixed;
+      top: 0;
+      right: 0;
+    }
+
+    .counter-numbers {
+      font-family: "Orbitron";
+      font-weight: bold;
+      font-size: 15vh;
+      transform: translateX(100%) rotate(90deg) translate(10px, 10px);
+      transform-origin: top left;
+      width: 90vh; /* Need a constant width to avoid jumpiness */
+      cursor: pointer;
+    }
+
+    @media (min-height: 700px) {
+      .counter-numbers {
+        font-size: 105px; /* 700px * 15vh * 0.01px/vh */
+      }
+    }
+    @media (max-width: 600px) {
+      .counter-numbers {
+        font-size: 40px; /* Hard-coded */
+      }
+    }
+
+    .counter-reset {
+
     }
   </style>
 
@@ -112,49 +212,73 @@
     <p>Here's an overview of the services that I actively backup my data from. Some methods are more technical than others. For the technically inclined I've included some script snippets, which I actually use (in <a href="https://en.wikipedia.org/wiki/Z_shell">zsh</a>, though they should typically also work in <a href="https://en.wikipedia.org/wiki/Bourne_shell">sh</a>). I'll update this list when I discover new methods.</p>
 
     <p>
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Within 10<br>minutes?</th>
-          <th>Automatic?</th>
-          <th>How/why?</th>
-        </tr>
-        <tr>
-          <td><a href="https://facebook.com">Facebook</a></td>
-          <td>❌</td>
-          <td>❌</td>
-          <td>Their <a href="https://www.facebook.com/help/131112897028467">archive tool</a> exports a lot, but not the most important thing: my likes and comments. It says "Jan Paul Posma likes a link," but it doesn't say <em>which</em> link. This is unacceptable, and I haven't found a solution for this yet.</td>
-        </tr>
-        <tr>
-          <td><a href="https://twitter.com">Twitter</a></td>
-          <td>⚠️</td>
-          <td>❌</td>
-          <td>Their <a href="https://support.twitter.com/articles/20170160">archive tool</a> is pretty good: it exports tweets, retweets, pictures, all with links to the originals. It does link to its URL shortener (which is <a href="http://www.archiveteam.org/index.php?title=URLTeam">problematic</a>), but has the original URL in the HTML <em>title</em> attribute. 👏 Unfortunately it doesn't export direct messages, and there doesn't seem to be a way to automate exporting an archive.</td>
-        </tr>
-        <tr>
-          <td><a href="https://youtube.com">Youtube</a></td>
-          <td>⚠️</td>
-          <td>✅</td>
-          <td>I want to backup the videos that I watched, but their <a href="https://www.youtube.com/static?template=terms">Terms of Service</a> don't allow that. However, if I would want to (I would never do this Youtube, don't sue me), I could use <a href="https://rg3.github.io/youtube-dl/">youtube-dl</a> pretty easily, for example like this: <code>youtube-dl --write-info-json --write-description --write-thumbnail --write-annotations --all-subs --ignore-errors --output "%(title)s-%(id)s.%(ext)s" &lt;my-liked-video-playlist-url&gt;</code>. This even skips over already downloaded videos, and resumes aborted downloads!</td>
-        </tr>
-        <tr>
-          <td><a href="https://slack.com/">Slack</a></td>
-          <td>✅️</td>
-          <td>✅</td>
-          <td>They provide <a href="https://get.slack.help/hc/en-us/articles/201658943-Export-your-team-s-Slack-history">exports</a> for admins, but unfortunately not for regular users. I also want to backup my private conversations, which their exports typically don't provide. They do provide an API which we can use to create a backup. For this you can use <a href="https://github.com/jesusmb1995/SlackBackup">SlackBackup</a>, which is easy to setup. I fixed some bugs in that script, and my fixed version can be found <a href="SlackBackup_JP.jar">here</a> (they have also merged it into their repo, but just not cut a release yet). Use it like this: <code>java -jar SlackBackup_JP.jar &lt;your-token&gt; cgpf</code></td>
-        </tr>
-        <tr>
-          <td><a href="https://mail.google.com">Google Mail</a></td>
-          <td>✅️</td>
-          <td>✅</td>
-          <td>E-mail is a super-portable format, and Google Mail is no exception. Besides being able to (incrementally) make a copy using <a href="https://support.google.com/mail/answer/7126229">IMAP</a> or <a href="https://support.google.com/a/answer/6089246">POP</a>, they also provide an archive tool through <a href="https://takeout.google.com/settings/takeout">Google Takeout</a>. If that is not enough, you can use <a href="http://gmvault.org/">Gmvault</a>, which claims to smooth over some bugs in Google's APIs (that is what I use).</td>
-        </tr>
-        <tr>
-          <td><a href="https://calendar.google.com/">Google Calendar</a></td>
-          <td>✅️</td>
-          <td>✅</td>
-          <td>Super easy. Use <a href="https://support.google.com/calendar/answer/37111">exports</a> to manually download a copy, or <a href="https://support.google.com/calendar/answer/37648">private addresses</a> if you want to automatically download them. I use: <code>curl -o "jpp-`date +%Y-%m-%d`.ics" &lt;private-address-url&gt;</code></td>
-        </tr>
+      <div class="table">
+        <div class="table-header">
+          <span class="table-header-name">Name</span>
+          <span class="table-header-10-minutes">Within 10<br>minutes?</span>
+          <span class="table-header-automatic">Automatic?</span>
+          <span class="table-header-how">How/why?</span>
+        </div>
+        <div class="table-row">
+          <div class="table-row-first-half">
+            <span class="table-row-name"><a href="https://facebook.com">Facebook</a></span>
+            <span class="table-row-10-minutes">❌</span>
+            <span class="table-row-automatic">❌</span>
+          </div>
+          <div class="table-row-second-half">
+            Their <a href="https://www.facebook.com/help/131112897028467">archive tool</a> exports a lot, but not the most important thing: my likes and comments. It says "Jan Paul Posma likes a link," but it doesn't say <em>which</em> link. This is unacceptable, and I haven't found a solution for this yet.
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-row-first-half">
+            <span class="table-row-name"><a href="https://twitter.com">Twitter</a></span>
+            <span class="table-row-10-minutes">⚠️</span>
+            <span class="table-row-automatic">❌</span>
+          </div>
+          <div class="table-row-second-half">
+            Their <a href="https://support.twitter.com/articles/20170160">archive tool</a> is pretty good: it exports tweets, retweets, pictures, all with links to the originals. It does link to its URL shortener (which is <a href="http://www.archiveteam.org/index.php?title=URLTeam">problematic</a>), but has the original URL in the HTML <em>title</em> attribute. 👏 Unfortunately it doesn't export direct messages, and there doesn't seem to be a way to automate exporting an archive.
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-row-first-half">
+            <span class="table-row-name"><a href="https://youtube.com">Youtube</a></span>
+            <span class="table-row-10-minutes">⚠️</span>
+            <span class="table-row-automatic">⚠️</span>
+          </div>
+          <div class="table-row-second-half">
+            I want to backup the videos that I watched, but their <a href="https://www.youtube.com/static?template=terms">Terms of Service</a> don't allow that. However, if I would want to (I would never do this Youtube, don't sue me), I could use <a href="https://rg3.github.io/youtube-dl/">youtube-dl</a> pretty easily, for example like this: <code>youtube-dl --write-info-json --write-description --write-thumbnail --write-annotations --all-subs --ignore-errors --output "%(title)s-%(id)s.%(ext)s" &lt;my-liked-video-playlist-url&gt;</code>. This even skips over already downloaded videos, and resumes aborted downloads!
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-row-first-half">
+            <span class="table-row-name"><a href="https://slack.com/">Slack</a></span>
+            <span class="table-row-10-minutes">✅️</span>
+            <span class="table-row-automatic">✅</span>
+          </div>
+          <div class="table-row-second-half">
+            They provide <a href="https://get.slack.help/hc/en-us/articles/201658943-Export-your-team-s-Slack-history">exports</a> for admins, but unfortunately not for regular users. I also want to backup my private conversations, which their exports typically don't provide. They do provide an API which we can use to create a backup. For this you can use <a href="https://github.com/jesusmb1995/SlackBackup">SlackBackup</a>, which is easy to setup. I fixed some bugs in that script, and my fixed version can be found <a href="SlackBackup_JP.jar">here</a> (they have also merged it into their repo, but just not cut a release yet). Use it like this: <code>java -jar SlackBackup_JP.jar &lt;your-token&gt; cgpf</code>
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-row-first-half">
+            <span class="table-row-name"><a href="https://mail.google.com">Google Mail</a></span>
+            <span class="table-row-10-minutes">✅️</span>
+            <span class="table-row-automatic">✅</span>
+          </div>
+          <div class="table-row-second-half">
+            E-mail is a super-portable format, and Google Mail is no exception. Besides being able to (incrementally) make a copy using <a href="https://support.google.com/mail/answer/7126229">IMAP</a> or <a href="https://support.google.com/a/answer/6089246">POP</a>, they also provide an archive tool through <a href="https://takeout.google.com/settings/takeout">Google Takeout</a>. If that is not enough, you can use <a href="http://gmvault.org/">Gmvault</a>, which claims to smooth over some bugs in Google's APIs (that is what I use).
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-row-first-half">
+            <span class="table-row-name"><a href="https://calendar.google.com/">Google Calendar</a></span>
+            <span class="table-row-10-minutes">✅️</span>
+            <span class="table-row-automatic">✅</span>
+          </div>
+          <div class="table-row-second-half">
+            Super easy. Use <a href="https://support.google.com/calendar/answer/37111">exports</a> to manually download a copy, or <a href="https://support.google.com/calendar/answer/37648">private addresses</a> if you want to automatically download them. I use: <code>curl -o "jpp-`date +%Y-%m-%d`.ics" &lt;private-address-url&gt;</code>
+          </div>
+        </div>
       </table>
     </p>
 
@@ -178,4 +302,9 @@
       How do you move your data? Please let me know about your backup methods by tweeting me at <a href="https://twitter.com/JanPaul123">@JanPaul123</a> or emailing me at j@npaulpos.ma!
     </p>
   </article>
+
+  <div class="counter-container">
+    <div class="counter-numbers">00:10:00</div>
+    <!-- <button class="counter-reset">restore backup</button> -->
+  </div>
 </html>
