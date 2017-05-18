@@ -10,7 +10,7 @@ html.jpp-iframe body {
 
 article {
   margin: 0 auto;
-  width: 710px;
+  max-width: 710px;
   padding: 50px 50px 20px;
   border: 1px solid transparent; /* for block formatting context */
 }
