@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="../common/article.css" />
   <link rel="stylesheet" type="text/css" href="../fonts/orbitron/stylesheet.css" />
   <script src='../fucking-cdn/jquery.min.js'></script>
+  <script src="../fucking-cdn/underscore-min.js"></script>
   <script src="index.js"></script>
 
   <style>
@@ -128,6 +129,7 @@
       position: fixed;
       top: 0;
       right: 0;
+      bottom: 0;
     }
 
     .counter-numbers {
@@ -152,7 +154,30 @@
     }
 
     .counter-reset {
+      display: none;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: yellow;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
+    .counter-reset-big {
+      font-size: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .counter-reset {
+        transform: rotate(90deg) translate(20px, 15px);
+        transform-origin: top right;
+      }
+    }
+
+    /* From JS */
+    .single-letter {
+      display: inline-block;
     }
   </style>
 
@@ -305,6 +330,6 @@
 
   <div class="counter-container">
     <div class="counter-numbers">00:10:00</div>
-    <!-- <button class="counter-reset">restore backup</button> -->
+    <button class="counter-reset">restore backup</button>
   </div>
 </html>
