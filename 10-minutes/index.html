@@ -196,7 +196,7 @@
     </header>
 
     <p>
-      Data needs to move. Those backup hard drives sitting in the closet? They have quite a few bits fallen over already. Or they may <a href="https://www.backblaze.com/b2/hard-drive-test-data.html">not work at all</a>, next time I use them. And that is digital, binary data&mdash;let's not even think about those photo albums in my grandma's basement, which "we are going to digitise soon."
+      Data needs to move. Those backup hard drives sitting in the closet? They have quite a few bits fallen over already. Or they may <a href="https://www.backblaze.com/b2/hard-drive-test-data.html">not work at all</a>, next time I use them. And that is digital, binary data&mdash;let's not even think about those photo albums in my grandma's basement, which &ldquo;we are going to digitise soon.&rdquo;
     </p>
 
     <p>
@@ -233,14 +233,14 @@
     </p>
 
     <p>
-      Luckily, for once, we have a major force on our side: the European Union. The <a href="http://ec.europa.eu/justice/data-protection/reform/files/regulation_oj_en.pdf">General Data Protection Regulation</a> Article 20, which will go into effect on 25 May 2018, requires service providers to provide users' data "in a structured, commonly used and machine-readable format." Hopefully this legislation will speed up the efforts described on this page.
+      Luckily, for once, we have a major force on our side: the European Union. The <a href="http://ec.europa.eu/justice/data-protection/reform/files/regulation_oj_en.pdf">General Data Protection Regulation</a> Article 20, which will go into effect on 25 May 2018, requires service providers to provide users&rsquo; data &ldquo;in a structured, commonly used and machine-readable format.&rdquo; Hopefully this legislation will speed up the efforts described on this page.
     </p>
 
     <p class="divider">
       I O I O I I I O I O I O O I I O O O I I I I O O O O I O I I O I O I O I O I I I O
     </p>
 
-    <p>Here's an overview of the services that I actively backup my data from. Some methods are more technical than others. For the technically inclined I've included some script snippets, which I actually use (in <a href="https://en.wikipedia.org/wiki/Z_shell">zsh</a>, though they should typically also work in <a href="https://en.wikipedia.org/wiki/Bourne_shell">sh</a>). I'll update this list when I discover new methods.</p>
+    <p>Here's an overview of the services that I actively backup my data from. Some methods are more technical than others. For the technically inclined I&rsquo;ve included some script snippets, which I actually use (in <a href="https://en.wikipedia.org/wiki/Z_shell">zsh</a>, though they should typically also work in <a href="https://en.wikipedia.org/wiki/Bourne_shell">sh</a>). I&rsquo;ll update this list when I discover new methods.</p>
 
     <p>
       <div class="table">
@@ -257,7 +257,7 @@
             <span class="table-row-automatic">❌</span>
           </div>
           <div class="table-row-second-half">
-            Their <a href="https://www.facebook.com/help/131112897028467">archive tool</a> exports a lot, but not the most important thing: my likes and comments. It says "Jan Paul Posma likes a link," but it doesn't say <em>which</em> link. This is unacceptable, and I haven't found a solution for this yet.
+            Their <a href="https://www.facebook.com/help/131112897028467">archive tool</a> exports a lot, but not the most important thing: my likes and comments. It says &ldquo;Jan Paul Posma likes a link,&rdquo; but it doesn&rsquo;t say <em>which</em> link. This is unacceptable, and I haven&rsquo;t found a solution for this yet.
           </div>
         </div>
         <div class="table-row">
@@ -267,7 +267,7 @@
             <span class="table-row-automatic">❌</span>
           </div>
           <div class="table-row-second-half">
-            Their <a href="https://support.twitter.com/articles/20170160">archive tool</a> is pretty good: it exports tweets, retweets, pictures, all with links to the originals. It does link to its URL shortener (which is <a href="http://www.archiveteam.org/index.php?title=URLTeam">problematic</a>), but has the original URL in the HTML <em>title</em> attribute. 👏 Unfortunately it doesn't export direct messages, and there doesn't seem to be a way to automate exporting an archive.
+            Their <a href="https://support.twitter.com/articles/20170160">archive tool</a> is pretty good: it exports tweets, retweets, pictures, all with links to the originals. It does link to its URL shortener (which is <a href="http://www.archiveteam.org/index.php?title=URLTeam">problematic</a>), but has the original URL in the HTML <em>title</em> attribute. 👏 Unfortunately it doesn&rsquo;t export direct messages, and there doesn&rsquo;t seem to be a way to automate exporting an archive.
           </div>
         </div>
         <div class="table-row">
@@ -277,7 +277,7 @@
             <span class="table-row-automatic">⚠️</span>
           </div>
           <div class="table-row-second-half">
-            I want to backup the videos that I watched, but their <a href="https://www.youtube.com/static?template=terms">Terms of Service</a> don't allow that. However, if I would want to (I would never do this Youtube, don't sue me), I could use <a href="https://rg3.github.io/youtube-dl/">youtube-dl</a> pretty easily, for example like this: <code>youtube-dl --write-info-json --write-description --write-thumbnail --write-annotations --all-subs --ignore-errors --output "%(title)s-%(id)s.%(ext)s" &lt;my-liked-video-playlist-url&gt;</code>. This even skips over already downloaded videos, and resumes aborted downloads!
+            I want to backup the videos that I watched, but their <a href="https://www.youtube.com/static?template=terms">Terms of Service</a> don&rsquo;t allow that. However, if I would want to (I would never do this Youtube, don&rsquo;t sue me), I could use <a href="https://rg3.github.io/youtube-dl/">youtube-dl</a> pretty easily, for example like this: <code>youtube-dl --write-info-json --write-description --write-thumbnail --write-annotations --all-subs --ignore-errors --output "%(title)s-%(id)s.%(ext)s" &lt;my-liked-video-playlist-url&gt;</code>. This even skips over already downloaded videos, and resumes aborted downloads!
           </div>
         </div>
         <div class="table-row">
@@ -287,7 +287,7 @@
             <span class="table-row-automatic">✅</span>
           </div>
           <div class="table-row-second-half">
-            They provide <a href="https://get.slack.help/hc/en-us/articles/201658943-Export-your-team-s-Slack-history">exports</a> for admins, but unfortunately not for regular users. I also want to backup my private conversations, which their exports typically don't provide. They do provide an API which we can use to create a backup. For this you can use <a href="https://github.com/jesusmb1995/SlackBackup">SlackBackup</a>, which is easy to setup. I fixed some bugs in that script, and my fixed version can be found <a href="SlackBackup_JP.jar">here</a> (they have also merged it into their repo, but just not cut a release yet). Use it like this: <code>java -jar SlackBackup_JP.jar &lt;your-token&gt; cgpf</code>
+            They provide <a href="https://get.slack.help/hc/en-us/articles/201658943-Export-your-team-s-Slack-history">exports</a> for admins, but unfortunately not for regular users. I also want to backup my private conversations, which their exports typically don&rsquo;t provide. They do provide an API which we can use to create a backup. For this you can use <a href="https://github.com/jesusmb1995/SlackBackup">SlackBackup</a>, which is easy to setup. I fixed some bugs in that script, and my fixed version can be found <a href="SlackBackup_JP.jar">here</a> (they have also merged it into their repo, but just not cut a release yet). Use it like this: <code>java -jar SlackBackup_JP.jar &lt;your-token&gt; cgpf</code>
           </div>
         </div>
         <div class="table-row">
@@ -318,11 +318,11 @@
     </p>
 
     <p>
-      One interesting question is where to store the data. I've thought about several options, and for now settled on something simple: multiple external hard drives (mirrors with the same data), plus Dropbox for the most important stuff. As my friend <a href="https://jbeekman.nl/">Jethro</a> said, you need at least 3 hard drives: one will fail, then the second one might also fail as you copy data off it, and then you'll be happy to have a third one!
+      One interesting question is where to store the data. I&rsquo;ve thought about several options, and for now settled on something simple: multiple external hard drives (mirrors with the same data), plus Dropbox for the most important stuff. As my friend <a href="https://jbeekman.nl/">Jethro</a> said, you need at least 3 hard drives: one will fail, then the second one might also fail as you copy data off it, and then you'll be happy to have a third one!
     </p>
 
     <p>
-      I've also considered cloud storage, but it's not very attractive. For example, <a href="https://aws.amazon.com/s3/pricing/">Amazon S3</a> costs $0.023 per GB per month, but I can buy a 5TB external hard drive for $120 (in <a href="https://www.amazon.com/Seagate-Backup-Desktop-External-STDT5000100/dp/B00J0O5R2I">May 2017</a>), which is $0.024 per GB. That means I can buy one external hard drive per month for the same price! <a href="https://aws.amazon.com/glacier/">Amazon Glacier</a> and <a href="https://www.backblaze.com">Backblaze</a> seem a lot cheaper, so I might use those for last-resort backups.
+      I&rsquo;ve also considered cloud storage, but it's not very attractive. For example, <a href="https://aws.amazon.com/s3/pricing/">Amazon S3</a> costs $0.023 per GB per month, but I can buy a 5TB external hard drive for $120 (in <a href="https://www.amazon.com/Seagate-Backup-Desktop-External-STDT5000100/dp/B00J0O5R2I">June 2017</a>), which is $0.024 per GB. That means I can buy one external hard drive per month for the same price! <a href="https://aws.amazon.com/glacier/">Amazon Glacier</a> and <a href="https://www.backblaze.com">Backblaze</a> seem a lot cheaper, so I might use those for last-resort backups.
     </p>
 
     <p class="divider">
