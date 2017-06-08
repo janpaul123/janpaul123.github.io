@@ -51,9 +51,11 @@ $(function() {
   }
 
   var singleLetterSpans = Array.from(document.querySelectorAll('.single-letter'));
-  var fractionsWhenToIntroduceCraziness = _.shuffle(singleLetterSpans.map(function(__, index) {
-    return index / singleLetterSpans.length;
-  }));
+  singleLetterSpans = _.shuffle(singleLetterSpans).slice(0, Math.floor(singleLetterSpans.length / 10));
+  var fractionsWhenToIntroduceCraziness =
+    _.shuffle(singleLetterSpans.map(function(__, index) {
+      return 1 - (index / singleLetterSpans.length * 0.5);
+    }));
   var crazyCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz0123456789';
   var originalTexts = singleLetterSpans.map(function(span) {
     return span.textContent;
@@ -85,7 +87,10 @@ $(function() {
 
     fractionsWhenToIntroduceCraziness.forEach(function(fraction, index) {
       if (clockSeconds < clockSecondsStartOfCraziness * fraction) {
-        singleLetterSpans[index].textContent = crazyCharacters[Math.floor(Math.random() * crazyCharacters.length)];
+        singleLetterSpans[index].style.visibility = 'hidden';
+        singleLetterSpans[index].innerHTML =
+          originalTexts[index] + '<span class="single-letter-craziness">' +
+          crazyCharacters[Math.floor(Math.random() * crazyCharacters.length)] + '</span>';
       }
     });
 
@@ -125,6 +130,7 @@ $(function() {
     enabled = false;
     clearInterval(interval);
     originalTexts.forEach(function(text, index) {
+      singleLetterSpans[index].style.visibility = 'visible';
       singleLetterSpans[index].textContent = text;
     });
     $('.counter-reset').hide();
