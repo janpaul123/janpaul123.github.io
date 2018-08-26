@@ -1,5 +1,5 @@
 (function() {
-  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, imageAngle, imageDistance, imageHeight, imageMargin, lastRotateAngle, log, makeBetweenMinus180And180, numberOfImages, pauseAllVimeoPlayers, rotateCarouselTo, setCss3, transitionEnd, updateCarouselOpacities, updateVimeoPlayers, vimeoPlayers,
+  var BackgroundView, ContentContainerView, IframeView, ItemView, MenuContainerView, Router, globalOnScroll, log, pauseAllVimeoPlayers, setCss3, transitionEnd, updateVimeoPlayers, vimeoPlayers,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -745,55 +745,7 @@
     return _results;
   };
 
-  imageHeight = 250;
-
-  imageMargin = 0;
-
-  numberOfImages = 21;
-
-  imageAngle = 360 / numberOfImages;
-
-  imageDistance = (imageHeight / 2 + imageMargin) / Math.tan(imageAngle / 360 * Math.PI);
-
-  lastRotateAngle = 0;
-
-  makeBetweenMinus180And180 = function(angle) {
-    return ((angle + 180 + 360 * 10000) % 360) - 180;
-  };
-
-  updateCarouselOpacities = function(selectedIndex) {
-    return $('.carousel-inner img').each(function(index) {
-      return $(this).css('opacity', Math.cos((selectedIndex - index) * imageAngle / 360 * 2 * Math.PI) / 2 + 0.6);
-    });
-  };
-
-  rotateCarouselTo = function(selectedIndex) {
-    var rotateAngle;
-    rotateAngle = (selectedIndex - 1) * imageAngle;
-    rotateAngle = lastRotateAngle - makeBetweenMinus180And180(lastRotateAngle - rotateAngle);
-    lastRotateAngle = rotateAngle;
-    return setCss3($('.carousel-inner'), 'transform', "translateZ(-" + imageDistance + "px) rotateX(" + rotateAngle + "deg)");
-  };
-
   $(function() {
-    $('.carousel-inner img').each(function(index) {
-      var angle;
-      angle = -(index - 1) * imageAngle;
-      return setCss3($(this), 'transform', "rotateX(" + angle + "deg) translateZ(" + imageDistance + "px) translateX(-50%)");
-    });
-    rotateCarouselTo(0);
-    updateCarouselOpacities(0);
-    _.defer(function() {
-      return setCss3($('.carousel-inner'), 'transition', 'transform 1s', true);
-    });
-    $('[data-carousel-index]').each(function() {
-      var carouselIndex;
-      carouselIndex = $(this).data('carousel-index');
-      return $(this).on('mouseenter', function() {
-        rotateCarouselTo(carouselIndex);
-        return updateCarouselOpacities(carouselIndex);
-      });
-    });
     $('.js-menu-planet').click(function() {
       if (window.planetStartledTimeout != null) {
         clearTimeout(window.planetStartledTimeout);
