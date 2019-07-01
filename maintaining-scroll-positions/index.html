@@ -1,13 +1,79 @@
 <!DOCTYPE html>
 <html lang="en-UK">
+  <meta charset="UTF-8">
   <base target="_top">
 
   <link rel="stylesheet" type="text/css" href="../common/reset.css" />
   <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-white.css" />
+
+  <style>
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
+
+    blockquote {
+      font-size: 24px;
+      font-family: Georgia,Cambria,"Times New Roman",Times,serif;
+      font-style: italic;
+      line-height: 1.5;
+      letter-spacing: -.012em;
+      text-align: center;
+      padding: 0.5em 0.5em 1em;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+  </style>
 
   <title>Maintaining scroll positions in all browsers</title>
 
-  <article style="text-align: center">
-    <a href="https://medium.com/brigade-engineering/maintaining-scroll-positions-in-all-browsers-a280d49bffca"><img src="cover.png" style="width: 406px"></a>
+  <article>
+    <p style="text-align: center; margin-bottom: 4em">
+      <a href="https://medium.com/brigade-engineering/maintaining-scroll-positions-in-all-browsers-a280d49bffca"><img src="cover.png" style="width: 406px"></a>
+    </p>
+
+    <header>
+      <time pubdate>14 Dec 2015</time>
+      <h1>Maintaining scroll positions in all browsers</h1>
+    </header>
+
+    <p>A few months ago I was riding the subway taking positions on the <a href="https://brigade.com">Brigade web app</a>. I noticed something strange. Whenever I didn’t have a strong opinion I checked out the reasons people had left to inform myself. Then I would use the back button to take positions again, only to have to scroll down all the way to where I was before. That was a bad experience—I had to do a lot of scrolling—especially since I like to take a lot of positions!</p>
+
+    <p>Now, I had done the same thing in Chrome on my MacBook before, and I never noticed this problem. When I got home, I verified this, and indeed, it worked fine on my laptop—it scrolled back to my last taken position. Then I tried out other browsers on my laptop, such as Firefox and Safari, and <em>aha</em>! Those browsers had the same problem as my iPhone. I found it so annoying that I started investigating.</p>
+
+    <p>It turns out that all browsers restore the scroll position when clicking the back button, right after the page has loaded. However, with single page applications like ours, a page load typically doesn’t mean all content on the page is available; we first need to make some AJAX requests before we can render things. So for traditional websites most browsers work fine, but for newer web apps navigating around can suck—except in Chrome.</p>
+
+    <h3>Existing solutions</h3>
+
+    <p>After digging through the Chrome source code, I found the <a href="https://chromium.googlesource.com/chromium/blink/+/5da5b59/Source/core/loader/FrameLoader.cpp#1049">piece of code</a> responsible for restoring the scroll position. It turns out that Chrome uses some sophisticated logic to determine when to restore the scroll position, which looks at if network requests have completed, if the size of the page has changed since last looking at it, if the user has already scrolled, and so on. A personal highlight is the variable <em>canRestoreWithoutAnnoyingUser</em>.</p>
+
+    <blockquote>
+      It turns out that this is such a debated topic in the react-router community, that they even split out a separate repo for different scroll behaviours.
+    </blockquote>
+
+    <p>Looking at how other people solve this problem, I found that our navigation library at the time, <a href="https://github.com/defunkt/jquery-pjax">pjax</a>, had functionality for <a href="https://github.com/defunkt/jquery-pjax/blob/d76e840c0f1c0a98c9dd5065b32e436e810d8d13/jquery.pjax.js#L783">caching page content</a> when navigating away, so that pages can be immediately restored when navigating back. However, it assumed having static content, and didn’t seem to play well with React, which we use for our rendering, as React components would lose their state.</p>
+
+    <p>We were considering switching to <a href="https://github.com/rackt/react-router">react-router</a> (which we have now done), so I looked if they had a better solution. It turns out that <a href="https://github.com/rackt/react-router/issues/186">this</a> <a href="https://github.com/rackt/react-router/issues/707">is</a> <a href="https://github.com/rackt/react-router/issues/810">such</a> <a href="https://twitter.com/dan_abramov/status/601097500586549249">a</a> <a href="https://github.com/rackt/react-router/issues/2019">debated</a> <a href="https://github.com/rackt/react-router/issues/2144">topic</a> in the react-router community, that they even split out a separate repo for <a href="https://github.com/rackt/scroll-behavior">different scroll behaviours</a>. Unfortunately, none of them supported waiting for the content to be rendered, like Chrome did.</p>
+
+    <h3>Writing our own polyfill</h3>
+
+    <p>So I decided to write <a href="https://github.com/brigade/delayed-scroll-restoration-polyfill">my own solution</a>. I really liked Chrome’s behaviour, so I wanted to write a polyfill that would emulate it as closely as possible. A key part of Chrome’s algorithm was to wait until the page becomes large enough to actually be able to scroll to previous position again, and that seemed easy enough to implement. Instead of waiting for network requests to finish, I simply <a href="https://github.com/brigade/delayed-scroll-restoration-polyfill/blob/1aa90ef6ff9c3b295da4574532e073e057fc6c0a/index.es6.js#L29-L55">checked the page width and height every few milliseconds</a>, and that seemed to work well enough. Then, when it would be possible to scroll, do it. With manual testing of scroll values, that seemed to work pretty well.</p>
+
+    <p>The next question is, where to scroll to? Our application uses the <a href="https://developer.mozilla.org/en-US/docs/Web/API/History">History API</a> for all page navigation, so I decided not to worry about full page loads. It turns out that you can store information whenever calling <em>pushState</em> or <em>replaceState</em>, so I modified both functions to <a href="https://github.com/brigade/delayed-scroll-restoration-polyfill/blob/1aa90ef6ff9c3b295da4574532e073e057fc6c0a/index.es6.js#L5-L27">store the scroll position</a> whenever calling them. Combining that with <a href="https://github.com/brigade/delayed-scroll-restoration-polyfill/blob/1aa90ef6ff9c3b295da4574532e073e057fc6c0a/index.es6.js#L57-L72">restoring the scroll position when <em>popState</em> is called</a>, and it already comes pretty close to Chrome’s behaviour!</p>
+
+    <blockquote>
+      Interestingly, people have argued that this is a bug in the spec, and in fact Chrome has deliberately implemented this differently.
+    </blockquote>
+
+    <p>Those modifications worked well for navigating to new pages, but not so much for pressing “back” and then “forward” again, because we didn’t save the scroll position from before clicking the “back” button. So I wanted to also store the scroll position when <em>popState</em> was fired, because that means that the browser navigates to another place. However, it turns out that’s not so easy, because <a href="https://html.spec.whatwg.org/#history-traversal">the spec</a> states that the scroll position should be restored before firing <em>popState</em>, so we would not be able to determine the actual scroll position. Interestingly, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=666792#c2">people have argued</a> that this is a <a href="https://github.com/whatwg/html/issues/39">bug in the spec</a>, and in fact Chrome has <a href="https://code.google.com/p/chromium/issues/detail?id=474579">deliberately implemented this differently</a>. So I had to do without scroll restoration when pressing the “forward” button.</p>
+
+    <p>Another deviation from Chrome’s behaviour, is that it doesn’t attempt to restore the scroll position if the user has already scrolled. Unfortunately, in Javascript-land there is no way for us to tell if a scroll was initiated by the user, or by the browser’s scroll restoration algorithm (which, as we just learned, is even inconsistent across browsers, so it’s hard to make assumptions about it). Luckily, both this problem and the <em>popState</em> problem will likely be fixed by the <a href="http://majido.github.io/scroll-restoration-proposal/">Custom Scroll Restoration Proposal</a>, a new API that allows Javascript developers to disable the browser’s scroll behaviour altogether. It has already been shipped in—you guessed it—<a href="https://code.google.com/p/chromium/issues/detail?id=477353">Google Chrome</a>. Hopefully other browser vendors will follow suit soon.</p>
+
+    <p>Anyway, we’ve had this polyfill enabled on Brigade’s production web app for a few months now without any problems, so we decided to make it open source. If you have similar scrolling issues with your web app, just install the <a href="https://github.com/brigade/delayed-scroll-restoration-polyfill">delayed-scroll-restoration-polyfill</a>. And, as always, we welcome all feedback!</p>
   </article>
 </html>

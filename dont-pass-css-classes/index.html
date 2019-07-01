@@ -1,13 +1,90 @@
 <!DOCTYPE html>
 <html lang="en-UK">
+  <meta charset="UTF-8">
   <base target="_top">
 
   <link rel="stylesheet" type="text/css" href="../common/reset.css" />
   <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-white.css" />
+
+  <style>
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-style: italic;
+    }
+
+    ul {
+      list-style: disc outside;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 0.25em 0;
+    }
+
+    img {
+      max-width: 100%;
+    }
+  </style>
 
   <title>Don&rsquo;t pass CSS classes between components</title>
 
-  <article style="text-align: center">
-    <a href="https://medium.com/brigade-engineering/don-t-pass-css-classes-between-components-e9f7ab192785"><img src="cover.png" style="width: 402.5px"></a>
+  <article>
+    <p style="text-align: center; margin-bottom: 4em">
+      <a href="https://medium.com/brigade-engineering/don-t-pass-css-classes-between-components-e9f7ab192785"><img src="cover.png" style="width: 402.5px"></a>
+    </p>
+
+    <header>
+      <time pubdate>11 May 2015</time>
+      <h1>Don’t pass CSS classes between components</h1>
+      <h2>The hidden complexity of CSS in modular applications</h2>
+    </header>
+
+    <p style="text-align: center; margin-top: 1em"><img src="images/1.jpeg" alt="Represent styles as properties." /><br/><em><a href="https://www.flickr.com/photos/veebl/2347345630">https://www.flickr.com/photos/veebl/2347345630</a></em></p>
+
+    <p>The hardest thing when building a large application is <strong>managing complexity</strong>. You get complexity when lots of parts of your application interact with each other, resulting in a large number of states your program can be in. This makes it harder to reason about your program.</p>
+
+    <p>Frameworks like <a href="http://reactjs.com">React</a> help us to reduce this complexity by decomposing an application into smaller components which can be reasoned about individually. But unless we are careful, we can still end up with a lot of complexity within our components. Think of that one component that accepts more than 10 properties — isn’t it a pain to work with? Each additional property increases the <a href="http://2014.jsconf.eu/speakers/sebastian-markbage-minimal-api-surface-area-learning-patterns-instead-of-frameworks.html">API surface</a>, causing a combinatorial explosion, which makes it hard to predict how a change to one prop will affect all the possible combinations.</p>
+
+    <p>For example, in our codebase at Brigade we have a <em>&lt;Button&gt;</em> component that has grown significantly over time — as these things happen. At one point it took a <em>color</em> string, <em>flat</em> boolean, <em>zDepth</em> integer (a Material Design term), <em>unstyled</em> boolean, <em>light</em> boolean, <em>dark</em> boolean, <em>darkRipple</em> boolean, <em>round</em> boolean, <em>type</em> string, and many more. Besides weird inconsistencies (what does it mean to have <em>&lt;Button dark light&gt;</em>?), it was mostly just hard to change anything. What if we change some shadow, will that still look good for <em>&lt;Button color=”primary-inverted” flat zDepth=”3" round&gt;</em>? Do we even have a button with those properties? The only way to work with such a component is to try to understand how all the different properties interact, and come up with all the possible results in your head, which is impractical.</p>
+
+    <p>While a dozen properties is bad, imagine that you suddenly add hundreds of properties to a component. Can you imagine how much complexity that adds? You have no idea how all those properties are being used throughout the application, and what interactions they might have with the changes you are making.</p>
+
+    <p><strong><em>That’s exactly what happens when you pass in a CSS class as a property.</em></strong></p>
+
+    <p>I’ve seen the pattern of passing a CSS class into components a couple of times now. Superficially it makes sense, because it is consistent with the built-in components, and you want to be able to style your components, right? For example, we could have <em>&lt;Button className=”sign-up-submit”&gt;</em>, with corresponding CSS that overrides the global styles for <em>&lt;Button&gt;</em>.</p>
+
+    <p>However, that <em>className</em> is complexity in disguise. Once you can give a component any arbitrary CSS class, you can change any of its <a href="http://meiert.com/en/indices/css-properties/">315</a> CSS properties, which has exactly the same problem as adding 315 properties explicitly. With any change you have no idea how it might interact with all the different CSS properties that might be applied to the component throughout the application, making the component very brittle. And if you do this throughout the application, expect styles to break all over the place.</p>
+
+    <p style="text-align: center"><img width="500" src="images/2.png" alt="Represent styles as properties." /><br/><em>Represent styles as properties.</em></p>
+
+    <p>So what to do instead? First of all, you can <strong>make all different styles explicit properties</strong>. Unfortunately you can end up with lots of properties, like with our <em>&lt;Button&gt;</em> component, but at least then these properties are explicit — the complexity is not hidden.</p>
+
+    <p>For example, we had a <em>&lt;Checkbox&gt;</em> component which took a <em>className</em>, which we used in one case to vertically align a (rather complex) label, and to add an ellipsis if it would overflow. In other cases, however, the label would wrap to the next line. Instead of solving this with <em>className</em> (which actually broke when we changed the component’s styles!) we could expose a <em>wrap</em> property that allows choosing between the wrapping and overflow ellipsis behaviours.</p>
+
+    <p style="text-align: center"><img width="500" src="images/3.png" alt="Split components by decomposing them if possible." /><br/><em>Split components by decomposing them if possible.</em></p>
+
+    <p>The second trick is <strong>splitting one component into two or more components</strong>, which have sufficiently different styles or behavior. In some cases you can use composition, such as extracting a component that just renders a shadow — which you can then reuse! The only potential downside is that you can get more elements, which in certain rare cases might hurt performance.</p>
+
+    <p>To see if a component has a truly small API surface, just look at your test suite. Does it reasonably cover all possible combinations of properties, or does it miss some major use cases? If you have a <em>className</em> property, your tests will most certainly not cover all the things you could do with the component. But CSS classes are only one example of properties in disguise. The same applies to a <em>style</em> property; a function that can alter a component’s rendered output significantly; many references to stateful objects (such as stores); multiple mixins that add properties, and so on.</p>
+
+    <p style="margin-bottom: 0">So, to keep your application maintainable:</p>
+
+    <ul>
+    <li>Keep the number of properties of your components to a minimum.</li>
+
+    <li>Don’t sneak in more properties implicitly through <em>className.</em></li>
+
+    <li>Represent actual different ways a component can look or behave using properties.</li>
+
+    <li>Split out your component into several smaller components that you can compose.</li>
+    </ul>
+
+    <p>Your application will become easier to reason about, and thus easier to change.</p>
   </article>
 </html>
