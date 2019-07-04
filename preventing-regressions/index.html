@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <meta charset="UTF-8">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-white.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-medium.css" />
+
+  <title>Preventing Regressions</title>
+
+  <article>
+    <header>
+      <time pubdate>13 July 2017</time>
+      <h1>Preventing Regressions</h1>
+    </header>
+
+    <p style="text-align: center"><img style="width: 700px; margin-top: 1em" src="images/1.jpeg" /><br/></p>
+
+    <h2>Fixing Bugs Forever</h2>
+
+    <p>
+      When fixing a bug, you want to make sure that it doesn’t appear again. The typical tool for this is adding an automated test, also called a <a href="https://en.wikipedia.org/wiki/Regression_testing">regression test</a>. But this is just one tool in our toolbox.
+    </p>
+
+    <p>
+      In this article, we’ll look at various techniques for preventing regressions that we use at Remix, such as screenshot tests, linters, commit hooks, approval tests, assertions, bot warnings, and conventions.
+    </p>
+
+    <h2>Cost vs. Effectiveness</h2>
+
+    <p>
+      When preventing regressions, there is often a tradeoff between <em>cost</em> and <em>effectiveness</em>. A technique is <em>cheap</em> if:</p>
+
+    <ul>
+      <li>it’s quick to write;</li>
+      <li>it’s easy for others to understand;</li>
+      <li>it’s reliable (no false positives);</li>
+      <li>it’s loosely coupled (changing the code doesn’t require changing the detection of bugs);</li>
+      <li>it executes quickly, and early on.</li>
+    </ul>
+
+    <p>A technique is <em>effective</em> if:</p>
+    <ul>
+      <li>it covers as much as possible (ideally we prevent <em>entire classes</em> of bugs);</li>
+      <li>it’s resilient to change (changing the code doesn’t affect us detecting the bug; it doesn’t lead to false negatives);</li>
+      <li>it points immediately to the problem (no digging around required).</li>
+    </ul>
+
+    <p>
+      We’ll examine all our techniques in terms of <em>cost</em> and <em>effectiveness.</em>Ideal techniques have both, but as we’ll see, that’s hard to find!
+    </p>
+
+    <h2>Unit Tests</h2>
+
+    <p>
+      Let’s start with a traditional technique. A <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a> runs a small piece of code in the actual codebase, and then makes some assertions on the result. Here’s an actual example from our codebase:</p>
+
+    <p style="text-align: center"><img style="width: 700px" src="images/2.png"/><br/><span class="imgcaption">Unit test for a simple function. (format-test.js)</span></p>
+
+    <p>
+      In this case, the <em>cost</em> is fairly low: it’s quick to write, easy to understand, runs quickly, and has never resulted in a false positive (as far as I know). It’s fairly loosely coupled, but would need updating if we change the API of the function, e.g. by changing the input from minutes to hours. In this case, it’s also fairly <em>effective</em>: we can be pretty sure that this piece of code works properly, even when changing it, and it immediately points to the problem when one of the tests fail.
+    </p>
+
+    <p>
+      But this is a pretty ideal case. Let’s look at another one, of a <a href="https://facebook.github.io/react/">React component</a>:
+    </p>
+
+    <p style="text-align: center"><img style="width: 700px" src="images/3.png"/><br/><span class="imgcaption">Unit test for a React component. (InputComponent-test.js)</span></p>
+
+    <p>
+      Still looks pretty straightforward, but in this case the test is less <em>resilient to change:</em> if we change the name of “onChange” to, say, “onEdit”, we might forget to update this test, which will make this test <em>do nothing!</em>
+    </p>
+
+    <p>
+      The reason is that in React, it is allowed to pass in properties that the component does not actually use. One way to make this test more resilient is disallowing that and instead throwing an error. That is basically an <em>assertion,</em> which we will look at in detail later.
+    </p>
+
+    <p>
+      Let’s look at one more, which has several problems:
+    </p>
+
+    <p style="text-align: center"><img style="width: 700px" src="images/4.png"/><br/><span class="imgcaption">More complicated unit test. (FormattedDistanceComponent-test.js)</span></p>
+
+    <p>
+      In this case the component depends on <a href="https://ampersandjs.com/docs/#ampersand-app">
+      global Ampersand state</a>, which makes it hard to change this global state (e.g. by replacing it with <a href="http://redux.js.org/">Redux</a>). We also have to deal with asynchronicity, as the component debounces changes to <em>selectedMap</em> . All in all, the test is not <em>loosely coupled</em>.
+    </p>
+
+    <p>
+      Overall, unit tests are cheapest and most effective for relatively small units which don’t require a world of context. And there is an upper limit to their effectiveness: they only test what you assert—rarely entire classes of bugs.
+    </p>
+
+    <h2>Screenshot Tests</h2>
+
+    <p>
+      Let’s look at another technique of preventing bugs from happening: screenshot tests. The way we use them, they are similar to unit tests, in that you run a small piece of code in your actual codebase, and make assertions. In this case, though, the assertions involve taking screenshots of what has rendered in the browser, and comparing that to previous screenshots.
+    </p>
+
+    <p>
+      We use <a href="https://github.com/Galooshi/happo">Happo</a> to take screenshots of “examples” (rendered components with specific properties) in our component library. This is such an example:
+    </p>
+
+    <p style="text-align: center"><img style="width: 550px" src="images/5.png"/><br/><span class="imgcaption">Screenshot tests like this one in Happo are cheap: they are extremely easy to write and understand, and execute quite quickly. (TimetableComponent-examples.js)</span></p>
+
+    <p>
+      Fixing a bug in the timetable causes a bot to comment on the Github Pull Request, like this:
+    </p>
+
+    <p style="text-align: center"><img style="width: 700px" src="images/6.png"/><br/><span class="imgcaption">Our bot Mrv1n adds a comment when a screenshot changes.</span></p>
+
+    <p>
+      When clicking on the link, you would see something like this:
+    </p>
+
+    <p style="text-align: center"><img style="width: 700px" src="images/7.png"/><br/><span class="imgcaption">Happo shows how React components change. Before (left), diff (middle), after (right).</span></p>
+
+    <p>
+      Screenshot tests like this are <em>cheap:</em> they are extremely easy to write and understand, and execute quite quickly. They are more loosely coupled to the code than unit tests typically are, as they don’t have to do any prodding into the DOM to make assertions. They are pretty reliable, with false positives only occasionally happening.
+    </p>
+
+    <p>
+      But most of all, they are <em>effective:</em> they cover so much at once — rendering logic of all the components in the tree, and even CSS. They point to problems in a direct, visual way. And they are fairly resilient to change, although one has to be careful to create new examples to explicitly cover bugs, otherwise it can become hard to determine what kinds of bugs a particular example is supposed to cover. They also have some side benefits: the examples serve as code documentation, and as a “component library” / “style guide”.
+    </p>
+
+    <p>
+      Screenshot tests are so effective at preventing bugs in rendering logic, that we often forgo having unit tests for that at all. We save unit tests for interaction and business logic, such as mutating state.
+    </p>
+
+    <h2>Approval Tests</h2>
+
+    <p>
+      Screenshot tests are like a big assertion that covers a lot of things. We can do something similar for text outputs: <a href="http://approvaltests.com/">approval tests</a>, where you store the text output of (for example) a JSON endpoint, and alert the programmer when it changes. Those text outputs are called the <em>golden masters.</em> In the backend we use the <a href="https://github.com/kytrinyx/approvals">Approvals gem</a>, which looks something like this:
+    </p>
+
+    <p style="text-align: center"><img style="width: 600px" src="images/8.png"/><br/><span class="imgcaption">Approval tests, like this one for a JSON endpoint, cover the entire output of an endpoint with ease, especially with good fixture data that covers edge cases. (maps_controller_spec.rb)</span></p>
+
+    <p>
+      Here we use a common fixture throughout the codebase, called <em>map_with_lots_of_stuff,</em> which contains various edge-cases. Because we use it in most of our tests, we know what to expect from it. And adding an edge case is easy: we just update the golden masters!
+    </p>
+
+    <p>
+      This is what the golden master for the test above looks like:
+    </p>
+
+    <p style="text-align: center"><img style="width: 500px" src="images/9.png"/><br/><span class="imgcaption">The “golden master” of a JSON endpoint. (get_apimaps_id/browser_request.approved.json)</span></p>
+
+    <p>
+      Since it’s checked into git, we get a nice diff view for free. And again, this is a <em>cheap </em> way of preventing bugs: extremely easy to set up and understand, just like the screenshot tests, and it runs just as fast as other backend tests. It’s fairly <em>effective</em>, too: you can cover the entire output of an endpoint with ease, especially with good fixture data that covers edge cases. When debugging, it gives a good indication of what might be going wrong, although it might be harder to trace down than with a pointed unit test.
+    </p>
+
+    <p>
+      It should be noted that approval tests can be flakey (false positives), especially if the <em>order</em> in which results are returned is poorly defined. So we changed our fixture framework to generate predictable IDs, and we changed the application logic to establish a well-defined order. This has the side-benefit that bugs become more reproducible.
+    </p>
+
+    <p>
+      Approval tests also have the same downside as screenshot tests: you have to be careful to be explicit about all the edge cases you are testing for. It can be confusing to have one fixture with all the things you want to test for. If that’s the case, just split out some separate tests. It’s cheap and effective, after all!
+    </p>
+
+    <p>
+      We’ve also started using Approvals for testing which SQL gets executed during an endpoint call, which can prevent certain performance regressions in a cheap way. Read more in our blog post on the topic, <a href="https://blog.remix.com/orm-we-approve-60f2a68f73fb">ORM: We Approve</a>.
+    </p>
+
+    <h2>External APIs Reminders</h2>
+
+    <p>
+      We also use golden masters to warn programmers when they change an API used by an external service (as opposed to the front-end). Ideally, we would have systems test that boot up multiple services and test their integration; that would be <em>effective</em>. However, that is not always <em>cheap:</em> it can be tricky to write these tests, they are typically slow, and can be flakey.
+    </p>
+
+    <p>
+      Instead, our bot posts a comment (using a <a href="https://gist.github.com/janpaul123/f607fada739578ce5a8cfd41a1b24538">custom Pronto matcher</a>) when the golden master of an externally used API changes to remind the programmer to manually test the integration. This can be cheaper for APIs that don’t change much and is still quite effective. It looks like this:
+    </p>
+
+    <p style="text-align: center"><img style="width: 600px" src="images/10.png"/><br/><span class="imgcaption">Our bot Mrv1n adds a comment when an external API changes.</span></p>
+
+    <h2>Linters</h2>
+
+    <p>
+      Linters are great to reduce discussion about code style, but they can also prevent bugs. For example, we once used <a href="https://lodash.com/docs/4.17.4#find">Lodash’s <em>find()</em></a> method but forgot to actually include it, leading to confusing bugs, as the browser resolved it to <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/find">window.find()</a>. This was easily solved by adding a <a href="http://eslint.org/docs/rules/no-restricted-globals">linter rule</a> disallowing use of <em>find()</em> as a global method.
+    </p>
+
+    <p>
+      In this case, the <em>effectiveness</em> of the linter is limited (it only covers one particular case), but it’s extremely cheap to implement and use, especially because of the feedback cycle that is almost instant, if the programmer has an IDE that automatically runs the linter. If they don’t, it would be caught when committing, using <a href="https://github.com/brigade/overcommit">Overcommit</a> (our pre-commit hook tool).
+    </p>
+
+    <h2>Different Language</h2>
+
+    <p>
+      More elaborate than linting, is introducing extensions to the language, in order to prevent bugs. For example, <a href="https://flow.org">Flow</a> adds static type checking to Javascript. One could even go as far as using a different language altogether, such as <a href="http://elm-lang.org/">Elm</a>, which eliminates entire classes of bugs because of how the language is structured.
+    </p>
+
+    <p>
+      A classical example of this is C++ vs. Java. Traditionally, programmers had to manage memory carefully, making sure to deallocate memory when the last reference to an object was removed. This could cause <a href="https://en.wikipedia.org/wiki/Memory_leak">memory leaks</a>, a particularly hard kind of bug to track down. In modern languages such as Java—while keeping similar syntax as C++— has <a href="https://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29">automatic memory management</a>. A garbage collector automatically deallocates unused objects, which removes an entire class of bugs.
+    </p>
+
+    <p>
+      In our case, we use <a href="https://github.com/css-modules/css-modules">CSS Modules</a>, which is an extension to the CSS language that adds better scoping of class names. We’ve never had clashing class names ever since.
+    </p>
+
+    <h2>Assertions</h2>
+
+    <p>
+      While tests and static checks can prevent a lot of bugs, they can rarely cover all combinations of user interactions. For this we use <a href="https://en.wikipedia.org/wiki/Assertion_%28software_development%29">runtime assertions</a>, which are checks in the application code.
+    </p>
+
+    <p>
+      For Ruby, we have written a <a href="https://gist.github.com/janpaul123/1f2ad60d691f85b6bb23e2c9d4ba5a52">small helper</a>. In order to have it catch problems as early as possible, it raises an exception in tests and in development mode. When an assertion fails in production, we log an error to <a href="https://sentry.io">Sentry</a>, but let the program continue executing. We use it like this:
+    </p>
+
+    <p style="text-align: center"><img style="width: 500px" src="images/11.png"/><br/><span class="imgcaption">Runtime assertions, like this one in Ruby, are easy to sprinkle throughout your codebase, but effectiveness depends on how actively the team monitors reported errors. (get_new_trip_params.rb)</span></p>
+
+    <p>
+      It is very <em>cheap</em> to sprinkle assertions like this throughout your codebase. It can even serve as additional documentation for the code, by making any <a href="https://en.wikipedia.org/wiki/Precondition">pre-</a>and <a href="https://en.wikipedia.org/wiki/Postcondition">post-conditions</a>explicit. They also have barely any performance overhead.
+    </p>
+
+    <p>
+      The <em>effectiveness</em> varies wildly per assertion. In this case, it’s in a file that gets called from many places in the codebase, making it more effective. Also, since assertions are embedded in runtime code, they rarely get out of sync (no false negatives). However, the team needs to be actively monitoring reported errors.
+    </p>
+
+    <p>
+      A special case of assertions that we use in the front-end (besides regular assertions), is immutable data. For example, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze"><em>Object.freeze()</em></a> raises an error when trying to change a “frozen” object.
+    </p>
+
+    <h2>Data Integrity Checks</h2>
+
+    <p>
+      Another special case of assertions, <a href="https://en.wikipedia.org/wiki/Data_integrity">data integrity</a> checks make sure that persisted data (in a database) is of a certain form. For this we use several techniques. First, we try to use the most appropriate <a href="https://www.postgresql.org/docs/9.5/static/datatype.html">type</a> for each column. Second, we use <a href="https://en.wikipedia.org/wiki/Relational_database#Constraints">database constraints</a> for simple checks. Third, for more complicated checks we have a script that runs queries against a <a href="https://en.wikipedia.org/wiki/Replication_%28computing%29#Database_replication">follower database</a>, and notifies us when an assertion fails.
+    </p>
+
+    <p>
+      These methods are increasingly <em>expensive</em> and decreasingly <em>effective</em> as they become more and more specific. But like other assertions, they operate on real-world data—full of edge cases—making it more likely to catch bugs with them than with tests.
+    </p>
+
+    <h2>“How can I prevent this bug from happening again?”</h2>
+
+    <p>
+      All these techniques are the result of us constantly asking ourselves the question: “How can I prevent this bug from happening again, in the cheapest, most effective way?” This is a more open-ended question than, “Is there a unit test for this,” or, “what is our test coverage percentage?” After all, there are more techniques than unit testing, and many of them are either cheaper, or more effective, or both.
+    </p>
+
+    <p>
+      To encourage asking this question, we have the convention to write a “test plan” in every commit. We have even <a href="https://gist.github.com/janpaul123/4df2223b1b8883976378e831ba59cbc9">configured Overcommit</a> to remind us of this. These are some actual commits:
+    </p>
+
+    <p style="text-align: center"><img style="width: 700px" src="images/12.png"/><br/><span class="imgcaption">Actual commits from our codebase, showing our “test plan” convention.</span></p>
+
+    <p>
+      Note that the test plan doesn’t always involve writing code. Sometimes just testing something manually is enough, if the cost of automating it outweighs the chance that the bug regresses.
+    </p>
+
+    <p>
+      For different types of commits, different test plans are useful. For pure refactors, ideally you don’t need to change your tests. For bug fixes, you want to write how that bug—or similar ones—will be prevented in the future. For new functionality, think about how to guarantee its correctness.
+    </p>
+
+    <h2>Conclusion</h2>
+
+    <p>
+      We’ve looked at various techniques of preventing bugs from regressing and a way of evaluating these techniques. In the end, this is only what we came up with, and we are always looking for new ideas!
+    </p>
+
+    <p>
+      Most importantly, though, is the mindset. Whenever you fix a bug, think to yourself: how can I prevent this bug from happening again, in the cheapest, most effective way? And then extend this line of thinking to refactors and new functionality, too.
+    </p>
+  </article>
+</html>

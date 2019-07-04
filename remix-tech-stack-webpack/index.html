@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <meta charset="UTF-8">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-white.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-medium.css" />
+
+  <title>Remix’s Tech Stack: Webpack</title>
+
+  <article>
+    <header>
+      <time pubdate>10 October 2016</time>
+      <h1>Remix’s Tech Stack: Webpack</h1>
+    </header>
+
+    <p><em>This is the first in a series about Remix’s tech stack. Over the last few months we’ve worked on setting up our ideal stack, and we’re proud of what we’ve built. Now it’s time to share it.</em></p>
+
+    <p>We’ll start with our front-end build tools. We wanted to use the latest Javascript features without worrying about older browsers (<a href="https://babeljs.io/">Babel</a>), confidence when changing CSS by scoping classes (<a href="https://github.com/css-modules/css-modules">CSS Modules</a>), immediate feedback when changing code (<a href="http://gaearon.github.io/react-hot-loader/">React Hot Loader</a>), and so on. All of this is easy to set up when using <a href="https://webpack.github.io/">Webpack</a>, which is why we switched to that. In this article we’ll look at how we’ve set this up.</p>
+
+    <h2>Webpack config</h2>
+
+    <p>There are a few ways we want Webpack to behave, based on the context. The first is <strong>dev-server</strong> vs <strong>static build</strong>.</p>
+
+    <ul>
+    <li>When developing we use the <a href="https://webpack.github.io/docs/webpack-dev-server.html">webpack-dev-server</a>, which caches files in memory and serves them from a web server, which in turn saves time. It also supports hot module loading.</li>
+
+    <li>When building on the Continuous Integration, or CI, server (we use <a href="https://circleci.com/">CircleCI</a>), or when deploying using <a href="https://www.heroku.com/">Heroku</a>, we want to generate a static build, so we can host them statically in production. That way we can set proper caching headers.</li>
+    </ul>
+
+    <p>We also use both <strong>minified</strong> and <strong>non-minified</strong> versions of our builds, depending on whether it’s in production or still in development.</p>
+
+    <ul>
+    <li>In production, we want a gzipped and minified build, so it downloads and parses faster. We also enable all React optimisations, so it runs faster. Sometimes we also want to do this when developing locally, when measuring performance.</li>
+
+    <li>Usually though, we want to disable minifying when developing. This way development is faster, as minifying is an additional step. We also want to get all of React’s warnings when developing.</li>
+    </ul>
+
+    <p>To set this context, we use two environment variables, which we use like this in our <em>package.json</em>:</p>
+
+    <pre><code>"scripts": {
+  "build": "webpack",
+  "build-min": "WEBPACK_MINIFY=true npm run build",
+  "dev-server": "WEBPACK_DEV_SERVER=true webpack-dev-server",
+  "dev-server-min": "WEBPACK_MINIFY=true npm run dev-server"
+},</code></pre>
+
+    <p>In our <a href="https://webpack.github.io/docs/configuration.html"><em>webpack.config.js</em></a> we first set up some common stuff:</p>
+
+    <pre><code>const config = {
+  plugins: [ /* Some plugins here. */ ],
+  module: {
+    loaders: [ /* Some loaders here. */ ],
+  },
+  entry: {
+    build: ['client/build'], // Our main entry point.
+    tests: ['client/tests'], // Jasmine unit tests.
+    happo: ['client/happo'], // Happo screenshot tests.
+  },
+  resolve: {
+    alias: {
+      client: path.resolve('./client'),
+    },
+  },
+};</code></pre>
+
+    <p>Nothing too exciting here. All our code is in the <em>client</em> directory, plus <em>node_modules</em> for libraries (which Webpack finds by default). We alias the <em>client</em> directory, so we can easily refer to it. We have three entry points, one for our app (<em>client/build.js</em>) and two for tests (which we’ll get into in a later article).</p>
+
+    <p>We then look at if we’re minifying or not:</p>
+
+    <pre><code>if (process.env.WEBPACK_MINIFY) {
+  config.plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+      // Disable React warnings and assertions.
+      'NODE_ENV': JSON.stringify('production'),
+    },
+    '__DEV__': false, // For internal use.
+  }));
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    compress: { warnings: false },
+  }));
+} else {
+  // Only use source maps when not minifying.
+  config.devtool = 'eval-source-map';
+  config.plugins.push(new webpack.DefinePlugin({
+    '__DEV__': true,
+  }));
+}</code></pre>
+
+    <p>If we’re minifying, we want to set <em>NODE_ENV</em> to “production”, as React uses this to strip away all sorts of assertions and warnings, making it faster. When not minifying we enable source maps.</p>
+
+    <p>Then we have setup specific for when using the dev-server:</p>
+
+    <pre><code>if (process.env.WEBPACK_DEV_SERVER) {
+  // Development configuration, assumes this is loaded with
+  // webpack-dev-server, running on port 8080 (default).
+
+  // Hot loading for build.js.
+  config.devServer = { noInfo: true, host: '0.0.0.0', hot: true};
+  config.entry.build.unshift(
+    'webpack-dev-server/client?http://localhost:8080');
+  config.entry.build.unshift('webpack/hot/dev-server');
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
+  config.plugins.push(new webpack.NoErrorsPlugin());
+
+  // React components hot loading.
+  config.module.loaders.unshift({
+    test: /\.js$/,
+    include: path.resolve(__dirname, 'client/components'),
+    loader: 'react-hot',
+  });
+
+  // Expose Jasmine test page as index page on http://localhost:8080
+  config.plugins.push(new JasmineWebpackPlugin({
+    htmlOptions: {
+      chunks: ['tests'],
+      filename: 'index.html',
+    },
+  }));
+
+  config.output = {
+    publicPath: 'http://localhost:8080/',
+    filename: '[name].js',
+
+    // In case this is run without webpack-dev-server.
+    path: 'public/client',
+  };
+}</code></pre>
+
+    <ul>
+    <li>We initialise the dev-server with <em>noInfo,</em> making it less verbose, and bind it to <em>0.0.0.0</em> so you can access it from other machines on the network (useful for debugging).</li>
+
+    <li>We enable Hot Module Replacement, <a href="https://webpack.github.io/docs/webpack-dev-server.html#hot-module-replacement-with-node-js-api">per instructions here</a>. We also enable the <a href="http://gaearon.github.io/react-hot-loader/">React Hot Loader</a>, but only on actual React components (<em>client/components</em>).</li>
+
+    <li>Then we host the <a href="https://github.com/iredelmeier/jasmine-webpack-plugin">Jasmine index page</a> on the same port, so you can just navigate there to run the tests.</li>
+
+    <li>Finally we set <em>config.output</em> to something simple, so you can easily view what is generated at <em>http://localhost:8080/build.js</em>. In case we run this without the dev-server (which should typically not happen), we write to where other static files are written.</li>
+    </ul>
+
+    <p>If we’re not running the dev-server, we’re writing to disk:</p>
+
+    <pre><code>else {
+  // Static configuration, outputs to public/client.
+  // For use with Heroku/CircleCI.
+
+  if (process.env.WEBPACK_MINIFY) {
+    // Gzip.
+    config.plugins.push(new CompressionPlugin());
+
+    // Generate stats.html.
+    config.plugins.push(new StatsPlugin('stats.json'));
+    config.plugins.push(new Visualizer());
+  }
+
+  config.output = {
+    path: 'public/client',
+    publicPath: '/client/',
+
+    // Unique filenames (for caching).
+    filename: '[id].[name].[chunkhash].js',
+  };
+}</code></pre>
+
+    <ul>
+    <li>When minifying, we gzip all files (which Rails static asset hosting automatically uses), and we generate a <a href="https://github.com/chrisbateman/webpack-visualizer">file usage visualisation</a>, which we serve on our internal development pages.</li>
+
+    <li>We also generate unique filenames for each build, so we can serve them with infinite caching headers.</li>
+    </ul>
+
+    <p style="text-align: center"><img style="width: 500px" src="images/1.png"/><br/><span class="imgcaption">The file usage visualisation helps us debug increases in the bundle size</span></p>
+
+    <p>Finally we speed up deploys a bit by leaving out tests when deploying on Heroku:</p>
+
+    <pre><code>// Don't build tests when deploying on Heroku.
+if (process.env.HEROKU_APP_ID) {
+  delete config.entry.tests;
+  delete config.entry.happo;
+}</code></pre>
+
+    <h2>Serving from Rails</h2>
+
+    <p>Let’s now look at the plugins part of our Webpack config. It looks like this:</p>
+
+    <pre><code>plugins: [
+  new CircularDependencyPlugin(),
+  new ManifestPlugin(),
+],</code></pre>
+
+    <p>The first one is to <a href="https://github.com/aackerman/circular-dependency-plugin">prevent circular dependencies</a>, which can be a pain to debug in Webpack. The second one <a href="https://github.com/danethurber/webpack-manifest-plugin">generates a <em>manifest.json</em> file</a>, which looks something like this:</p>
+
+    <pre><code>{
+  "build.js": "0.build.fc79868b1fdedc95cd1f.js",
+  "happo.js": "1.happo.d44f048f66291e0e73ca.js",
+  "tests.js": "2.tests.305167cc0309faddc140.js"
+}</code></pre>
+
+    <p>We use this in our Rails application to serve the right assets. For this we have created a helper file, <em>assets_helper.rb</em>:</p>
+
+    <pre><code># Adds `webpack_include_tag`.
+module AssetsHelper
+  def webpack_include_tag(filename)
+    if Rails.application.config.use_webpack_dev_server
+      # Assumes that Webpack is configured with
+      # config.output.filename = '[name].js'.
+      return javascript_include_tag(root_url(port: 8080) + filename)
+    end
+
+    webpack_filename = webpack_manifest[filename]
+    if webpack_filename
+      javascript_include_tag("/client/#{webpack_filename}")
+    else
+      raise ArgumentError, "Webpack file not found: #{filename}"
+    end
+  end
+
+  private def webpack_manifest
+    @webpack_manifest ||= JSON.load(Rails.root.join(
+      'public', 'client', 'manifest.json'))
+  end
+end</code></pre>
+
+    <p>This allows us to call <em>webpack_include_tag(‘build.js’)</em> in templates, and have it use the filename including the hash. Now we can tell the browser to cache these files forever, as they will have a different filename if they ever change.</p>
+
+    <p>Note that when <em>use_webpack_dev_server</em> is enabled, we point to the dev-server. We set this variable to <em>true</em> in development, to <em>false</em> in staging and production, and in <em>test.rb</em> we set:</p>
+
+    <pre><code>config.use_webpack_dev_server = !ENV['CI']</code></pre>
+
+    <h2>Preprocessing using Loaders</h2>
+
+    <p>Finally, we have a bunch of Webpack loaders. This is what that looks like in the Webpack config:</p>
+
+    <pre><code>module: {
+  loaders: [
+    {
+      test: /\.js$/,
+      include: path.resolve('./client'),
+      loader: 'babel',
+      query: {
+        cacheDirectory: '.babel-cache',
+
+        // For code coverage.
+        plugins: (!process.env.WEBPACK_DEV_SERVER &amp;&amp;
+          !process.env.WEBPACK_MINIFY) ? ['istanbul'] : [],
+      },
+    },
+    {
+      test: /\.less$/,
+      include: path.resolve('./client'),
+      loaders: [
+         // Inject into HTML (bundles it in JS).
+        'style',
+
+        // Resolves url() and :local().
+        'css?localIdentName=[path][name]--[local]--[hash:base64:10]',
+
+        // Autoprefixer (see below at `postcss()`).
+        'postcss-loader',
+
+        // LESS preprocessor.
+        'less',
+      ],
+    },
+    {
+      test: /\.(jpe?g|png|gif)$/i,
+      include: path.resolve('./client'),
+      loaders: [
+        // Inline small images, otherwise create file.
+        'url?limit=10000',
+
+        // Minify images.
+        'img?progressive=true',
+      ],
+    },
+    {
+      test: /\.(geo)?json$/,
+      include: [
+        path.resolve('./client'),
+        path.resolve('./spec'), // Shared fixtures.
+      ],
+      loader: 'json',
+    },
+    {
+      test: /\.svg$/,
+      loader: 'raw',
+    },
+  ],
+},
+postcss() {
+  return [autoprefixer];
+},</code></pre>
+
+    <ul>
+    <li>First, the Babel loader. This allows us to use the latest Javascript features without having to worry about browser support (in conjunction with babel-polyfill). We use Istanbul to track code coverage for tests, and we set an explicit cache path so the CI can keep this cache between builds. This is what that looks like for CircleCI, in <em>circle.yml</em>:</li>
+    </ul>
+
+    <pre><code>dependencies:
+  cache_directories:
+    - ".babel-cache"</code></pre>
+
+    <ul>
+    <li>Next is CSS. We use LESS for preprocessing, although we’re thinking of switching to PostCSS, which uses future CSS standards. We already use PostCSS for auto-prefixing. We also use CSS Modules by setting <em>css?localIdentName</em>, which lets you scope CSS classes to only the file that uses them.</li>
+
+    <li>Images are being inlined if they are a small file, otherwise they get loaded separately. They are also minified.</li>
+
+    <li>JSON and SVG are straightforward. We import SVG as text, which we use with an <em>&lt;Svg&gt;</em> component that looks like this:</li>
+    </ul>
+
+    <pre><code>// Use a tool like https://jakearchibald.github.io/svgomg/
+// to slim down the SVG, and then manually
+// remove width/height/fill/stroke.
+const Svg = React.createClass({
+  propTypes: {
+    height: React.PropTypes.number,
+    offset: React.PropTypes.number,
+    svg: React.PropTypes.string.isRequired,
+    width: React.PropTypes.number.isRequired,
+  },
+
+  render() {
+    return (
+      &lt;div
+        className={styles.root}
+        dangerouslySetInnerHTML={{ __html: this.props.svg }}
+        style={{
+          height: this.props.height || this.props.width,
+          width: this.props.width,
+          top: this.props.offset,
+        }}
+      /&gt;
+    );
+  },
+});
+
+export default Svg;</code></pre>
+
+    <p>Which then gets used like this:</p>
+
+    <pre><code>&lt;Svg svg={require('./pencil.svg')} width={14} offset={2} /&gt;</code></pre>
+
+    <h2>Conclusion</h2>
+
+    <p>This is just a small part of our stack, but it took a while to get right. After all, it’s the small things that make a difference, such as being able to run a minified version with all React optimisations in development, or persisting Babel’s cache between CI runs, or not building tests when deploying.</p>
+
+    <p>Hopefully this is useful to get started with Webpack, or to tune your existing setup. Keep an eye out for next editions in this series, in which we’ll talk about our components library, unit testing, screenshot testing, deploying, keeping the CI fast, and more!</p>
+  </article>
+</html>
