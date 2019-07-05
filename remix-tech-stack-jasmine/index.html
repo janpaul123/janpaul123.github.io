@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-UK">
+  <meta charset="UTF-8">
+  <base target="_top">
+
+  <link rel="stylesheet" type="text/css" href="../common/reset.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-white.css" />
+  <link rel="stylesheet" type="text/css" href="../common/article-medium.css" />
+
+  <title>Remix’s Tech Stack: Jasmine</title>
+
+  <article>
+    <header>
+      <time pubdate>15 September 2017</time>
+      <h1>Remix’s Tech Stack: Jasmine</h1>
+    </header>
+
+    <p style="text-align: center"><img style="width: 700px; margin-top: 1em" src="images/1.jpeg" /><br/></p>
+
+    <h2>How We Configure Jasmine</h2>
+
+    <p>Testing front-end code is tricky. It’s full of asynchronicity (back-and-forths with the user and the back-end), browser-specific behavior (and bugs), visuals (the correctness of which can be fuzzy), and state (management of which is still much less mature than on the back-end, where we have fantastic decades-old databases). Therefore, it’s extra important to have good automated testing tools for the front-end.</p>
+
+    <p>At Remix we use various tools for this, which we’ve covered in the <a href="https://blog.remix.com/preventing-regressions-f9cac1180a9">Preventing Regressions</a> article. This time we’ll focus on Jasmine, our unit testing tool. Over the last few years we’ve built some configuration on top of it, all for very specific reasons, which we’ll look at in detail.</p>
+
+    <p>Our full setup is available as open source <a href="https://github.com/remix/remix-jasmine-setup">here</a>. Maybe some day some of this configuration can be added to Jasmine by default! 📈</p>
+
+    <h2>Random Test Order</h2>
+
+    <p>First of all, we want to run our tests in random order, <a href="http://jakegoulding.com/blog/2012/10/18/run-your-tests-in-a-deterministic-random-order/">to prevent dependencies between tests</a>. (This is one of the reasons we use Jasmine and not Mocha, which <a href="https://github.com/mochajs/mocha/issues/902">doesn’t support random test order</a>.)</p>
+
+    <pre><code>// Prevent dependencies between tests by randomizing tests.
+jasmine.getEnv().randomizeTests(true);</code></pre>
+
+    <p>The downside of this is that tests that are dependent on each other will sporadically fail based on the test order, which can be hard to debug. When you see such a failure in CI, you want to be able to run the tests locally in the same order so you can debug the problem. For this we can print the seed to the console:</p>
+
+    <pre><code>// Generate our own seed so we can print it in the console,
+// for CI debugging.
+const seed = jasmine.getEnv().seed() ||
+  String(Math.random()).slice(-5); // Same seed function as Jasmine
+jasmine.getEnv().seed(seed);
+console.log(`Jasmine seed used: ${seed}`);</code></pre>
+
+    <p>Now we can just plug the seed into the URL like <em>?seed=12345</em>. 🎉</p>
+
+    <h2>Asynchronous Behavior</h2>
+
+    <p>The trickiest thing in testing front-end code is probably dealing with asynchronous behavior, so we’ve spent a lot of time on setting this up right. There are two main approaches to this:</p>
+
+    <ol>
+      <li>Keep the application code asynchronous, and in tests wait until the code is finished running before making assertions.</li>
+
+      <li>Stub asynchronous browser functions by introducing an artificial clock that we can move forward arbitrarily in tests to simulate time moving forward.</li>
+    </ol>
+
+    <br/>
+
+    <p>(1) has the downside of having to wait in tests for application code to finish. It can also be difficult to know exactly when it has finished—you have to always pass through a callback or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> for the test to use. So we went with option (2).</p>
+
+    <p>First we set up fake clock and date, which is built into Jasmine. This replaces functions like <em>setTimeout</em> and <em>new Date()</em>. It’s important to do this before any libraries and polyfills are loaded, as they can store handles to those functions.</p>
+
+    <pre><code>jasmine.clock().mockDate();
+jasmine.clock().install();</code></pre>
+
+    <p>Then there are some other asynchronous functions that Jasmine currently doesn’t replace, so we replace them ourselves. One example is <em>setImmediate</em>, which we can replace by a timeout with 0 milliseconds:</p>
+
+    <pre><code>window.setImmediate = fn =&gt; window.setTimeout(fn, 0);
+window.clearImmediate = id =&gt; window.clearTimeout(id);</code></pre>
+
+    <p>Some libraries use it internally, in which case you’d have to call <em>jasmine.clock().tick(1)</em> in your tests. Another example is <em>requestAnimationFrame</em>, but there we want to replace it with at least 1 millisecond per frame, so we can step through it if we need to:</p>
+
+    <pre><code>window.requestAnimationFrame = fn =&gt; window.setTimeout(fn, 1);
+window.cancelAnimationFrame = id =&gt; window.clearTimeout(id);</code></pre>
+
+    <p>We also install <em>jasmine.Ajax</em> to stub out calls to the server:</p>
+
+    <pre><code>jasmine.Ajax.install();</code></pre>
+
+    <p>Now there should not be any asynchronous waiting in tests any more! So we can tighten the timeout on asynchronous tests (in case you still want to use <a href="https://jasmine.github.io/api/2.8/global.html#implementationCallback">that syntax</a>):</p>
+
+    <pre><code>jasmine.DEFAULT_TIMEOUT_INTERVAL = 10; // milliseconds</code></pre>
+
+    <h2>Asynchronous Test Example</h2>
+
+    <p>To see what an asynchronous test looks like with this setup, let’s try to test this function:</p>
+
+    <pre><code>function ajaxCallWithTimeout(url, timeoutMs, onFinish, onTimeout) {
+  let done = false;
+
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = () =&gt; {
+    if (!done) onFinish(xhr);
+    done = true;
+  };
+  xhr.open('GET', url);
+  xhr.send();
+
+  setTimeout(() =&gt; {
+    if (!done) onTimeout();
+    done = true;
+  }, timeoutMs);
+}</code></pre>
+
+    <p>This is what the happy-path test would look like:</p>
+
+    <pre><code>it('calls `onFinish` when the request comes back in time', () =&gt; {
+  const onFinish = jasmine.createSpy('onFinish');
+  const onTimeout = jasmine.createSpy('onTimeout');
+
+  ajaxCallWithTimeout('test.json', 100, onFinish, onTimeout);
+
+  jasmine.clock().tick(99); // Move clock forward by 99ms.
+  jasmine.Ajax.requests.mostRecent().respondWith({ status: 200 });
+
+  expect(onFinish).toHaveBeenCalled();
+  expect(onTimeout).not.toHaveBeenCalled();
+
+  jasmine.clock().tick(20); // Move clock forward some more
+  expect(onTimeout).not.toHaveBeenCalled(); // Still not called.
+});</code></pre>
+
+    <p>Hurray for arbitrarily manipulating time! ⏰</p>
+
+    <h2>Tightening Asynchronous Tests</h2>
+
+    <p>
+      We noticed that we often want to make sure that at the end of a test nothing changes if you move forward time a bit more, like the last two lines of the test above. Typically this means that no more callbacks should be called, and no more Ajax requests should be made. We haven’t yet figured out how to do the first part (no more callbacks), but we did tighten against any more Ajax requests:
+    </p>
+
+    <pre><code>afterEach(() =&gt; {
+  jasmine.Ajax.requests.reset();
+  jasmine.Ajax.stubs.reset();
+
+  jasmine.clock().tick(1000000);
+
+  if (jasmine.Ajax.requests.count() &gt; 0) {
+    fail('Requests were made after the test.');
+  }
+  if (jasmine.Ajax.stubs.count &gt; 0) {
+    fail('Stubs were set after the test.');
+  }
+});</code></pre>
+
+    <h2>Promises</h2>
+
+    <p>One more source of asynchronicity is Promises. According to the spec, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then#Return_value">handler functions should execute asynchronously</a>. Because of this we use a <a href="https://github.com/taylorhakes/promise-polyfill">Promise polyfill</a> that internally uses <em>setTimeout</em>, even if the browser we run our tests in supports Promises natively.</p>
+
+    <p>We can even write a test to make sure Promises use the Jasmine clock:</p>
+
+    <pre><code>it('uses the Jasmine clock', () =&gt; {
+  const onThen = jasmine.createSpy('onThen');
+  window.Promise.resolve().then(onThen);
+  expect(onThen).not.toHaveBeenCalled();
+
+  jasmine.clock().tick(1);
+  expect(onThen).toHaveBeenCalled();
+});</code></pre>
+
+    <h2>Tightening Tests</h2>
+
+    <p>
+      We try to tighten our tests as much as possible in order to catch as many bugs as possible, like how we tightened asynchronous tests above. Another example is not allowing logging to the console in any way. This catches errors and warnings from libraries, like <a href="https://facebook.github.io/react/docs/typechecking-with-proptypes.html">React’s PropTypes</a>. When legitimately logging to the console, you can still stub out the console method, which we do in a few places. We also ignore some logging by tools:
+    </p>
+
+    <pre><code>const oldConsoleFunctions = {};
+Object.keys(console).forEach(key =&gt; {
+  if (typeof console[key] === 'function') {
+    oldConsoleFunctions[key] = console[key];
+    console[key] = (...args) =&gt; {
+      // Detect Karma logging to console.error
+      // by looking at the stack trace.
+      if (key === 'error') {
+        const error = new Error();
+        if (error.stack &amp;&amp;
+            error.stack.match(/KarmaReporter\.specDone/)) {
+          return;
+        }
+      }
+
+      // Don't fail tests when React shamelessly self-promotes.
+      if (args[0].match &amp;&amp; args[0].match(/React DevTools/)) {
+        return;
+      }
+
+      oldConsoleFunctions[key].apply(console, args);
+      throw new Error("Don't log to console during tests");
+    };
+  }
+});</code></pre>
+
+    <p>
+      Another way to tighten tests is to make sure there are no DOM elements from tests left on the page after running a test, as that could leak state between tests. Since we always mount elements on <em>&lt;body&gt;</em>, we can just check if its number of children have changed:
+    </p>
+
+    <pre><code>let numberOfElementsInBody;
+beforeEach(() =&gt; {
+  numberOfElementsInBody = document.body.childElementCount;
+});
+afterEach(() =&gt; {
+  if (document.body.childElementCount !== numberOfElementsInBody) {
+    throw new Error('Forgot to clean up elements in &lt;body&gt;');
+  }
+});</code></pre>
+
+    <p>
+      This is an assertion on global state, to make sure it doesn’t leak between tests. The alternative would be to clear out the global state before each test (e.g. having a special <em>&lt;div&gt;</em> that all DOM elements get mounted into, and clearing it out before each test), which also works.
+    </p>
+
+    <p>
+    These are just some examples we came up with as we developed our product, but the principle of tightening tests can be more widely applied to any invariants you might have in your application. For example, on the backend you could check complicated database invariants that cannot be expressed as table constraints.
+  </p>
+
+    <h2>Conclusion</h2>
+
+    <p>
+      We showed how we configure Jasmine, but the underlying ideas are more widely applicable. For example, on the backend we use <a href="http://rspec.info/">RSpec</a>, which supports random test order, we stub out external requests using <a href="https://github.com/bblimke/webmock">WebMock</a> and <a href="https://github.com/oesmith/puffing-billy">Puffing Billy</a>, and we tighten tests by running database invariant checks after each test and not allowing any warnings to be logged.
+    </p>
+
+    <p>
+      If you have any suggestions for how to configure Jasmine, be sure to leave a comment below. And of course we welcome contributions to <a href="https://github.com/remix/remix-jasmine-setup">our config</a>! 🌟
+    </p>
+  </article>
+</html>
