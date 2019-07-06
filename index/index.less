@@ -777,7 +777,13 @@ iframe.content-iframe {
   .animation-play-state(paused);
 }
 
-
+.webviz-pop img {
+  .transition(all 0.2s); // transform
+  .transform(translateZ(1px) scale(1));
+}
+.webviz-pop:hover img {
+  .transform(translateZ(1px) scale(1.04));
+}
 
 
 
