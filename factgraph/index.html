@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)https://factlink.com/blog/factlinks-fact-graph -->
+<html class="chrome"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>
+        Factlink’s Fact Graph
+    </title>
+    <meta name="description" content="">
+    <meta name="google-site-verification" content="ecWX-XgW6gT2y6TlW4HD-Of0TpyhbBcxfeYgv8au2OA">  <!-- Keep for Google site verification -->
+
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1">
+    <link href="/factgraph/files/css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" media="screen" href="/factgraph/files/application-d7a6ebbcb408fb2ae99cc557f2e26160.css">
+
+
+
+
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/cobkhjnnnbmaigjhgpmmlkmaidbhpinb">
+
+    <script>window.csrfDataForLocalStorage = {} </script>
+    <style>
+      .content {
+        max-width: 840px;
+        margin: 0 auto;
+        box-sizing: content-box;
+        padding: 25px;
+      }
+      html.jpp-iframe body {
+        background: transparent;
+      }
+    </style>
+  </head>
+
+
+
+  <body class="controller_blog action_fact_graph show_footer">
+
+
+  <div class="content">
+    <div class="container">
+
+  <article class="blog-content">
+
+  <time><a href="https://janpaulposma.nl">Jan Paul Posma</a>, <span pubdate="">26 May 2014</span></time>
+  <h1 class="static-pages-heading-h1">Factlink’s Fact Graph</h1>
+
+  <p class="factlink-tether-target factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><span class="factlink" data-factid="13827">Factlink started with a mission to annotate the world’s information, and to provide a platform in which credible information can surface. We called the second part the “Fact Graph”: the interfaces for linking pieces of text on the web together, and a calculation that shows for each piece of text how credible it is.</span></p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">For the last six months, we haven’t focused on the Fact Graph, as we wanted to get annotation right first. But today, we’re sharing the insights from the hundreds of hours of research into the Fact Graph. We look at our collaborative “fact checking” system in detail, especially the mathematics and user interfaces.</p>
+
+  <h4>Factlink’s original idea</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">What did we try to do anyway? In an internal document we wrote (emphasis added):</p>
+
+  <blockquote>“The goal of Factlink is to solve the problem of assigning credibility to sources. The traditional mental model of a few authoritative sources, such as investigative journalism and peer reviewed science, falls short in a world with billions of tweets and blogs. And, finding correct information simply based on text search and popularity does not seem to be a sustainable trend. Factlink tries to solve this fundamentally hard problem by <b>assigning scores</b> to <b>strings of text annotated by its users</b>.”</blockquote>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">In short, we tried to show if what you’re reading is true or not.</p>
+
+
+  <h4>Annotation</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">We started out with annotating sentences on websites. After installing a browser extension, you could select a piece of text on any website, and create an annotation. We called these annotations “Factlinks”. It worked like this:</p>
+
+  <ol class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">
+    <li>Select a piece of text</li>
+    <li class="factlink-tether-target factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><span class="factlink" data-factid="13554">Give your opinion on the piece of text: </span><span class="blog-fact-graph-agree"><span class="factlink" data-factid="13554">“agree”</span></span><span class="factlink" data-factid="13554">, </span><span class="blog-fact-graph-disagree"><span class="factlink" data-factid="13554">“disagree”</span></span><span class="factlink" data-factid="13554">, or </span><span class="blog-fact-graph-unsure"><span class="factlink" data-factid="13554">“neutral”</span></span><span class="factlink" data-factid="13554"> (which we later renamed to </span><span class="blog-fact-graph-unsure"><span class="factlink" data-factid="13554">“unsure”</span></span><span class="factlink" data-factid="13554">)</span></li>
+    <li>A Factlink is created.</li>
+  </ol>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner">
+      <figure class="blog-figure">
+        <img class="blog-content-image" src="/factgraph/files/annotate-agree-neutral-disagree-4a6ddf1e2ed4e4761ca3f7d35de6efd8.png" alt="Annotate agree neutral disagree">
+        <figcaption>annotating a Factlink</figcaption>
+      </figure>
+    </div>
+  </aside>
+
+  <p class="factlink-tether-target factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><span class="factlink" data-factid="13214">Once you created a Factlink on a website, other people with the browser extension could see it. It didn’t modify the website directly, as that’s generally not possible, but it altered how the website is rendered using the browser extension.</span></p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">You could then post the Factlink to a channel, such as “Brain development”. Others who subscribed to that channel, <span class="factlink" data-factid="13555">such as experts or interested people</span>, would see the Factlink on their activity feed. They could then give their opinion, add sources, and comment on the Factlink.</p>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner">
+      <figure class="blog-figure">
+        <img class="blog-content-image" src="/factgraph/files/channels-6177fa2e4995e0cf701b340d59411426.png" alt="Channels">
+        <figcaption>adding a Factlink to a channel</figcaption>
+      </figure>
+    </div>
+  </aside>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">The annotation part of Factlink still works similarly to what we had originally, except that we used to mark Factlinks using a checkmark in front of the text, while we now show an icon on the right of a paragraph.</p>
+
+  <div class="blog-full-width">
+    <figure class="blog-figure blog-image-half">
+      <img class="blog-content-image" src="/factgraph/files/checkmark-c376a795cfd6f812646b2e9e15c30b68.png" alt="Checkmark">
+      <figcaption>original: checkmark inside the text</figcaption>
+    </figure>
+    <figure class="blog-figure blog-image-half">
+      <img class="blog-content-image" src="/factgraph/files/highlight-c5ee96d9c6829395e1e6d8ca87fd16d8.png" alt="Highlight">
+      <figcaption>now: icon in the margin</figcaption>
+    </figure>
+  </div>
+
+  <h4>Voting on statements</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">You could open a Factlink by clicking on the text. You <span class="factlink" data-factid="13821">would then see a circle w</span>ith three colours, which we called the “Factwheel”. It served several purposes:</p>
+
+  <ol class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">
+    <li class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">The Factwheel showed the credibility of a piece of text. Green meant <span class="blog-fact-graph-agree">credible</span>. Red meant <span class="blog-fact-graph-disagree">not credible</span>. Blue meant <span class="blog-fact-graph-unsure">uncertainty</span>.</li>
+    <li><span class="factlink" data-factid="13828">The number inside the Factwheel represented the amount of "thinking" people have put in to get at this number. The higher this number, the more reliable the credibility calculation.</span></li>
+    <li class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">You could click a colour on the Factwheel to cast a vote, for whether you <span class="blog-fact-graph-agree">agree</span>, <span class="blog-fact-graph-disagree">disagree</span>, or are <span class="blog-fact-graph-unsure">unsure</span>.</li>
+  </ol>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Initially, we started out with just voting. If you agreed, you clicked the green part, which would grow a bit. And the number inside the circle would become higher. Similarly for the red and blue parts.</p>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner">
+      <figure class="blog-figure">
+        <div class="blog-box">
+          <div class="blog-fact-graph-factwheel-click-me-container">
+            <div class="blog-fact-graph-factwheel-click-me js-blog-click-me">click me!</div>
+            <div class="js-blog-factwheel-x"><div class="blog-fact-graph-fact-wheel"><div class="blog-fact-graph-wheel"><div class="blog-fact-graph-raphael_container"><div><svg height="45.6" version="1.1" width="45.6" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#98d100" d="M38.8,22.8A16,16,0,0,0,6.924837324330737,20.805204265836355" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#36a9e1" d="M6.800000000000001,22.799999999999997A16,16,0,0,0,20.805204265836355,38.67516267566926" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#e94e1b" d="M22.799999999999997,38.8A16,16,0,0,0,38.67516267566926,24.794795734163646" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path></svg></div></div>
+<div class="blog-fact-graph-authority">4</div></div></div></div>
+            <div class="blog-fact-graph-factwheel-text">“Working from home is more productive than working in an office.”</div>
+          </div>
+        </div>
+        <figcaption>Factlink with Factwheel</figcaption>
+      </figure>
+    </div>
+  </aside>
+
+
+  <h4>Linking statements</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">However, truth is not a popularity contest. Prevailing “truths” have often turned out not to be very true at all: the earth “was” once flat. So what is more powerful than opinions, what is a better predictor of truth? Hard evidence.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">The key idea of our credibility calculation was evidence. You could add Factlinks as evidence for another Factlink. This evidence could be either supporting or weakening. If the <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> supporting Factlink</span> was likely to be <span class="blog-fact-graph-agree">true</span>, then the Factlink it supported was also more likely to be <span class="blog-fact-graph-agree">true</span>. If a <span class="blog-fact-graph-weakening"><i class="icon-minus-circled"></i> weakening Factlink</span> was likely to be <span class="blog-fact-graph-agree">true</span>, then the Factlink it weakened was more likely to be <span class="blog-fact-graph-disagree">false</span>. We called this network of evidence the “Fact Graph”.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><span class="factlink" data-factid="13826">An example. </span><span class="blog-fact-graph-f1"><span class="factlink" data-factid="13826">Factlink 1 (F1)</span></span><span class="factlink" data-factid="13826"> is: </span><span class="blog-fact-graph-factlink blog-fact-graph-f1"><span class="factlink" data-factid="13826">“Working from home is more productive than working in an office.”</span></span><span class="factlink" data-factid="13826"> You could find a website talking about personal experience, and annotate </span><span class="blog-fact-graph-f2"><span class="factlink" data-factid="13826">F2</span></span><span class="factlink" data-factid="13826">: </span><span class="blog-fact-graph-factlink blog-fact-graph-f2"><span class="factlink" data-factid="13826">“I’m much happier working from home, so I work harder.”</span></span><span class="factlink" data-factid="13826"> You can then add </span><span class="blog-fact-graph-f2"><span class="factlink" data-factid="13826">F2</span></span><span class="factlink" data-factid="13826"> as </span><span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i><span class="factlink" data-factid="13826"> supporting evidence</span></span><span class="factlink" data-factid="13826"> to </span><span class="blog-fact-graph-f1"><span class="factlink" data-factid="13826">F1</span></span><span class="factlink" data-factid="13826">. If it turns out that </span><span class="blog-fact-graph-f2"><span class="factlink" data-factid="13826">F2</span></span><span class="factlink" data-factid="13826"> is </span><span class="blog-fact-graph-agree"><span class="factlink" data-factid="13826">very credible</span></span><span class="factlink" data-factid="13826"> — many people voted that they agree, or it gets a lot of supporting evidence — then in turn </span><span class="blog-fact-graph-f1"><span class="factlink" data-factid="13826">F1</span></span><span class="factlink" data-factid="13826"> will also become </span><span class="blog-fact-graph-agree"><span class="factlink" data-factid="13826">more credible</span></span><span class="factlink" data-factid="13826">. The green part of the Factwheel of </span><span class="blog-fact-graph-f1"><span class="factlink" data-factid="13826">F1</span></span><span class="factlink" data-factid="13826"> will become bigger.</span></p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Say you find a counter argument on the web, which you annotate. <span class="blog-fact-graph-f3">F3</span>: <span class="blog-fact-graph-factlink blog-fact-graph-f3">“In conclusion, in 89% of the cases we have looked at, working in the office was most productive.”</span> This one might be added as <span class="blog-fact-graph-weakening"><i class="icon-minus-circled"></i> weakening evidence</span> to <span class="blog-fact-graph-f1">F1</span>. If it turns out <span class="blog-fact-graph-f3">F3</span> is <span class="blog-fact-graph-agree">credible</span>, then <span class="blog-fact-graph-f1">F1</span> becomes <span class="blog-fact-graph-disagree">less credible</span>. The red part of the Factwheel of <span class="blog-fact-graph-f1">F1</span> will become bigger.</p>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner">
+      <figure class="blog-figure">
+        <div class="blog-box">
+          <div class="blog-fact-graph-factwheel-container"><div class="js-blog-factwheel-y1"><div class="blog-fact-graph-fact-wheel"><div class="blog-fact-graph-wheel"><div class="blog-fact-graph-raphael_container"><div><svg height="45.6" version="1.1" width="45.6" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#98d100" d="M38.8,22.8A16,16,0,0,0,9.56074479565829,13.815450949863378" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#36a9e1" d="M8.543895612986116,15.536152004167251A16,16,0,0,0,7.74950817119575,28.229797023010757" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#e94e1b" d="M8.54389561298611,30.06384799583274A16,16,0,0,0,38.67516267566926,24.794795734163646" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path></svg></div></div>
+<div class="blog-fact-graph-authority">7</div></div></div></div><div class="blog-fact-graph-factwheel-text"><span class="blog-fact-graph-f1">F1:</span> “Working from home is more productive than working in an office.”</div></div>
+
+          <div class="blog-fact-graph-supporting blog-fact-graph-evidence-header"><i class="icon-plus-circled"></i> Supporting evidence</div>
+
+          <div class="blog-fact-graph-factwheel-container"><div class="js-blog-factwheel-y2"><div class="blog-fact-graph-fact-wheel"><div class="blog-fact-graph-wheel"><div class="blog-fact-graph-raphael_container"><div><svg height="45.6" version="1.1" width="45.6" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#98d100" d="M38.8,22.8A16,16,0,0,0,19.791468426405444,7.085397307895924" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#36a9e1" d="M17.855728090000845,7.583095739277542A16,16,0,0,0,25.808531573594554,38.51460269210408" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#e94e1b" d="M27.744271909999156,38.016904260722455A16,16,0,0,0,38.67516267566926,24.794795734163646" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path></svg></div></div>
+<div class="blog-fact-graph-authority">10</div></div></div></div><div class="blog-fact-graph-factwheel-text"><span class="blog-fact-graph-f2">F2:</span> “I’m much happier working from home, so I work harder.”</div></div>
+
+          <div class="blog-fact-graph-weakening blog-fact-graph-evidence-header"><i class="icon-minus-circled"></i> Weakening evidence</div>
+
+          <div class="blog-fact-graph-factwheel-container"><div class="js-blog-factwheel-y3"><div class="blog-fact-graph-fact-wheel"><div class="blog-fact-graph-wheel"><div class="blog-fact-graph-raphael_container"><div><svg height="45.6" version="1.1" width="45.6" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#98d100" d="M38.8,22.8A16,16,0,1,0,7.305313747175608,26.789322991001704" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#36a9e1" d="M7.923576225787981,28.689992842954855A16,16,0,0,0,16.919882027461973,37.68032972178491" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#e94e1b" d="M18.820961805362316,38.297330578058094A16,16,0,0,0,38.67516267566926,24.794795734163646" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path></svg></div></div>
+<div class="blog-fact-graph-authority">7</div></div></div></div><div class="blog-fact-graph-factwheel-text"><span class="blog-fact-graph-f3">F3:</span> “In conclusion, in 89% of the cases we have looked at, working in the office was most productive.”</div></div>
+        </div>
+        <figcaption>Factlink with evidence</figcaption>
+      </figure>
+    </div>
+  </aside>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">What if someone adds nonsense <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> supporting evidence</span>, <span class="blog-fact-graph-f4">F4</span>: <span class="blog-fact-graph-factlink blog-fact-graph-f4">“The sky is blue.”</span> Someone can do this to falsely increase the credibility of <span class="blog-fact-graph-f1">F1</span>, especially if <span class="blog-fact-graph-f4">F4</span> itself is <span class="blog-fact-graph-agree">very credible</span>.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">We could have users reporting such invalid arguments, and have them removed by a moderator. But it might also be that evidence that looks like nonsense, is in fact relevant. It might just be that you don’t understand the subject matter well enough, or that it needs further explaining. Relevance isn’t binary — either relevant or irrelevant — but it’s a scale.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><span class="factlink" data-factid="13823">In other words, we are not just interested in the credibility of Factlinks, but also in the credibility of relations between Factlinks. In our model, in the same way you can vote on the credibility of Factlinks, you can vote on the credibility of the relations between Factlinks: evidence. In an attempt to avoid confusion, we call this voting on relevance. You can </span><span class="blog-fact-graph-agree"><span class="factlink" data-factid="13823">agree</span></span><span class="factlink" data-factid="13823"> or </span><span class="blog-fact-graph-disagree"><span class="factlink" data-factid="13823">disagree</span></span><span class="factlink" data-factid="13823"> that evidence is relevant.</span></p>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner">
+      <figure class="blog-figure">
+        <div class="blog-box">
+          <div class="blog-fact-graph-factwheel-container"><div class="js-blog-factwheel-z1"><div class="blog-fact-graph-fact-wheel"><div class="blog-fact-graph-wheel"><div class="blog-fact-graph-raphael_container"><div><svg height="45.6" version="1.1" width="45.6" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#98d100" d="M38.8,22.8A16,16,0,1,0,8.784212093039377,30.517362849257275" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#36a9e1" d="M9.855728090000841,32.20456403667957A16,16,0,0,0,25.808531573594554,38.51460269210408" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#e94e1b" d="M27.744271909999156,38.016904260722455A16,16,0,0,0,38.67516267566926,24.794795734163646" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path></svg></div></div>
+<div class="blog-fact-graph-authority">5</div></div></div></div><div class="blog-fact-graph-factwheel-text"><span class="blog-fact-graph-f1">F1:</span> “Working from home is more productive than working in an office.”</div></div>
+
+          <div class="blog-fact-graph-factwheel-container"><div class="js-blog-factwheel-z2"><div class="blog-fact-graph-fact-wheel"><div class="blog-fact-graph-wheel"><div class="blog-fact-graph-raphael_container"><div><svg height="45.6" version="1.1" width="45.6" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#98d100" d="M38.8,22.8A16,16,0,0,0,7.404662087041677,18.442986051683096" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#36a9e1" d="M6.9815720841933775,20.396390574067887A16,16,0,0,0,10.225949091786852,32.69410146287494" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#e94e1b" d="M11.557600483218412,34.184570835348566A16,16,0,0,0,38.67516267566926,24.794795734163646" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path></svg></div></div>
+<div class="blog-fact-graph-authority">9</div></div></div></div><div class="blog-fact-graph-factwheel-text">“<span class="blog-fact-graph-f4">F4</span> is relevant<br> <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> supporting evidence</span> for <span class="blog-fact-graph-f1">F1</span>.”</div></div>
+
+          <div class="blog-fact-graph-factwheel-container"><div class="js-blog-factwheel-z3"><div class="blog-fact-graph-fact-wheel"><div class="blog-fact-graph-wheel"><div class="blog-fact-graph-raphael_container"><div><svg height="45.6" version="1.1" width="45.6" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="none" stroke="#98d100" d="M38.8,22.8A16,16,0,0,0,19.791468426405444,7.085397307895924" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#36a9e1" d="M17.855728090000845,7.583095739277542A16,16,0,0,0,25.808531573594554,38.51460269210408" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path><path fill="none" stroke="#e94e1b" d="M27.744271909999156,38.016904260722455A16,16,0,0,0,38.67516267566926,24.794795734163646" stroke-width="9.6" opacity="0.2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0.2;"></path></svg></div></div>
+<div class="blog-fact-graph-authority">10</div></div></div></div><div class="blog-fact-graph-factwheel-text"><span class="blog-fact-graph-f4">F4:</span> “The sky is blue.”</div></div>
+        </div>
+        <figcaption>evidence must be both<br>relevant and credible</figcaption>
+      </figure>
+    </div>
+  </aside>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">In theory, you could visualise the relevance of evidence with a Factwheel. However, to avoid confusion, we chose a different representation: voting arrows.</p>
+
+  <figure class="blog-figure">
+    <img class="blog-content-image" src="/factgraph/files/evidence-acc454770a64f9cdb3c795248788b7aa.png" alt="Evidence">
+    <figcaption class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">arrows for voting on relevance, an<span class="factlink" data-factid="13825">d Factwheel for voting on credibility</span></figcaption>
+  </figure>
+
+
+  <h4>Calculating credibility</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">How can we use these votes and evidence to get to a summary of how credible a Factlink is? For this, we first introduce some math. We define a <em>credibility tuple</em> to be a tuple of three numbers: &lt;<em>true</em>, <em>false</em>, <em>unsure</em>&gt;, or &lt;<em>t</em>, <em>f</em>, <em>u</em>&gt;. These numbers represent how <span class="blog-fact-graph-agree">true</span>, how <span class="blog-fact-graph-disagree">false</span>, or how <span class="blog-fact-graph-unsure">unsure</span> a Factlink is. The size of each number represents how much “work” or “thinking” <span class="factlink" data-factid="13824">has gone into reaching this conclusion. For now, let’s just say it’s the number of votes.</span></p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">We denote the credibility tuple of a <span class="blog-fact-graph-f1">Factlink F1</span> as <em>c</em>(<span class="blog-fact-graph-f1">F1</span>). The numbers <em>t</em>, <em>f</em>, and <em>u</em> correspond to green, red, and blue parts of the Factwheel. The number inside the Factwheel is the sum of those numbers, representing the total amount of votes, or the amount of “thinking” people have put in. For example:</p>
+
+  <blockquote>
+    <em>c</em>(<span class="blog-fact-graph-factlink">“Generally agreed upon Factlink”</span>) = <span class="blog-fact-graph-agree">&lt;10000, 8, 13&gt;</span><br>
+    <em>c</em>(<span class="blog-fact-graph-factlink">“Factlink with only few votes”</span>) = <span class="blog-fact-graph-agree blog-fact-graph-2-1-0">&lt;2, 1, 0&gt;</span><br>
+    <em>c</em>(<span class="blog-fact-graph-factlink">“Factlink without any votes”</span>) = <span class="blog-fact-graph-unsure">&lt;0, 0, 0&gt;</span><br>
+    <em>c</em>(<span class="blog-fact-graph-factlink">“Highly controversial Factlink”</span>) = <span class="blog-fact-graph-undetermined blog-fact-graph-7839-8009-3041">&lt;7839, 8009, 3041&gt;</span><br>
+    <em>c</em>(<span class="blog-fact-graph-factlink">“Vague or unknown Factlink”</span>) = <span class="blog-fact-graph-unsure">&lt;182, 119, 1205&gt;</span>
+  </blockquote>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">To be a bit more precise, the voting part of <span class="blog-fact-graph-f1">F1</span>’s credibility tuple <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f1">F1</span>) is the sum of the credibility tuple of individual votes. An “agree” vote corresponds to <span class="blog-fact-graph-agree">&lt;1, 0, 0&gt;</span>, a “disagree” vote to <span class="blog-fact-graph-disagree">&lt;0, 1, 0&gt;</span> and an “unsure” vote to <span class="blog-fact-graph-unsure">&lt;0, 0, 1&gt;</span>.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">To calculate the sum of different votes, we need to define addition on credibility tuples. An intuitive choice would be to just add up the numbers:</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">&lt;<em>t1</em>, <em>f1</em>, <em>u1</em>&gt; + &lt;<em>t2</em>, <em>f2</em>, <em>u2</em>&gt; = &lt;<em>t1</em>+<em>t2</em>, <em>f1</em>+<em>f2</em>, <em>u1</em>+<em>u2</em>&gt;</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Now, if you have a <span class="blog-fact-graph-f1">Factlink F1</span> with, say, 2 <span class="blog-fact-graph-agree">agreeing</span> votes, and 1 <span class="blog-fact-graph-disagree">disagreeing</span> vote, you would get:</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><em>c<sub>v</sub></em>(<span class="blog-fact-graph-f1">F1</span>) = <span class="blog-fact-graph-agree">&lt;1, 0, 0&gt;</span> + <span class="blog-fact-graph-agree">&lt;1, 0, 0&gt;</span> + <span class="blog-fact-graph-disagree">&lt;0, 1, 0&gt;</span> = <span class="blog-fact-graph-agree blog-fact-graph-2-1-0">&lt;2, 1, 0&gt;</span></p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Looks reasonable, right? It becomes more interesting when we add evidence. How does useful evidence change the credibility calculation? One way to look at it is to say that useful evidence is the same as a lot of people voting. Bad evidence is the same as only a few people voting.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">For example, if you have <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> supporting evidence</span>, that a lot of people find relevant, and a lot of people think is true, then that could count as a big vote in favour of the Factlink, say <span class="blog-fact-graph-agree">&lt;300, 0, 0&gt;</span>. Such evidence would weigh the same as 300 people voting in favour, so there must be a darn good reason why it weighs so much. In our model there must be 300 people <span class="blog-fact-graph-agree">agreeing</span> with the <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> supporting Factlink</span>, and 300 people saying that the relation is <span class="blog-fact-graph-agree">relevant</span>. If either the credibility or relevance is lower, the evidence won’t weigh as much.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">So, the evidence part of a Factlink’s credibility tuple is the sum of the credibility tuple of its evidence. <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> Supporting evidence</span>, denoted as <span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span> (<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> supporting</span> <span class="blog-fact-graph-f1">F1</span>), has a credibility tuple <em>c</em>(<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span>). The same goes for <span class="blog-fact-graph-weakening"><i class="icon-minus-circled"></i> weakening evidence</span>, <span class="blog-fact-graph-f3">F3</span> <span class="blog-fact-graph-weakening-arrow"></span> <span class="blog-fact-graph-f1">F1</span>. Such a tuple is made up of the relevance votes on the evidence, and the credibility tuple of <span class="blog-fact-graph-f2">F2</span>:</p>
+
+  <blockquote>
+    <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><em>c</em>(<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) = &lt;<em>min</em>(<em>t1</em>-f1, <em>t2</em>-<em>f2</em>), 0, 0&gt;<br>
+      where &lt;<em>t1</em>, <em>f1</em>, <em>u1</em>&gt; = <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) (up/downvotes on evidence)<br>
+      and &lt;<em>t2</em>, <em>f2</em>, <em>u2</em>&gt; = <em>c</em>(<span class="blog-fact-graph-f2">F2</span>)</p>
+
+    <p>Similarly, <em>c</em>(<span class="blog-fact-graph-f3">F3</span> <span class="blog-fact-graph-weakening-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) = &lt;0, <em>min</em>(<em>t1</em>-f1, <em>t2</em>-<em>f2</em>), 0&gt;</p>
+  </blockquote>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">This ensures that we don’t puff up the importance of this complex opinion more than any of its constituent parts and bounds the information that can pass through evidence. It allows highly credible Factlinks to support or weaken other Factlinks, but requires matching relevance of the relationship to transmit their credibility.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">The final credibility tuple of a <span class="blog-fact-graph-f1">Factlink F1</span> is the sum of the voting part <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f1">F1</span>), and of the evidence part <em>c<sub>e</sub></em>(<span class="blog-fact-graph-f1">F1</span>), which we define as the sum of tuples of evidence of <span class="blog-fact-graph-f1">F1</span>. An example:</p>
+
+  <blockquote>
+    <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><span class="blog-fact-graph-f1">F1</span> = <span class="blog-fact-graph-factlink blog-fact-graph-f1">“peanut butter is great”</span>, <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f1">F1</span>) = <span class="blog-fact-graph-unsure blog-fact-graph-4-2-8">&lt;4, 2, 8&gt;</span><br>
+      <span class="blog-fact-graph-f2">F2</span> = <span class="blog-fact-graph-factlink blog-fact-graph-f2">“peanut butter has great taste”</span>, <em>c</em>(<span class="blog-fact-graph-f2">F2</span>) = <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f2">F2</span>) = <span class="blog-fact-graph-agree blog-fact-graph-10-3-0">&lt;10, 3, 0&gt;</span><br>
+      <span class="blog-fact-graph-f3">F3</span> = <span class="blog-fact-graph-factlink blog-fact-graph-f3">“peanut butter has awful texture”</span>, <em>c</em>(<span class="blog-fact-graph-f3">F3</span>) = <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f3">F3</span>) = <span class="blog-fact-graph-agree blog-fact-graph-6-4-2">&lt;6, 4, 2&gt;</span><br>
+      <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) = <span class="blog-fact-graph-agree blog-fact-graph-11-2-0">&lt;11, 2, 0&gt;</span><br>
+      <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f3">F3</span> <span class="blog-fact-graph-weakening-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) = <span class="blog-fact-graph-agree blog-calulcation-9-3-0">&lt;9, 3, 0&gt;</span></p>
+
+    <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Then:<br>
+      <em>c</em>(<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) = &lt;<em>min</em>(11-2, 10-3), 0, 0&gt; = <span class="blog-fact-graph-agree">&lt;7, 0, 0&gt;</span><br>
+      <em>c</em>(<span class="blog-fact-graph-f3">F3</span> <span class="blog-fact-graph-weakening-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) = &lt;0, <em>min</em>(9-3, 6-4), 0&gt; = <span class="blog-fact-graph-disagree">&lt;0, 2, 0&gt;</span><br>
+      So <em>c<sub>e</sub></em>(<span class="blog-fact-graph-f1">F1</span>) = <em>c</em>(<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) + <em>c</em>(<span class="blog-fact-graph-f3">F3</span> <span class="blog-fact-graph-weakening-arrow"></span> <span class="blog-fact-graph-f1">F1</span>) = <span class="blog-fact-graph-agree blog-fact-graph-7-2-0">&lt;7, 2, 0&gt;</span><br>
+      So <em>c</em>(<span class="blog-fact-graph-f1">F1</span>) = <em>c<sub>v</sub></em>(<span class="blog-fact-graph-f1">F1</span>) + <em>c<sub>e</sub></em>(<span class="blog-fact-graph-f1">F1</span>) = <span class="blog-fact-graph-unsure blog-fact-graph-4-2-8">&lt;4, 2, 8&gt;</span> + <span class="blog-fact-graph-agree blog-fact-graph-7-2-0">&lt;7, 2, 0&gt;</span> = <b><span class="blog-fact-graph-agree blog-calulcation-11-4-8">&lt;11, 4, 8&gt;</span></b></p>
+  </blockquote>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">When now looking at <span class="blog-fact-graph-f1">F1</span>, you will see that the prevailing opinion is that peanut butter is great, even though the majority of people didn’t vote directly in agreement with that. However, quite a few people agreed with the underlying <span class="blog-fact-graph-supporting"><i class="icon-plus-circled"></i> supporting evidence</span>, and enough people agreed that the evidence was <span class="blog-fact-graph-agree">relevant</span>.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">The kicker is that this final credibility tuple of <span class="blog-fact-graph-f1">F1</span> is used when <span class="blog-fact-graph-f1">F1</span> is used as evidence for other Factlinks, allowing votes to propagate throughout the network of Factlinks and evidence.</p>
+
+
+  <h4>Variations</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">We’ve had various variations on this calculation, which might be worth mentioning. For example, you could add evidence for the uncertainty of a Factlink, which would add to the number of unsure votes.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">The most notable addition was authority. You could gain authority when people found your evidence <span class="blog-fact-graph-agree">relevant</span>. This encouraged making good connections between Factlinks. We didn’t award authority if someone agreed with a Factlink you annotated, as you shouldn’t be punished for not posting agreeable content. After all, the whole point was to call out misinformation on the web.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Authority was then used to weigh votes. The votes of people with high authority would weigh more than the votes of people with low authority. This way we tried to build moderation into the system: if people appreciated the evidence you posted, then your vote would weigh more than that of people who weren’t yet appreciated by the community.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Of course, people who have expertise on one topic don’t necessarily know much about other topics. That’s why at one point we even had topic-specific authority, weighed by “topic channels” that people posted Factlinks to. But that’s another story.</p>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner">
+      <figure class="blog-figure">
+        <img class="blog-content-image" src="/factgraph/files/channels-authority-3f8bb93b2fd7906f20c09c6ebffbf317.png" alt="Channels authority">
+        <figcaption>people had authority on different topics</figcaption>
+      </figure>
+    </div>
+  </aside>
+
+
+  <h4>User interface</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">The calculation had been designed to be directly visualised and interacted with. But building a good user interface proved tricky. We started out with tabs for supporting and weakening evidence. But that meant that the initially opened tab got the most attention, an undesirable bias.</p>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">More importantly, there were too many numbers on the screen, which was overwhelming to many users. It also wasn’t clear what all the different numbers meant. We tried to address those problems with a design that showed all votes and evidence in one overview:</p>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner">
+      <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">Compare the designs here in full resolution: <a href="/factgraph/odp-full-74835f1406cebfacaa5df5861f5fb8a8.png">original</a>, <a href="/factgraph/ndp-sketch-full-86f5f35f2e7bcf743c2852a3c6471676.jpg">sketch</a>, <a href="/factgraph/ndp-design-full-9edd8a02a06393e70c69f5fdb15549e8.jpg">new</a>.</p>
+    </div>
+  </aside>
+
+  <div class="blog-full-width">
+    <figure class="blog-figure blog-image-half">
+      <img class="blog-content-image" src="/factgraph/files/ndp-sketch-ff9697b09e872ac2666a04cce5aa03a7.jpg" alt="Ndp sketch">
+      <figcaption>sketch</figcaption>
+    </figure>
+    <figure class="blog-figure blog-image-half">
+      <img class="blog-content-image" src="/factgraph/files/ndp-design-02eace9b45c57f02aa5142ee29458892.jpg" alt="Ndp design">
+      <figcaption>design</figcaption>
+    </figure>
+  </div>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">In this design, the numbers in the middle represent not the relevance of the evidence, but the total number of votes contributed by the evidence’s credibility tuple (e.g. <em>t</em> from <em>c</em>(<span class="blog-fact-graph-f2">F2</span> <span class="blog-fact-graph-supporting-arrow"></span> <span class="blog-fact-graph-f1">F1</span>)). All the numbers in the middle add up to the big number on top, which represents the “total amount of thinking” or “brain cycles” that people have put into it.</p>
+
+  <aside class="blog-aside">
+    <div class="blog-aside-inner blog-aside-inner-top">
+      <figure class="blog-figure">
+        <img class="blog-content-image" src="/factgraph/files/ndp-animation-d91e3d153fee1e3217727c9fbd6c5935.gif" alt="Ndp animation">
+        <figcaption>interface evolution; <a href="/factgraph/screenshots-over-time.mp4">full video</a></figcaption>
+      </figure>
+    </div>
+  </aside>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right"><span class="factlink" data-factid="13822">Showing total contributing votes instead of relevance also subtly changed the meaning of upvote and downvote buttons. If you click upvote, you want the number to go up. Just adding an agreeing vote to the relevance of the evidence is not enough, as you often also need to agree with the underlying Factlink. Therefore we added popups when clicking on an upvote or downvote button, to ask what you think exactly:</span></p>
+
+  <figure class="blog-figure">
+    <img class="blog-content-image" src="/factgraph/files/ndp-popup-7ee7039f94b8b5b8b66e44adf3c1be63.png" alt="Ndp popup">
+    <figcaption>clarification popup when voting</figcaption>
+  </figure>
+
+
+  <h4>Epilogue</h4>
+
+  <p class="factlink-tether-target factlink-tether-enabled factlink-tether-element-attached-top factlink-tether-element-attached-left factlink-tether-target-attached-top factlink-tether-target-attached-right">In the end, we didn’t gain enough traction with this part of Factlink, and decided to focus on annotation. But we think the idea was quite intriguing. We hope that someday online communities can visibly work together to assess the credibility of statements using evidence. To curb misinformation. We hope to have inspired you.</p>
+
+  <p><em>Originally from factlink.com/blog/factlinks-fact-graph; moved here in November 2020.</em></p>
+
+  </article>
+
+    </div>
+  </div>
+
+
+
+
+    <script src="/factgraph/files/jquery.min.js"></script>
+<script src="/factgraph/files/application-bba5bdc23665bac548d3d35920a98864.js"></script>
+
+    <script>
+        var interval = setInterval(function() {
+          if (jQuery(".blog-fact-graph-fact-wheel").length > 7) {
+            jQuery(".blog-fact-graph-fact-wheel:first-child").remove();
+            clearInterval(interval);
+          }
+        }, 100);
+    </script>
+
+    <link rel="stylesheet" media="screen" href="/factgraph/files/blog_fact_graph-463d001a45dbddeb184c6fd07fa8b2f6.css">
+  <script src="/factgraph/files/blog_fact_graph-1955bc9c5f40cafc6cf598234485ab39.js"></script>
+
+
+
+
+
+</body></html>
