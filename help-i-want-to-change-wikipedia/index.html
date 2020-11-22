@@ -53,7 +53,7 @@
 
     <p>However, building a visual editor on top of wikitext is easier said than done. This is because of the way wikitext is transformed to HTML, with a number of subsequent substitutions. A common way of building a visual editor on top of a language, is by using an intermediate representation of the text, called a document tree or syntax tree. Such a tree represents the page in a hierarchical way. A page contains paragraphs, paragraphs contain sentences, and sentences contain pieces of text, links, media, and so on. Alas, wikitext can&#8217;t be described by such a hierarchical model, because these substitutions make sure there is no such thing as <em>wrong</em> wikitext. There are even substitutions that fix common mistakes, such as <code>'''bold [[link''']]</code>. This is equivalent to <code>'''bold [[link]]'''</code>, which <em>has</em> a defined hierarchy: the link is inside the bold text. In the former example, this hierarchy is not present: the bold text ends before the link element is closed.</p>
 
-    <p>While this is a silly example, there are more <a href="http://sweble.org/downloads/diwp-preprint.pdf">complex cases</a>, which are widely used in Wikipedia. There are people <a href="http://www.mediawiki.org/wiki/Wikitext.next">working</a> on a intermediate representation that <em>does</em> allow for these kinds of cases, but as this is quite difficult it may take a while.</p>
+    <p>While this is a silly example, there are more complex cases which are widely used in Wikipedia. There are people <a href="http://www.mediawiki.org/wiki/Wikitext.next">working</a> on a intermediate representation that <em>does</em> allow for these kinds of cases, but as this is quite difficult it may take a while.</p>
 
     <p>For my thesis I investigated if it&#8217;s perhaps possible to build a different kind of interface instead of a visual editor, which is both easy to use and easier to implement on top of wikitext. Eventually I arrived at a compromise: users get to see the same page when editing as when viewing, but they can&#8217;t edit it directly. Instead, there are some explicitly marked elements on the page that are editable, such as sentences, paragraphs, lists, info boxes, etc. Such editable elements are marked by either a light blue background colour, or in case of larger elements such as paragraphs, by a bar at the left of the element. When a user moves the mouse over such an element, it lights up in a darker colour, indicating it can be clicked.</p>
 
@@ -130,6 +130,4 @@
     <li>Implemented in the MediaWiki extension <a href="http://www.mediawiki.org/wiki/Extension:InlineEditor">InlineEditor</a>.</li>
     </ul>
   </article>
-
-  <script type="text/javascript" src="https://static.factlink.com/lib/dist/factlink_loader_publishers.min.js"></script>
 </html>
