@@ -1,0 +1,9 @@
+A {
+	COLOR: #FFFF00; FONT-FAMILY: Tahoma;
+}
+A:visited {
+	COLOR: #FFFF00; FONT-FAMILY: Tahoma;
+}
+A:hover {
+	COLOR: #FF0000; Font-Weight: bold; FONT-FAMILY: Verdana;
+}
