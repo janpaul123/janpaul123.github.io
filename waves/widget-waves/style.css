@@ -1,0 +1,43 @@
+body { 
+	background-color: #222;
+	margin: 0px;
+	padding: 0px;
+}
+
+#main {
+	padding: 0px;
+	background-color: #000;
+	width: 1024px;
+	height: 768px;
+	color: #eee;
+	font-family: Helvetica;
+	font-size: 16px;
+	position: relative;
+	line-height: 25px;
+	margin: 0px;
+}
+
+#wavehelp {
+	position: absolute;
+	left: 50%;
+	top: 30%;
+	margin-left: -150px;
+	margin-top: -10px;
+	width: 300px;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+	font-size: 36px;
+	cursor: pointer;
+	z-index: 100;
+}
+
+#wave {
+	cursor: pointer;
+	background-color: #222;
+	position: absolute;
+	left: 50%;
+	top: 40%;
+	margin-left: -375px;
+	margin-top: -200px;
+}

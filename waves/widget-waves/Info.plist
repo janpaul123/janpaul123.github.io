@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Modify these properties as desired -->
+  <key>Width</key>
+  <integer>1024</integer>
+  <key>Height</key>
+  <integer>768</integer>
+  <key>MainHTML</key>
+  <string>main.html</string>
+
+  <!-- These are required, but have no user-facing effect -->
+  <key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDisplayName</key>
+	<string>Untitled</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.janpaul.widget.Untitled</string>
+	<key>CFBundleName</key>
+	<string>Untitled</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>CloseBoxInsetX</key>
+	<integer>17</integer>
+	<key>CloseBoxInsetY</key>
+	<integer>18</integer>
+</dict>
+</plist>
